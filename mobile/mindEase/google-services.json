@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408782528907",
+    "project_id": "mindease-a1223",
+    "storage_bucket": "mindease-a1223.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408782528907:android:b4a583a21d66a13e554f8e",
+        "android_client_info": {
+          "package_name": "com.anonymous.mindEase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj99ujmS7zctuvm-nuVB9RYO1bBtmst5w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
