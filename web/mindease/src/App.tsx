@@ -1,35 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import IconBackground from './assets/background.png';
+import { TextField, Button, Link, Stack, Box } from "@mui/material";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh', margin: 0 }}>
+      <div style={{ width: '60vw', height: '100vh' }}>
+        <img
+          src={IconBackground}
+          alt="Background"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
 
-export default App
+      <div
+        style={{
+          width: "40vw",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log("Login submit");
+          }}
+          sx={{ width: "80%", display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          <TextField
+            label="E-mail"
+            type="email"
+            variant="outlined"
+            required
+            fullWidth
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            variant="outlined"
+            required
+            fullWidth
+          />
+
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+            <Button type="submit" variant="contained" color="primary">
+              Login
+            </Button>
+            <Button variant="outlined" color="secondary">
+              Register
+            </Button>
+          </Stack>
+
+          <Link href="#" underline="hover" sx={{ textAlign: "center" }}>
+            Esqueci a senha
+          </Link>
+        </Box>
+      </div>
+    </div>
+  );
+};
+
+export default App;
