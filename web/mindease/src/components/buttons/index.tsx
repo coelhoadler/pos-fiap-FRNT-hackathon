@@ -1,9 +1,5 @@
-import { LoginButton } from "./loginButton";
-import { SaveButton } from "./saveButton";
-import { CancelButton } from "./cancelButton";
+import { LoginButton } from './LoginButton';
+import { SaveButton } from './SaveButton';
+import { CancelButton } from './CancelButton';
 
-export {
-    LoginButton,
-    SaveButton,
-    CancelButton
-}
+export { LoginButton, SaveButton, CancelButton };

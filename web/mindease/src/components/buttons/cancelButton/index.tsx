@@ -1,11 +1,13 @@
-import { WrapperButton } from "../../shared/wrapperButton/WrapperButton";
-import type { WrapperButtonProps } from "../../shared/types";
+import { WrapperButton } from '../../Shared/WrapperButton';
+import type { WrapperButtonProps } from '../../Shared/Types';
 
-export const CancelButton = ({ label = "Cancelar", variant = "outlined", color = "error", ...props }: WrapperButtonProps) => {
-  return <WrapperButton 
-            label={label} 
-            variant={variant}
-            color={color} 
-            {...props} 
-        />;
+export const CancelButton = ({
+  label = 'Cancelar',
+  variant = 'outlined',
+  color = 'error',
+  ...props
+}: WrapperButtonProps) => {
+  return (
+    <WrapperButton label={label} variant={variant} color={color} {...props} />
+  );
 };

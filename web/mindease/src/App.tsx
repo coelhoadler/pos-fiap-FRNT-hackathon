@@ -1,9 +1,17 @@
 import IconBackground from './assets/background.png';
-import { TextField, Button, Link, Stack, Box } from "@mui/material";
+import { TextField, Button, Link, Stack, Box } from '@mui/material';
 
 const App = () => {
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', width: '100vw', height: '100vh', margin: 0 }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100vw',
+        height: '100vh',
+        margin: 0,
+      }}
+    >
       <div style={{ width: '60vw', height: '100vh' }}>
         <img
           src={IconBackground}
@@ -14,20 +22,25 @@ const App = () => {
 
       <div
         style={{
-          width: "40vw",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          width: '40vw',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         <Box
           component="form"
           onSubmit={(e) => {
             e.preventDefault();
-            console.log("Login submit");
+            console.log('Login submit');
           }}
-          sx={{ width: "80%", display: "flex", flexDirection: "column", gap: 2 }}
+          sx={{
+            width: '80%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
         >
           <TextField
             label="E-mail"
@@ -54,7 +67,7 @@ const App = () => {
             </Button>
           </Stack>
 
-          <Link href="#" underline="hover" sx={{ textAlign: "center" }}>
+          <Link href="#" underline="hover" sx={{ textAlign: 'center' }}>
             Esqueci a senha
           </Link>
         </Box>
