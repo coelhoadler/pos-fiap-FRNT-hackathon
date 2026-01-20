@@ -1,0 +1,12 @@
+import auth from "@react-native-firebase/auth";
+
+export function signUp(email: string, password: string) {
+    auth().createUserWithEmailAndPassword(email, password).then(() => {
+        alert('User account created & signed in!');
+    })
+        .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+                alert('That email address is already in use!');
+            }
+        });
+}

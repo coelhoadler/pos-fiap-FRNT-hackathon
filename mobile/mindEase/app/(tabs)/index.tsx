@@ -5,7 +5,9 @@ import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Button } from '@react-navigation/elements';
 import { Link } from 'expo-router';
+import { signUp } from '../services/firebaseAuth';
 
 export default function HomeScreen() {
   return (
@@ -73,6 +75,10 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
+      </ThemedView>
+
+      <ThemedView style={styles.stepContainer}>
+        <Button onPress={() => signUp('adlercoelhosantos12@gmail.com', 'Adler12345')}>Sign Up</Button>
       </ThemedView>
     </ParallaxScrollView>
   );
