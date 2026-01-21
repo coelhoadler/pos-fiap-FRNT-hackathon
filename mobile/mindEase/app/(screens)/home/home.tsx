@@ -1,6 +1,7 @@
 import { Text, TextInput, View } from "react-native";
 
 export default function HomeScreen() {
+
     return (
         <View
             style={{

@@ -1,7 +1,8 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 export function isAuthenticated(): boolean {
-    return auth().currentUser !== null;
+    // return auth().currentUser !== null; // TODO: ajustar isso depois do login
+    return false;
 }
 
 export function signIn(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential> {
@@ -12,7 +13,7 @@ export function signUp(email: string, password: string): Promise<FirebaseAuthTyp
     return auth().createUserWithEmailAndPassword(email, password);
 }
 
-export function getCurrentUser(): FirebaseAuthTypes.User | null {
+export default function getCurrentUser(): FirebaseAuthTypes.User | null {
     return auth().currentUser;
 }
 
