@@ -9,7 +9,8 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,6 +26,7 @@ export default function LoginScreen() {
     const [email, setEmail] = useState('adlercoelhosantos12@gmail.com');
     const [password, setPassword] = useState('Adler12345@');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = () => {
         if (email === '' || password === '') {
@@ -32,10 +34,13 @@ export default function LoginScreen() {
             return;
         }
 
+        setIsLoading(true);
         signIn(email, password).then(() => {
             router.replace('/(screens)/home/home');
         }).catch((error) => {
             Alert.alert('Erro', 'Falha no login: ' + error.message);
+        }).finally(() => {
+            setIsLoading(false);
         });
     };
 
@@ -96,8 +101,16 @@ export default function LoginScreen() {
                     </View>
 
                     {/* Botão de Login */}
-                    <TouchableOpacity style={styles(colorScheme).loginButton} onPress={handleLogin}>
-                        <Text style={styles(colorScheme).loginButtonText}>ENTRAR</Text>
+                    <TouchableOpacity
+                        style={styles(colorScheme).loginButton}
+                        onPress={handleLogin}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <ActivityIndicator size="small" color="#FFF" />
+                        ) : (
+                            <Text style={styles(colorScheme).loginButtonText}>Entrar</Text>
+                        )}
                     </TouchableOpacity>
 
                     {/* Link de Cadastro */}
