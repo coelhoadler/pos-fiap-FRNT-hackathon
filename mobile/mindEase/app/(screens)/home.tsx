@@ -1,6 +1,6 @@
 import { Text, TextInput, View } from "react-native";
 
-export default function LoginScreen() {
+export default function HomeScreen() {
     return (
         <View
             style={{
@@ -9,7 +9,7 @@ export default function LoginScreen() {
                 alignItems: "center",
             }}
         >
-            <Text>Edit o arquivo login da pasta de Screens</Text>
+            <Text>Home</Text>
             <TextInput>123</TextInput>
         </View>
     );

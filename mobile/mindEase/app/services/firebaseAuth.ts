@@ -1,6 +1,6 @@
 import auth from "@react-native-firebase/auth";
 
-export function signUp(email: string, password: string): void {
+export default function signUp(email: string, password: string): void {
     auth().createUserWithEmailAndPassword(email, password).then(() => {
         alert('User account created & signed in!');
     })

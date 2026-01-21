@@ -1,12 +1,23 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './screens/login';
 
-const Stack = createStackNavigator();
+import { useColorScheme } from '@/app-example/hooks/use-color-scheme.web';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+
+export const unstable_settings = {
+  anchor: '(screens)',
+};
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme();
+
   return (
-    <Stack.Navigator initialRouteName="login">
-      <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} />
-    </Stack.Navigator>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="(screens)/login" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="auto" />
+    </ThemeProvider>
   );
 }
