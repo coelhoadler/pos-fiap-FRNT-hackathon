@@ -15,9 +15,12 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
 import { signIn } from '@/app/services/firebaseAuth';
+import { useColorScheme } from '@/app/hooks/use-color-scheme';
 
 export default function LoginScreen() {
     const router = useRouter();
+    const colorSchemeRaw = useColorScheme();
+    const colorScheme: 'light' | 'dark' | undefined = colorSchemeRaw ?? 'dark';
 
     const [email, setEmail] = useState('adlercoelhosantos12@gmail.com');
     const [password, setPassword] = useState('Adler12345@');
@@ -44,25 +47,25 @@ export default function LoginScreen() {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.container}
+                style={styles(colorScheme).container}
             >
-                <View style={styles.content}>
+                <View style={styles(colorScheme).content}>
 
-                    <View style={styles.logoContainer}>
+                    <View style={styles(colorScheme).logoContainer}>
                         <Image
-                            source={require('../../../assets/images/logotipo.png')} // <--- Caminho da imagem
-                            style={styles.logo}
+                            source={require('../../../assets/images/logotipo.png')}
+                            style={styles(colorScheme).logo}
                         />
                     </View>
 
-                    <Text style={styles.title}>Bem-vindo!</Text>
-                    <Text style={styles.subtitle}>Faça login para continuar.</Text>
+                    <Text style={styles(colorScheme).title}>Bem-vindo!</Text>
+                    <Text style={styles(colorScheme).subtitle}>Faça login para continuar.</Text>
 
                     {/* Input de Email */}
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="mail-outline" size={20} color="#666" style={styles.icon} />
+                    <View style={styles(colorScheme).inputContainer}>
+                        <Ionicons name="mail-outline" size={20} color="#666" style={styles(colorScheme).icon} />
                         <TextInput
-                            style={styles.input}
+                            style={styles(colorScheme).input}
                             placeholder="Digite seu email"
                             placeholderTextColor="#999"
                             value={email}
@@ -73,10 +76,10 @@ export default function LoginScreen() {
                     </View>
 
                     {/* Input de Senha */}
-                    <View style={styles.inputContainer}>
-                        <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.icon} />
+                    <View style={styles(colorScheme).inputContainer}>
+                        <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles(colorScheme).icon} />
                         <TextInput
-                            style={styles.input}
+                            style={styles(colorScheme).input}
                             placeholder="Sua senha"
                             placeholderTextColor="#999"
                             value={password}
@@ -93,15 +96,15 @@ export default function LoginScreen() {
                     </View>
 
                     {/* Botão de Login */}
-                    <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-                        <Text style={styles.loginButtonText}>ENTRAR</Text>
+                    <TouchableOpacity style={styles(colorScheme).loginButton} onPress={handleLogin}>
+                        <Text style={styles(colorScheme).loginButtonText}>ENTRAR</Text>
                     </TouchableOpacity>
 
                     {/* Link de Cadastro */}
-                    <View style={styles.footer}>
-                        <Text style={styles.footerText}>Ainda não tem uma conta? </Text>
+                    <View style={styles(colorScheme).footer}>
+                        <Text style={styles(colorScheme).footerText}>Ainda não tem uma conta? </Text>
                         <TouchableOpacity onPress={handleSignUp}>
-                            <Text style={styles.signupText}>Cadastre-se</Text>
+                            <Text style={styles(colorScheme).signupText}>Cadastre-se</Text>
                         </TouchableOpacity>
                     </View>
 
