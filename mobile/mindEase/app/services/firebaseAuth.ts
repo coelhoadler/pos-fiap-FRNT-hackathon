@@ -1,12 +1,21 @@
-import auth from "@react-native-firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
-export default function signUp(email: string, password: string): void {
-    auth().createUserWithEmailAndPassword(email, password).then(() => {
-        alert('User account created & signed in!');
-    })
-        .catch(error => {
-            if (error.code === 'auth/email-already-in-use') {
-                alert('That email address is already in use!');
-            }
-        });
+export function isAuthenticated(): boolean {
+    return auth().currentUser !== null;
+}
+
+export function signIn(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential> {
+    return auth().signInWithEmailAndPassword(email, password);
+}
+
+export function signUp(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential> {
+    return auth().createUserWithEmailAndPassword(email, password);
+}
+
+export function getCurrentUser(): FirebaseAuthTypes.User | null {
+    return auth().currentUser;
+}
+
+export function signOut(): Promise<void> {
+    return auth().signOut();
 }

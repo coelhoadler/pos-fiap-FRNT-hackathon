@@ -1,7 +1,7 @@
 import { Button } from "@react-navigation/elements";
 import { Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import signUp from "../services/firebaseAuth";
+import { signIn } from "../services/firebaseAuth";
 
 export default function LoginScreen() {
     return (
@@ -15,7 +15,7 @@ export default function LoginScreen() {
             <Text>Login</Text>
             <TextInput>123</TextInput>
 
-            <Button onPress={() => signUp('test@example.com', 'password')}>Teste</Button>
+            <Button onPress={() => signIn('test@example.com', 'password')}>Logar</Button>
         </SafeAreaView>
     );
 }
