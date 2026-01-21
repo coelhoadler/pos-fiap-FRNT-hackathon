@@ -1,8 +1,7 @@
+import { Redirect, router } from "expo-router";
 import React, { useState } from "react";
-import { Button } from "@react-navigation/elements";
-import { Text, TextInput, View } from "react-native";
+import { Text, TextInput, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { signIn } from "../../services/firebaseAuth";
 import doLogin from "./services/login";
 
 export default function LoginScreen() {
@@ -30,7 +29,19 @@ export default function LoginScreen() {
                 placeholder="Password"
                 secureTextEntry
             />
-            <Button onPress={() => doLogin(email, password)}>Logar</Button>
+
+            <TouchableOpacity onPress={() => {
+                doLogin(email, password);
+            }}>
+                <Text>Fazer Login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => {
+                router.push('/(screens)/register/register');
+            }}>
+                <Text>Criar conta</Text>
+            </TouchableOpacity>
+
         </SafeAreaView>
     );
 }
