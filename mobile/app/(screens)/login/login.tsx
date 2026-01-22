@@ -16,7 +16,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from './styles';
 import { signIn } from '@/app/services/firebaseAuth';
-import { useColorScheme } from '@/app/hooks/use-color-scheme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -36,7 +36,7 @@ export default function LoginScreen() {
 
         setIsLoading(true);
         signIn(email, password).then(() => {
-            router.replace('/(screens)/home/home');
+            router.replace('/(screens)/home/(tabs)');
         }).catch((error) => {
             Alert.alert('Erro', 'Falha no login: ' + error.message);
         }).finally(() => {
