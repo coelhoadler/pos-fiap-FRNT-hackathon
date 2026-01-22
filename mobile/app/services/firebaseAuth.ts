@@ -20,3 +20,7 @@ export default function getCurrentUser(): FirebaseAuthTypes.User | null {
 export function signOut(): Promise<void> {
     return auth().signOut();
 }
+
+export function getAuth(): FirebaseAuthTypes.Module {
+    return auth();
+}
