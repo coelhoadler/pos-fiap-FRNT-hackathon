@@ -1,8 +1,8 @@
 import { WrapperButton } from '../../shared/WrapperButton';
 import type { WrapperButtonProps } from '../../shared/types';
 
-export const SaveButton = ({
-  label = 'Salvar',
+export const RegisterButton = ({
+  label = 'Register',
   variant = 'contained',
   color = 'success',
   ...props
