@@ -1,4 +1,4 @@
-import { useColorScheme } from "@/app/hooks/use-color-scheme.web";
+import { useColorScheme } from "@/hooks/use-color-scheme.web";
 import { Text, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "./styles";
