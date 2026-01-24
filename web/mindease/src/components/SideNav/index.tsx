@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { NavItem } from './interfaces';
+import mindeaseLogo from '../../assets/favicon.svg';
 
 const navItems: NavItem[] = [
   { label: 'Home', icon: <Home size={20} />, path: '/' },
@@ -87,7 +88,7 @@ const SideNav = () => {
             {/* LOGO */}
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded flex items-center justify-center font-bold">
-                M
+                <img src={mindeaseLogo} alt="mindease logo" />
               </div>
               <span className="text-cyan-700 text-xl font-regular">
                 MINDEASE
