@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    Modal,
-    Animated,
-    Dimensions,
-    Pressable,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { signOut } from "@/app/services/firebaseAuth";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { signOut } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";
+import React, { useState } from "react";
+import {
+    Animated,
+    Dimensions,
+    Modal,
+    Pressable,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const DRAWER_WIDTH = width * 0.75;

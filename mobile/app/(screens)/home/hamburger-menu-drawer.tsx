@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react";
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    Modal,
-    Animated,
-    Dimensions,
-    Pressable,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { signOut } from "@/app/services/firebaseAuth";
 import { ThemedText } from "@/components/themed-text";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { signOut } from "@/app/services/firebaseAuth";
+import { getAuth } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+    Animated,
+    Dimensions,
+    Modal,
+    Pressable,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useMenu } from "./menu-context";
+import { ProfileAvatar } from "@/components/profile-avatar";
+import { Link } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 const DRAWER_WIDTH = width * 0.75;
@@ -67,6 +71,16 @@ export const HamburgerMenuDrawer: React.FC = () => {
         router.push(route as any);
     };
 
+    const getCurrentUser = (): { name?: string; email?: string } | undefined => {
+        const auth = getAuth();
+        if (auth.currentUser) {
+            return {
+                name: auth.currentUser.displayName || "",
+                email: auth.currentUser.email || ""
+            }
+        };
+    }
+
     const menuItems = [
         {
             icon: "house.fill",
@@ -86,10 +100,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
         {
             icon: "person.circle.fill",
             label: "Perfil",
-            onPress: () => {
-                toggleMenu();
-                // Adicione navegação para perfil aqui
-            },
+            onPress: () => navigateTo("/(screens)/home/(tabs)/profile"),
         },
         {
             icon: "arrow.right.square.fill",
@@ -121,14 +132,21 @@ export const HamburgerMenuDrawer: React.FC = () => {
                     <SafeAreaView style={styles.drawerContent}>
                         {/* Header do drawer */}
                         <View style={styles.drawerHeader}>
-                            <ThemedText type="title">Menu</ThemedText>
-                            <TouchableOpacity onPress={toggleMenu}>
-                                <IconSymbol
-                                    size={24}
-                                    name="xmark"
-                                    color={Colors[colorScheme ?? "light"].text}
-                                />
-                            </TouchableOpacity>
+                            <View style={styles.drawerHeaderImage}><ProfileAvatar size={75} editable={false} /></View>
+                            <View style={styles.drawerHeaderInfo}>
+                                <View>
+                                    <Text style={styles.nameText} numberOfLines={1}
+                                        ellipsizeMode="tail">{getCurrentUser()?.name}</Text>
+                                    <Text
+                                        style={styles.emailText}
+                                        numberOfLines={1}
+                                        ellipsizeMode="tail"
+                                    >
+                                        {getCurrentUser()?.email}
+                                    </Text>
+                                    <Text style={styles.closeMenuText} onPress={toggleMenu}>Fechar Menu</Text>
+                                </View>
+                            </View>
                         </View>
 
                         {/* Divisor */}
@@ -160,7 +178,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
                     </SafeAreaView>
                 </Animated.View>
             </Pressable>
-        </Modal>
+        </Modal >
     );
 };
 
@@ -187,10 +205,34 @@ const styles = StyleSheet.create({
     },
     drawerHeader: {
         flexDirection: "row",
-        justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 20,
         paddingVertical: 16,
+    },
+    drawerHeaderImage: {
+        paddingRight: 16,
+    },
+    drawerHeaderInfo: {
+        flex: 1,
+        justifyContent: "space-between",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 16,
+    },
+    nameText: {
+        fontSize: 18,
+        fontWeight: "600"
+    },
+    emailText: {
+        fontSize: 14,
+        fontWeight: "500",
+        flex: 1,
+    },
+    closeMenuText: {
+        fontSize: 12,
+        fontWeight: "500",
+        color: "#1E90FF",
+        textDecorationLine: "underline",
     },
     divider: {
         height: 1,

@@ -49,6 +49,15 @@ export const LayoutWithMenu: React.FC = () => {
                         ),
                     }}
                 />
+                <Tabs.Screen
+                    name="profile"
+                    options={{
+                        title: "Perfil",
+                        tabBarIcon: ({ color }) => (
+                            <IconSymbol size={28} name="person.circle.fill" color={color} />
+                        ),
+                    }}
+                />
             </Tabs>
             <HamburgerMenuDrawer />
         </>
