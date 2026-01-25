@@ -1,8 +1,7 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 export function isAuthenticated(): boolean {
-    // return auth().currentUser !== null; // TODO: ajustar isso depois do login
-    return false;
+    return auth().currentUser !== null; // TODO: ajustar isso depois do login
 }
 
 export function signIn(email: string, password: string): Promise<FirebaseAuthTypes.UserCredential> {

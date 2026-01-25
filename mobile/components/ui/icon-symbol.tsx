@@ -22,6 +22,10 @@ const MAPPING = {
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",
   "gearshape.fill": "settings",
+  "line.3.horizontal": "menu",
+  "xmark": "close",
+  "person.circle.fill": "account-circle",
+  "arrow.right.square.fill": "logout",
 } as IconMapping;
 
 /**
