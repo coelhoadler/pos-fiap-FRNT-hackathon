@@ -10,6 +10,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
+    ScrollView,
     Text,
     TextInput,
     TouchableOpacity,
@@ -123,12 +124,16 @@ export default function RegisterScreen() {
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={styles(colorScheme).container}
-            >
-                <View style={styles(colorScheme).content}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles(colorScheme).container}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ScrollView
+                    contentContainerStyle={styles(colorScheme).scrollContent}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                >
                     <View style={styles(colorScheme).logoContainer}>
                         <Image
                             source={require("../../../assets/images/logotipo.png")}
@@ -250,8 +255,8 @@ export default function RegisterScreen() {
                             <Text style={styles(colorScheme).loginText}>Faça login</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+                </ScrollView>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }

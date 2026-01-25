@@ -9,6 +9,11 @@ export function styles(colorScheme: 'light' | 'dark' = 'dark') {
             flex: 1,
             backgroundColor: colors.background,
         },
+        scrollContent: {
+            flexGrow: 1,
+            paddingHorizontal: 30,
+            paddingVertical: 20,
+        },
         content: {
             flex: 1,
             justifyContent: 'center',
