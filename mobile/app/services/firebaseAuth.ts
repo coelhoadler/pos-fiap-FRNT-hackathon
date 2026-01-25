@@ -23,3 +23,11 @@ export function signOut(): Promise<void> {
 export function getAuth(): FirebaseAuthTypes.Module {
     return auth();
 }
+
+export async function updateUserProfile(updates: { displayName?: string; photoURL?: string }): Promise<void> {
+    const user = auth().currentUser;
+    if (!user) {
+        throw new Error("Nenhum usuário autenticado");
+    }
+    return user.updateProfile(updates);
+}

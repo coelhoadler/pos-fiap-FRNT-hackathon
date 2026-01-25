@@ -135,7 +135,8 @@ export const HamburgerMenuDrawer: React.FC = () => {
                             <View style={styles.drawerHeaderImage}><ProfileAvatar size={75} editable={false} /></View>
                             <View style={styles.drawerHeaderInfo}>
                                 <View>
-                                    <Text>{getCurrentUser()?.name || "Adler Santos"}</Text>
+                                    <Text style={styles.nameText} numberOfLines={1}
+                                        ellipsizeMode="tail">{getCurrentUser()?.name}</Text>
                                     <Text
                                         style={styles.emailText}
                                         numberOfLines={1}
