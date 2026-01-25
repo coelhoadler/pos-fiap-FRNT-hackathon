@@ -154,7 +154,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
                         {/* Footer */}
                         <View style={styles.drawerFooter}>
                             <ThemedText style={styles.footerText}>
-                                Task Manager v1.0
+                                MindEase v1.0
                             </ThemedText>
                         </View>
                     </SafeAreaView>

@@ -118,7 +118,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ children }) => {
                         color={Colors[colorScheme ?? "light"].text}
                     />
                 </TouchableOpacity>
-                <ThemedText type="subtitle">Task Manager</ThemedText>
             </ThemedView>
 
             {/* Conteúdo principal */}
@@ -173,13 +172,6 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ children }) => {
                                         onPress={item.onPress}
                                     />
                                 ))}
-                            </View>
-
-                            {/* Footer */}
-                            <View style={styles.drawerFooter}>
-                                <ThemedText style={styles.footerText}>
-                                    Task Manager v1.0
-                                </ThemedText>
                             </View>
                         </SafeAreaView>
                     </Animated.View>
