@@ -27,7 +27,7 @@ export default function RootLayout() {
         />
         <Stack.Screen
           name="(screens)/register/register"
-          options={{ headerBackButtonMenuEnabled: true }}
+          options={{ headerBackButtonMenuEnabled: true, headerTitle: "" }}
         />
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
