@@ -26,6 +26,7 @@ const MAPPING = {
   "xmark": "close",
   "person.circle.fill": "account-circle",
   "arrow.right.square.fill": "logout",
+  "pencil": "edit",
 } as IconMapping;
 
 /**

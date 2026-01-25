@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
-import {
-    View,
-    StyleSheet,
-    TouchableOpacity,
-    Modal,
-    Animated,
-    Dimensions,
-    Pressable,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { IconSymbol } from "@/components/ui/icon-symbol";
+import { signOut } from "@/app/services/firebaseAuth";
 import { ThemedText } from "@/components/themed-text";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { signOut } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+    Animated,
+    Dimensions,
+    Modal,
+    Pressable,
+    StyleSheet,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useMenu } from "./menu-context";
+import { ProfileAvatar } from "@/components/profile-avatar";
 
 const { width } = Dimensions.get("window");
 const DRAWER_WIDTH = width * 0.75;
@@ -86,10 +87,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
         {
             icon: "person.circle.fill",
             label: "Perfil",
-            onPress: () => {
-                toggleMenu();
-                // Adicione navegação para perfil aqui
-            },
+            onPress: () => navigateTo("/(screens)/home/(tabs)/profile"),
         },
         {
             icon: "arrow.right.square.fill",
@@ -121,7 +119,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
                     <SafeAreaView style={styles.drawerContent}>
                         {/* Header do drawer */}
                         <View style={styles.drawerHeader}>
-                            <ThemedText type="title">Menu</ThemedText>
+                            <ProfileAvatar size={75} editable={false} />
                             <TouchableOpacity onPress={toggleMenu}>
                                 <IconSymbol
                                     size={24}
