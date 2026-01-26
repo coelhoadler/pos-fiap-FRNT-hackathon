@@ -1,4 +1,4 @@
-import { TPreferencesItems } from "@/app/types/preferencesItems";
+import { TPreferencesItems } from "@/app/types/preferences";
 
 export const preferencesConstantsItems: TPreferencesItems[] = [
   {
@@ -13,6 +13,31 @@ export const preferencesConstantsItems: TPreferencesItems[] = [
   },
   {
     id:"3",
+    title: "Modo simplificado",
+    description: "Descrição modo simplificado",
+  },
+  {
+    id:"4",
+    title: "Modo simplificado",
+    description: "Descrição modo simplificado",
+  },
+  {
+    id:"5",
+    title: "Modo simplificado",
+    description: "Descrição modo simplificado",
+  },
+  {
+    id:"6",
+    title: "Modo simplificado",
+    description: "Descrição modo simplificado",
+  },
+  {
+    id:"7",
+    title: "Modo simplificado",
+    description: "Descrição modo simplificado",
+  },
+  {
+    id:"8",
     title: "Modo simplificado",
     description: "Descrição modo simplificado",
   },

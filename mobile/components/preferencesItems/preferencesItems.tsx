@@ -1,6 +1,9 @@
-import { IPreferencesItems } from "@/app/interface/preferencesItems";
+import { IPreferencesItems } from "@/app/interface/preferences";
 import React, { useState } from "react";
-import { Text, View, useColorScheme } from "react-native";
+import { ScrollView, View, useColorScheme } from "react-native";
+import { ThemedText } from "../themed-text";
+import { ThemedView } from "../themed-view";
+import { Button } from "../ui/button";
 import { ToggleItem } from "../ui/toggleItem/toggleItem";
 import { createStyles } from "./styles";
 
@@ -20,22 +23,37 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
   };
 
   return (
-    <>
-      {preferencesItems.map((item) => (
-        <View key={item.id}>
-          <Text style={styles.title}>{item.title}</Text>
+    <ThemedView>
+      <ScrollView style={{ width: "100%" }}>
+        {preferencesItems.map((item) => (
+          <View style={styles.wrapperItem} key={item.id}>
+            <View style={styles.item}>
+              <ThemedText style={styles.title}>{item.title}</ThemedText>
 
-          {item.description && (
-            <Text style={styles.description}>{item.description}</Text>
-          )}
+              {item.description && (
+                <ThemedText style={styles.description}>
+                  {item.description}
+                </ThemedText>
+              )}
+            </View>
 
-          <ToggleItem
-            id={item.id}
-            value={!!activeItems[item.id]}
-            onChange={(value) => handleToggle(item.id, value)}
-          />
-        </View>
-      ))}
-    </>
+            <View style={styles.toogleWrapper}>
+              <ThemedText style={styles.textToggle}>Desativado</ThemedText>
+              <ToggleItem
+                id={item.id}
+                value={!!activeItems[item.id]}
+                onChange={(value) => handleToggle(item.id, value)}
+                containerStyle={{ marginRight: 7 }}
+              />
+              <ThemedText style={styles.textToggle}>Ativado</ThemedText>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+      <ThemedView style={styles.actionsWrapper}>
+        <Button variant="outline" title="Configurar mais tarde" />
+        <Button title="Salvar" />
+      </ThemedView>
+    </ThemedView>
   );
 };
