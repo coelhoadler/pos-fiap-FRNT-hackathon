@@ -7,7 +7,7 @@ export function styles(colorScheme: 'light' | 'dark' = 'dark') {
 
     return StyleSheet.create({
         wrapperContent: {
-            paddingVertical:20,
+            paddingTop:20,
             backgroundColor: colors.background,
         },
     });

@@ -52,6 +52,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       flexDirection:'row',
       gap:10,
       width:'100%',
+      paddingVertical:20,
+      backgroundColor:colors.background
     }
   });
 }
