@@ -1,10 +1,10 @@
-import { IToggleItemProps } from "@/app/interface/toogleItem";
+import { IToggleItem } from "@/app/interface/toogle";
 import { Colors } from "@/constants/theme";
 import React from "react";
 import { Pressable, Switch, useColorScheme } from "react-native";
 import { createStyles } from "./styles";
 
-export const ToggleItem: React.FC<IToggleItemProps> = ({
+export const ToggleItem: React.FC<IToggleItem> = ({
   value,
   onChange,
   disabled = false,
@@ -13,7 +13,6 @@ export const ToggleItem: React.FC<IToggleItemProps> = ({
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
-  const scaleRatio = 1.3;
 
   const handleToggle = () => {
     if (disabled) return;
@@ -35,17 +34,10 @@ export const ToggleItem: React.FC<IToggleItemProps> = ({
       disabled={disabled}
       accessibilityRole="switch"
       accessibilityState={{ checked: value, disabled }}
-      style={({ pressed }) => [
-        styles.container,
-        containerStyle,
-        pressed && !disabled && styles.pressed,
-      ]}
+      style={({ pressed }) => [containerStyle, pressed && !disabled && {}]}
       id={formatarId(id)}
     >
       <Switch
-        style={{
-          transform: [{ scaleX: scaleRatio }, { scaleY: scaleRatio }],
-        }}
         value={value}
         onValueChange={onChange}
         disabled={disabled}

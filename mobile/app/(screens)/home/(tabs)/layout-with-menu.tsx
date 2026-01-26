@@ -9,57 +9,57 @@ import { HamburgerMenuButton } from "../hamburger-menu-button";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
 
 export const LayoutWithMenu: React.FC = () => {
-    const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme();
 
-    return (
-        <>
-            <Tabs
-                screenOptions={{
-                    tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-                    headerShown: true,
-                    headerLeft: () => <HamburgerMenuButton />,
-                    headerTitle: "",
-                    tabBarButton: HapticTab,
-                }}
-            >
-                <Tabs.Screen
-                    name="index"
-                    options={{
-                        title: "Tarefas",
-                        tabBarIcon: ({ color }) => (
-                            <IconSymbol size={28} name="house.fill" color={color} />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="explore"
-                    options={{
-                        title: "Focar",
-                        tabBarIcon: ({ color }) => (
-                            <IconSymbol size={28} name="paperplane.fill" color={color} />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="modal"
-                    options={{
-                        title: "Preferências",
-                        tabBarIcon: ({ color }) => (
-                            <IconSymbol size={28} name="gearshape.fill" color={color} />
-                        ),
-                    }}
-                />
-                <Tabs.Screen
-                    name="profile"
-                    options={{
-                        title: "Perfil",
-                        tabBarIcon: ({ color }) => (
-                            <IconSymbol size={28} name="person.circle.fill" color={color} />
-                        ),
-                    }}
-                />
-            </Tabs>
-            <HamburgerMenuDrawer />
-        </>
-    );
+  return (
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          headerShown: true,
+          headerLeft: () => <HamburgerMenuButton />,
+          headerTitle: "",
+          tabBarButton: HapticTab,
+        }}
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: "Tarefas",
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="house.fill" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="explore"
+          options={{
+            title: "Focar",
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="paperplane.fill" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="preferences"
+          options={{
+            title: "Preferências",
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="gearshape.fill" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "Perfil",
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="person.circle.fill" color={color} />
+            ),
+          }}
+        />
+      </Tabs>
+      <HamburgerMenuDrawer />
+    </>
+  );
 };
