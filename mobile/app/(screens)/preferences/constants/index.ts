@@ -16,29 +16,5 @@ export const preferencesConstantsItems: TPreferencesItems[] = [
     title: "Modo simplificado",
     description: "Descrição modo simplificado",
   },
-  {
-    id:"4",
-    title: "Modo simplificado",
-    description: "Descrição modo simplificado",
-  },
-  {
-    id:"5",
-    title: "Modo simplificado",
-    description: "Descrição modo simplificado",
-  },
-  {
-    id:"6",
-    title: "Modo simplificado",
-    description: "Descrição modo simplificado",
-  },
-  {
-    id:"7",
-    title: "Modo simplificado",
-    description: "Descrição modo simplificado",
-  },
-  {
-    id:"8",
-    title: "Modo simplificado",
-    description: "Descrição modo simplificado",
-  },
+
 ];

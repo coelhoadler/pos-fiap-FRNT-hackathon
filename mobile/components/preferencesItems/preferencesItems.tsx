@@ -1,4 +1,5 @@
 import { IPreferencesItems } from "@/app/interface/preferences";
+import { savePreferences } from "@/app/services/preferences";
 import React, { useState } from "react";
 import { ScrollView, View, useColorScheme } from "react-native";
 import { ThemedText } from "../themed-text";
@@ -20,6 +21,11 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
       ...prev,
       [id]: value,
     }));
+  };
+
+  const handlePreferencesSave = async () => {
+    const setPreferences = await savePreferences({});
+    console.log("Preferências salvas com sucesso!");
   };
 
   return (
@@ -52,7 +58,7 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
       </ScrollView>
       <ThemedView style={styles.actionsWrapper}>
         <Button variant="outline" title="Configurar mais tarde" />
-        <Button title="Salvar" />
+        <Button onPress={handlePreferencesSave} title="Salvar" />
       </ThemedView>
     </ThemedView>
   );
