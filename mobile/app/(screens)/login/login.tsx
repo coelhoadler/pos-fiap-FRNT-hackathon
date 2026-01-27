@@ -18,7 +18,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import * as LocalAuthentication from "expo-local-authentication";
 import { styles } from "./styles";
+import { store } from "expo-router/build/global-state/router-store";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -29,19 +31,70 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [biometricEnabled, setBiometricEnabled] = useState(false);
+  const [isBiometricSupported, setIsBiometricSupported] = useState(false);
 
   useEffect(() => {
     (async () => {
-      setEmail(await AsyncStorage.getItem('@email') || '');
-      setPassword(await AsyncStorage.getItem('@password') || '');
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupported(compatible);
+
+      // Carrega a preferência de biometria salva
+      if (compatible) {
+        const savedBiometricPref = await AsyncStorage.getItem('@biometric_enabled');
+        if (savedBiometricPref !== null) {
+          const isActivated = savedBiometricPref === 'true';
+          setBiometricEnabled(isActivated);
+          if (isActivated) {
+            const success = await handleBiometricAuth();
+            console.log(">>> Biometric auth success:", success);
+            if (success) {
+              const storedEmail = await AsyncStorage.getItem('@email');
+              const storedPassword = await AsyncStorage.getItem('@password');
+              if (storedEmail && storedPassword) {
+                console.log(">>> Stored credentials found, logging in...");
+                console.log(">>> Email:", storedEmail);
+                console.log(">>> Password:", storedPassword);
+                setEmail(storedEmail);
+                setPassword(storedPassword);
+                // setTimeout(handleLogin, 2000);
+              }
+            }
+          }
+        }
+      }
+
     })();
   }, []);
 
-  const handleLogin = async () => {
-    if (email === "" || password === "") {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
-      return;
+  const handleBiometricAuth = async () => {
+    try {
+      const biometricAuth = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Autentique-se para fazer login",
+        cancelLabel: "Cancelar",
+        requireConfirmation: false,
+        disableDeviceFallback: false,
+      });
+
+      if (biometricAuth.success) {
+        return true;
+      } else {
+        Alert.alert("Erro", "Falha na autenticação biométrica");
+        resetLoginData();
+        return false;
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao autenticar: " + error);
+      resetLoginData();
+      return false;
     }
+  };
+
+  const handleLogin = async () => {
+    // if (emailToUse === "" || passwordToUse === "") {
+    //   Alert.alert("Erro", "Por favor, preencha todos os campos.");
+    //   return;
+    // }
 
     setIsLoading(true);
 
@@ -61,6 +114,17 @@ export default function LoginScreen() {
 
   const handleSignUp = () => {
     router.push("/(screens)/register/register");
+  };
+
+  // Salva a preferência quando o toggle é alterado
+  const handleBiometricToggle = async (value: boolean) => {
+    setBiometricEnabled(value);
+    await AsyncStorage.setItem('@biometric_enabled', value.toString());
+  };
+
+  const resetLoginData = () => {
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -126,6 +190,28 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
+          {/* Toggle de Autenticação Biométrica */}
+          {isBiometricSupported && (
+            <View style={styles(colorScheme).biometricContainer}>
+              <View style={styles(colorScheme).biometricTextContainer}>
+                <Ionicons
+                  name="finger-print-outline"
+                  size={20}
+                  color="#666"
+                  style={styles(colorScheme).icon}
+                />
+                <Text style={styles(colorScheme).biometricText}>
+                  Habilitar impressão digital
+                </Text>
+              </View>
+              <Switch
+                value={biometricEnabled}
+                onValueChange={handleBiometricToggle}
+                trackColor={{ false: "#767577", true: "#81b0ff" }}
+                thumbColor={biometricEnabled ? "#007AFF" : "#f4f3f4"}
+              />
+            </View>
+          )}
           {/* Botão de Login */}
           <TouchableOpacity
             style={styles(colorScheme).loginButton}
