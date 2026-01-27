@@ -7,7 +7,7 @@ import { styles } from "./styles";
 
 export default function Preferences() {
   const colorSchemeRaw = useColorScheme();
-  const colorScheme: "light" | "dark" | undefined = colorSchemeRaw ?? "dark";
+  const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
 
   return (
     <ThemedView style={genericStyle(colorScheme).container}>

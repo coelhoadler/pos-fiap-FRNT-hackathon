@@ -34,6 +34,9 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     disabled: {
       opacity: .7,
       pointerEvents:'none'
+    },
+    buttonLoading:{
+      minWidth:85
     }
   });
 }

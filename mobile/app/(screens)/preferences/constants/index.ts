@@ -2,17 +2,17 @@ import { TPreferencesItems } from "@/app/types/preferences";
 
 export const preferencesConstantsItems: TPreferencesItems[] = [
   {
-    id:"1",
+    id: "focusMode",
     title: "Modo foco",
     description: "Descrição modo foco",
   },
   {
-    id:"2",
+    id: "summaryMode",
     title: "Modo resumo",
     description: "Descrição modo resumo",
   },
   {
-    id:"3",
+    id: "simpleMode",
     title: "Modo simplificado",
     description: "Descrição modo simplificado",
   },
