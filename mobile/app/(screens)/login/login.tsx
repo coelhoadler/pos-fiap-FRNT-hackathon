@@ -20,7 +20,6 @@ import {
 } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import { styles } from "./styles";
-import { store } from "expo-router/build/global-state/router-store";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -47,17 +46,13 @@ export default function LoginScreen() {
           setBiometricEnabled(isActivated);
           if (isActivated) {
             const success = await handleBiometricAuth();
-            console.log(">>> Biometric auth success:", success);
             if (success) {
               const storedEmail = await AsyncStorage.getItem('@email');
               const storedPassword = await AsyncStorage.getItem('@password');
               if (storedEmail && storedPassword) {
-                console.log(">>> Stored credentials found, logging in...");
-                console.log(">>> Email:", storedEmail);
-                console.log(">>> Password:", storedPassword);
                 setEmail(storedEmail);
                 setPassword(storedPassword);
-                // setTimeout(handleLogin, 2000);
+                handleLogin(storedEmail, storedPassword);
               }
             }
           }
@@ -79,29 +74,31 @@ export default function LoginScreen() {
       if (biometricAuth.success) {
         return true;
       } else {
-        Alert.alert("Erro", "Falha na autenticação biométrica");
         resetLoginData();
+        handleBiometricDisable();
         return false;
       }
     } catch (error) {
-      Alert.alert("Erro", "Erro ao autenticar: " + error);
       resetLoginData();
       return false;
     }
   };
 
-  const handleLogin = async () => {
-    // if (emailToUse === "" || passwordToUse === "") {
-    //   Alert.alert("Erro", "Por favor, preencha todos os campos.");
-    //   return;
-    // }
+  const handleLogin = async (emailToUse?: string, passwordToUse?: string) => {
+    const loginEmail = (typeof emailToUse === "string") ? emailToUse : email;
+    const loginPassword = (typeof passwordToUse === "string") ? passwordToUse : password;
+
+    if (loginEmail === "" || loginPassword === "") {
+      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      return;
+    }
 
     setIsLoading(true);
 
-    signIn(email, password)
+    signIn(loginEmail, loginPassword)
       .then(async () => {
-        await AsyncStorage.setItem('@email', email);
-        await AsyncStorage.setItem('@password', password);
+        await AsyncStorage.setItem('@email', loginEmail);
+        await AsyncStorage.setItem('@password', loginPassword);
         router.replace("/(screens)/home/(tabs)");
       })
       .catch((error) => {
@@ -119,8 +116,17 @@ export default function LoginScreen() {
   // Salva a preferência quando o toggle é alterado
   const handleBiometricToggle = async (value: boolean) => {
     setBiometricEnabled(value);
-    await AsyncStorage.setItem('@biometric_enabled', value.toString());
+    if (value) {
+      await AsyncStorage.setItem('@biometric_enabled', value.toString());
+    } else {
+      await handleBiometricDisable();
+    }
   };
+
+  const handleBiometricDisable = async () => {
+    setBiometricEnabled(false);
+    await AsyncStorage.setItem('@biometric_enabled', 'false');
+  }
 
   const resetLoginData = () => {
     setEmail("");
@@ -215,7 +221,7 @@ export default function LoginScreen() {
           {/* Botão de Login */}
           <TouchableOpacity
             style={styles(colorScheme).loginButton}
-            onPress={handleLogin}
+            onPress={() => handleLogin()}
             disabled={isLoading}
           >
             {isLoading ? (
