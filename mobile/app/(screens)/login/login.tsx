@@ -2,7 +2,8 @@ import { signIn } from "@/app/services/firebaseAuth";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -24,21 +25,30 @@ export default function LoginScreen() {
   const colorSchemeRaw = useColorScheme();
   const colorScheme: "light" | "dark" | undefined = colorSchemeRaw ?? "dark";
 
-  const [email, setEmail] = useState("adlercoelhosantos12@gmail.com");
-  const [password, setPassword] = useState("Adler12345@");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [biometricEnabled, setBiometricEnabled] = useState(false);
 
-  const handleLogin = () => {
+  useEffect(() => {
+    (async () => {
+      setEmail(await AsyncStorage.getItem('@email') || '');
+      setPassword(await AsyncStorage.getItem('@password') || '');
+    })();
+  }, []);
+
+  const handleLogin = async () => {
     if (email === "" || password === "") {
       Alert.alert("Erro", "Por favor, preencha todos os campos.");
       return;
     }
 
     setIsLoading(true);
+
     signIn(email, password)
-      .then(() => {
+      .then(async () => {
+        await AsyncStorage.setItem('@email', email);
+        await AsyncStorage.setItem('@password', password);
         router.replace("/(screens)/home/(tabs)");
       })
       .catch((error) => {
@@ -114,27 +124,6 @@ export default function LoginScreen() {
                 color="#666"
               />
             </TouchableOpacity>
-          </View>
-
-          {/* Toggle de Autenticação Biométrica */}
-          <View style={styles(colorScheme).biometricContainer}>
-            <View style={styles(colorScheme).biometricTextContainer}>
-              <Ionicons
-                name="finger-print-outline"
-                size={20}
-                color="#666"
-                style={styles(colorScheme).icon}
-              />
-              <Text style={styles(colorScheme).biometricText}>
-                Habilitar impressão digital
-              </Text>
-            </View>
-            <Switch
-              value={biometricEnabled}
-              onValueChange={setBiometricEnabled}
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={biometricEnabled ? "#007AFF" : "#f4f3f4"}
-            />
           </View>
 
           {/* Botão de Login */}
