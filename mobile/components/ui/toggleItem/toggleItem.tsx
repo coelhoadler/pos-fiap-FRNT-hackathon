@@ -9,23 +9,14 @@ export const ToggleItem: React.FC<IToggleItem> = ({
   onChange,
   disabled = false,
   containerStyle,
-  id,
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
-  const styles = createStyles(colorScheme);
+  createStyles(colorScheme);
 
   const handleToggle = () => {
-    if (disabled) return;
-    onChange(!value);
-  };
-  const formatarId = (id: string) => {
-    return id
-      ? id
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-zA-Z0-9]/g, "")
-          .toLowerCase()
-      : "";
+    if (!disabled) {
+      onChange(!value);
+    }
   };
 
   return (
@@ -34,19 +25,23 @@ export const ToggleItem: React.FC<IToggleItem> = ({
       disabled={disabled}
       accessibilityRole="switch"
       accessibilityState={{ checked: value, disabled }}
-      style={({ pressed }) => [containerStyle, pressed && !disabled && {}]}
-      id={formatarId(id)}
+      style={containerStyle}
     >
       <Switch
         value={value}
         onValueChange={onChange}
         disabled={disabled}
-        trackColor={{
-          false: "white",
-          true: "white",
-        }}
-        thumbColor={`${colorScheme === "light" ? Colors.light.buttonBackground : Colors.dark.buttonBackground}`}
-        ios_backgroundColor={`${colorScheme === "light" ? Colors.light.buttonBackground : Colors.dark.buttonBackground}`}
+        trackColor={{ false: "white", true: "white" }}
+        thumbColor={
+          colorScheme === "light"
+            ? Colors.light.buttonBackground
+            : Colors.dark.buttonBackground
+        }
+        ios_backgroundColor={
+          colorScheme === "light"
+            ? Colors.light.buttonBackground
+            : Colors.dark.buttonBackground
+        }
       />
     </Pressable>
   );

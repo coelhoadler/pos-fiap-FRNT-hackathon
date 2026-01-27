@@ -4,7 +4,7 @@ import React from "react";
 import {
   ActivityIndicator,
   TouchableOpacity,
-  useColorScheme
+  useColorScheme,
 } from "react-native";
 import { createStyles } from "./styles";
 
@@ -26,15 +26,14 @@ export const Button: React.FC<TButton> = ({
         styles.buttonBg,
         variant === "outline" ? styles.buttonOutline : styles.buttonPrimary,
         disabled ? styles.disabled : {},
+        loading ? styles.buttonLoading : {},
         style,
       ]}
       onPress={onPress}
       disabled={disabled || loading}
     >
       {loading ? (
-        <ActivityIndicator
-          color={`${variant === "outline" ? "white" : "#FFF"} `}
-        />
+        <ActivityIndicator color={"white"} />
       ) : (
         <ThemedText
           style={[
