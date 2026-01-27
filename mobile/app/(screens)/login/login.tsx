@@ -4,17 +4,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  ActivityIndicator,
+  Alert,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { styles } from "./styles";
 
@@ -27,6 +28,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("Adler12345@");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [biometricEnabled, setBiometricEnabled] = useState(false);
 
   const handleLogin = () => {
     if (email === "" || password === "") {
@@ -112,6 +114,27 @@ export default function LoginScreen() {
                 color="#666"
               />
             </TouchableOpacity>
+          </View>
+
+          {/* Toggle de Autenticação Biométrica */}
+          <View style={styles(colorScheme).biometricContainer}>
+            <View style={styles(colorScheme).biometricTextContainer}>
+              <Ionicons
+                name="finger-print-outline"
+                size={20}
+                color="#666"
+                style={styles(colorScheme).icon}
+              />
+              <Text style={styles(colorScheme).biometricText}>
+                Habilitar impressão digital
+              </Text>
+            </View>
+            <Switch
+              value={biometricEnabled}
+              onValueChange={setBiometricEnabled}
+              trackColor={{ false: "#767577", true: "#81b0ff" }}
+              thumbColor={biometricEnabled ? "#007AFF" : "#f4f3f4"}
+            />
           </View>
 
           {/* Botão de Login */}
