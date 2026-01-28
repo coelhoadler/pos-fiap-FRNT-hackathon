@@ -1,6 +1,7 @@
 import { IModal } from "@/app/interface/modal";
+import { Colors } from "@/constants/theme";
 import React from "react";
-import { Text, useColorScheme, View } from "react-native";
+import { ActivityIndicator, Text, useColorScheme, View } from "react-native";
 import { ThemedView } from "../themed-view";
 import { Button } from "../ui/button";
 import { createStyles } from "./styles";
@@ -14,12 +15,15 @@ export const Modal: React.FC<IModal> = ({
   contentType = "feedbackMessage",
   onPressActionA,
   onPressActionB,
-  textButtonActionA,
-  textButtonActionB,
-  textButton,
+  textButtonActionA = "Não",
+  textButtonActionB = "Sim",
+  textButton = "OK",
+  textLoading = "Salvando...",
+  sizeLoading = 30,
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
+  const colors = Colors[colorScheme];
 
   return (
     <View
@@ -29,62 +33,73 @@ export const Modal: React.FC<IModal> = ({
       ]}
     >
       {/* MODAL  */}
-      <View style={[styles.modalContent, style]}>
-        <View style={styles.modalHeader}>
-          <Button
-            style={[
-              {
-                paddingVertical: 0,
-                paddingHorizontal: 0,
-              },
-            ]}
-            variant="close"
-            title="Fechar"
-            onPress={onClose}
-          />
-        </View>
-        <View>
-          <Text style={[styles.textBody]}>{children || text}</Text>
-          <View
-            style={[
-              styles.modalActionsButtons,
-              contentType === "feedbackMessage"
-                ? ""
-                : contentType === "withActions"
-                  ? styles.modalActionsButtonsTwoOptions
-                  : {},
-            ]}
-          >
-            {contentType === "feedbackMessage" ? (
-              <Button
-                textStyle={styles.buttonModalTextOutline}
-                style={styles.buttonModalOutline}
-                variant="outline"
-                title={"OK"}
-                onPress={onClose}
-              />
-            ) : (
-              <>
+      {contentType !== "loading" && (
+        <View style={[styles.modalContent, style]}>
+          <View style={styles.modalHeader}>
+            <Button
+              style={[
+                {
+                  paddingVertical: 0,
+                  paddingHorizontal: 0,
+                },
+              ]}
+              variant="close"
+              title="Fechar"
+              onPress={onClose}
+            />
+          </View>
+          <View>
+            <Text style={[styles.textBody]}>{children || text}</Text>
+            <View
+              style={[
+                styles.modalActionsButtons,
+                contentType === "feedbackMessage"
+                  ? ""
+                  : contentType === "withActions"
+                    ? styles.modalActionsButtonsTwoOptions
+                    : {},
+              ]}
+            >
+              {contentType === "feedbackMessage" ? (
                 <Button
                   textStyle={styles.buttonModalTextOutline}
                   style={styles.buttonModalOutline}
                   variant="outline"
-                  title={textButtonActionA || "Não"}
-                  onPress={onPressActionA}
+                  title={textButton}
+                  onPress={onClose}
                 />
-                <Button
-                  textStyle={styles.buttonModalText}
-                  style={styles.buttonModal}
-                  variant="outline"
-                  title={textButtonActionB || "Sim"}
-                  onPress={onPressActionB}
-                />
-              </>
-            )}
+              ) : (
+                <>
+                  <Button
+                    textStyle={styles.buttonModalTextOutline}
+                    style={styles.buttonModalOutline}
+                    variant="outline"
+                    title={textButtonActionA}
+                    onPress={onPressActionA}
+                  />
+                  <Button
+                    textStyle={styles.buttonModalText}
+                    style={styles.buttonModal}
+                    variant="outline"
+                    title={textButtonActionB}
+                    onPress={onPressActionB}
+                  />
+                </>
+              )}
+            </View>
           </View>
         </View>
-      </View>
+      )}
       {/* MODAL  */}
+
+      {/* MODAL LOADING  */}
+      {contentType === "loading" && (
+        <View style={styles.loadingContent}>
+          <ActivityIndicator size={sizeLoading} color={colors.colorPrimary} />
+          {textLoading && <Text style={styles.loadingText}>{textLoading}</Text>}
+        </View>
+      )}
+      {/* MODAL LOADING  */}
 
       {/* backdrop */}
       <ThemedView style={styles.backdrop}></ThemedView>
