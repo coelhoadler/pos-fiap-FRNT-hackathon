@@ -27,7 +27,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'center',
-      gap:3,
+      gap: 3,
       width: (width / 2) - 15,
     },
     wrapperItem: {
@@ -38,7 +38,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       marginBottom: 20,
       width: width - 10,
       paddingHorizontal: 10,
-      paddingVertical:10,
+      paddingVertical: 10,
       gap: 10,
     },
     item: {
@@ -49,15 +49,24 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       color: colors.text,
       textAlign: 'center',
     },
-    actionsWrapper:{
-      display:'flex',
-      alignItems:'center',
-      justifyContent:'space-around',
-      flexDirection:'row',
-      gap:10,
-      width:'100%',
-      paddingVertical:20,
-      backgroundColor:colors.background
+    actionsWrapper: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+      flexDirection: 'row',
+      gap: 10,
+      width: '100%',
+      paddingVertical: 20,
+      backgroundColor: colors.background
+    },
+    warningMessage: {
+      fontSize: 16,
+      color: colors.colorWhite,
+      textAlign: 'center',
+      marginBottom: 10,
+    },
+    warningMessageSmall: {
+      fontSize: 14,
     }
   });
 }

@@ -11,6 +11,12 @@ export const Modal: React.FC<IModal> = ({
   onClose,
   open = true,
   style,
+  contentType = "feedbackMessage",
+  onPressActionA,
+  onPressActionB,
+  textButtonActionA,
+  textButtonActionB,
+  textButton,
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
@@ -38,15 +44,43 @@ export const Modal: React.FC<IModal> = ({
           />
         </View>
         <View>
-          <Text style={styles.textBody}>{children || text}</Text>
-          <View style={styles.modalActionsButtons}>
-            <Button
-              textStyle={styles.buttonModalText}
-              style={styles.buttonModal}
-              variant="outline"
-              title="OK"
-              onPress={onClose}
-            />
+          <Text style={[styles.textBody]}>{children || text}</Text>
+          <View
+            style={[
+              styles.modalActionsButtons,
+              contentType === "feedbackMessage"
+                ? ""
+                : contentType === "withActions"
+                  ? styles.modalActionsButtonsTwoOptions
+                  : {},
+            ]}
+          >
+            {contentType === "feedbackMessage" ? (
+              <Button
+                textStyle={styles.buttonModalTextOutline}
+                style={styles.buttonModalOutline}
+                variant="outline"
+                title={"OK"}
+                onPress={onClose}
+              />
+            ) : (
+              <>
+                <Button
+                  textStyle={styles.buttonModalTextOutline}
+                  style={styles.buttonModalOutline}
+                  variant="outline"
+                  title={textButtonActionA || "Não"}
+                  onPress={onPressActionA}
+                />
+                <Button
+                  textStyle={styles.buttonModalText}
+                  style={styles.buttonModal}
+                  variant="outline"
+                  title={textButtonActionB || "Sim"}
+                  onPress={onPressActionB}
+                />
+              </>
+            )}
           </View>
         </View>
       </View>
