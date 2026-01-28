@@ -6,6 +6,7 @@ import {
 } from "@/app/services/preferences";
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, useColorScheme } from "react-native";
+import { Modal } from "../modal";
 import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { Button } from "../ui/button";
@@ -77,53 +78,54 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
   };
 
   return (
-    <ThemedView>
-      {successMessage ? (
-        <View>
-          <ThemedText>Preferências salvas com sucesso!</ThemedText>
-          <Button title="Ok" onPress={() => setSuccessMessage(false)} />
-        </View>
-      ) : (
-        <>
-          <ScrollView style={{ width: "100%" }}>
-            {preferencesItems.map((item) => (
-              <View style={styles.wrapperItem} key={item.id}>
-                <View style={styles.item}>
-                  <ThemedText style={styles.title}>{item.title}</ThemedText>
+    <ThemedView style={successMessage ? styles.containerPreferences : {}}>
+      <>
+        <ScrollView style={{ width: "100%" }}>
+          {preferencesItems.map((item) => (
+            <View style={styles.wrapperItem} key={item.id}>
+              <View style={styles.item}>
+                <ThemedText style={styles.title}>{item.title}</ThemedText>
 
-                  {item.description && (
-                    <ThemedText style={styles.description}>
-                      {item.description}
-                    </ThemedText>
-                  )}
-                </View>
-
-                <View style={styles.toogleWrapper}>
-                  <ThemedText style={styles.textToggle}>Desativado</ThemedText>
-
-                  <ToggleItem
-                    id={item.id}
-                    value={!!activeItems[item.id]}
-                    onChange={(value) => handleToggle(item.id, value)}
-                    containerStyle={{ marginRight: 7 }}
-                  />
-
-                  <ThemedText style={styles.textToggle}>Ativado</ThemedText>
-                </View>
+                {item.description && (
+                  <ThemedText style={styles.description}>
+                    {item.description}
+                  </ThemedText>
+                )}
               </View>
-            ))}
-          </ScrollView>
 
-          <ThemedView style={styles.actionsWrapper}>
-            <Button variant="outline" title="Configurar mais tarde" />
-            <Button
-              loading={loading}
-              title="Salvar"
-              onPress={handlePreferencesSave}
-            />
-          </ThemedView>
-        </>
-      )}
+              <View style={styles.toogleWrapper}>
+                <ThemedText style={styles.textToggle}>Desativado</ThemedText>
+
+                <ToggleItem
+                  id={item.id}
+                  value={!!activeItems[item.id]}
+                  onChange={(value) => handleToggle(item.id, value)}
+                  containerStyle={{ marginRight: 7 }}
+                />
+
+                <ThemedText style={styles.textToggle}>Ativado</ThemedText>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+
+        <ThemedView style={styles.actionsWrapper}>
+          <Button variant="outline" title="Configurar mais tarde" />
+          <Button
+            loading={loading}
+            title="Salvar"
+            onPress={handlePreferencesSave}
+          />
+        </ThemedView>
+
+        {successMessage && (
+          <Modal
+            open={successMessage}
+            onClose={() => setSuccessMessage(false)}
+            text="Preferências salvas com sucesso!"
+          />
+        )}
+      </>
     </ThemedView>
   );
 };

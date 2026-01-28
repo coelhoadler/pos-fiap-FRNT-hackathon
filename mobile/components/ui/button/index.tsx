@@ -1,5 +1,7 @@
 import { TButton } from "@/app/types/button";
 import { ThemedText } from "@/components/themed-text";
+import { Colors } from "@/constants/theme";
+import { X } from "lucide-react-native";
 import React from "react";
 import {
   ActivityIndicator,
@@ -15,10 +17,13 @@ export const Button: React.FC<TButton> = ({
   disabled,
   style,
   loading,
+  size = 22,
   variant = "primary",
+  colorIcon,
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
+  const colors = Colors[colorScheme];
 
   return (
     <TouchableOpacity
@@ -34,6 +39,8 @@ export const Button: React.FC<TButton> = ({
     >
       {loading ? (
         <ActivityIndicator color={"white"} />
+      ) : variant === "close" ? (
+        <X color={colorIcon || colors.colorWhite} size={size} />
       ) : (
         <ThemedText
           style={[
