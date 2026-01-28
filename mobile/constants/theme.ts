@@ -10,30 +10,48 @@ const tintColorDark = '#A3BACF';
 
 // TODO: ajustar as cores
 
+const baseColors = {
+  colorPrimary: '#0a7ea4',
+  colorSecondary: '#F5EFE6',
+  colorTertiary: '#687076',
+  text: '#11181C',
+  colorWhite: '#FFFFFF',
+  colorBlack: '#000000',
+  colorSuccess: '#E0EADD',
+}
+
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#F5EFE6',
-    buttonBackground: '#0a7ea4',
-    borderButton:'#0a7ea4',
+    colorPrimary: baseColors.colorPrimary,
+    text: baseColors.text,
+    colorWhite: baseColors.colorWhite,
+    colorBlack: baseColors.colorBlack,
+    colorSuccess: baseColors.colorSuccess,
+    background: baseColors.colorSecondary,
+    buttonBackground: baseColors.colorPrimary,
+    borderButton: baseColors.colorPrimary,
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
+    icon: baseColors.colorTertiary,
+    tabIconDefault: baseColors.colorTertiary,
     tabIconSelected: tintColorLight,
-    textButton: 'white',
-    textButtonOutline: '#0a7ea4',
+    textButton: baseColors.colorWhite,
+    textButtonOutline: baseColors.colorPrimary,
   },
   dark: {
+    colorPrimary: baseColors.colorPrimary,
+    colorWhite: baseColors.colorWhite,
+    colorBlack: baseColors.colorBlack,
+    colorSuccess: baseColors.colorSuccess,
     text: '#F9F7F2',
     background: '#4A6572',
-    buttonBackground: '#0a7ea4',
-    borderButton:'#0a7ea4',
+    buttonBackground: baseColors.colorPrimary,
+    borderButton: baseColors.colorPrimary,
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    icon: baseColors.colorTertiary,
+    tabIconDefault: baseColors.colorTertiary,
     tabIconSelected: tintColorDark,
-    textButton: 'white',
-    textButtonOutline: '#0a7ea4',
+    textButton: baseColors.colorWhite,
+    textButtonOutline: baseColors.colorPrimary,
   },
 };
 

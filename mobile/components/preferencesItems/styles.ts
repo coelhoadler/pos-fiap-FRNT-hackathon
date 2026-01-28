@@ -6,6 +6,10 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   const { width, height } = Dimensions.get('window');
 
   return StyleSheet.create({
+    containerPreferences: {
+      position: 'relative',
+      paddingHorizontal: 10,
+    },
     title: {
       fontSize: 18,
       fontWeight: "600",

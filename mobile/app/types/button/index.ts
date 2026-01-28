@@ -1,6 +1,6 @@
 import { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-export type ButtonVariant = "primary" | "secondary" | "outline";
+export type ButtonVariant = "primary" | "secondary" | "outline" | "close";
 export type TButton = {
     title: string;
     onPress?: () => void;
@@ -9,4 +9,6 @@ export type TButton = {
     loading?: boolean;
     style?: StyleProp<ViewStyle>;
     textStyle?: StyleProp<TextStyle>;
+    size?:number;
+    colorIcon?: string;
 }
