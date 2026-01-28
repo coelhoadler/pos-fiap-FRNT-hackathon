@@ -6,10 +6,12 @@ export interface IModal {
     onClose?: () => void;
     open?: boolean;
     style?: StyleProp<ViewStyle>;
-    contentType: "feedbackMessage" | "withActions";
     textButton?: string;
     textButtonActionA?: string;
     textButtonActionB?: string;
     onPressActionA?: () => void;
     onPressActionB?: () => void;
+    contentType: "feedbackMessage" | "withActions" | 'loading';
+    textLoading?: string;
+    sizeLoading?: number;
 }

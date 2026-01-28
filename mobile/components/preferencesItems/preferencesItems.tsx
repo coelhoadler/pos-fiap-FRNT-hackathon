@@ -161,6 +161,8 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
             </View>
           </Modal>
         )}
+
+        {loading && <Modal contentType="loading" open={loading} />}
       </>
     </ThemedView>
   );

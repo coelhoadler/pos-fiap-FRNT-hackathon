@@ -71,6 +71,19 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       top: -20,
       left: 0,
       right: 0,
-    }
+    },
+    loadingContent:{
+      height: '100%',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'row',
+      gap: 15,
+    },
+    loadingText:{
+      fontSize:16,
+      color: colors.colorPrimary,
+    },
   });
 }
