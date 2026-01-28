@@ -21,7 +21,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     modalContent: {
       backgroundColor: colors.colorPrimary,
-      maxWidth: 300,
+      maxWidth: 340,
       padding: 20,
       borderRadius: 10,
       zIndex: 5,
@@ -43,10 +43,23 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       alignItems: "center",
       marginBottom: 10,
     },
+    modalActionsButtonsTwoOptions: {
+      flexDirection: "row", 
+      justifyContent: "center", 
+      gap: 10,
+      flexWrap: "wrap",
+    },
     buttonModal: {
+      borderColor: colors.colorWhite,
+      backgroundColor: colors.colorWhite,
+    },
+    buttonModalOutline: {
       borderColor: colors.colorWhite,
     },
     buttonModalText: {
+      color: colors.colorPrimary,
+    },
+    buttonModalTextOutline: {
       color: colors.colorWhite,
     },
     backdrop: {

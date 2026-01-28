@@ -4,8 +4,9 @@ import {
   getPreferences,
   savePreferences,
 } from "@/app/services/preferences";
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, useColorScheme } from "react-native";
+import { ScrollView, Text, View, useColorScheme } from "react-native";
 import { Modal } from "../modal";
 import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
@@ -19,10 +20,13 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
 
+  const navigation = useNavigation();
+
   const [activeItems, setActiveItems] = useState<PreferencesFlags>({});
 
   const [loading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState(false);
+  const [configureLater, setConfigureLater] = useState(false);
 
   useEffect(() => {
     async function loadPreferences() {
@@ -47,6 +51,10 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
       ...prev,
       [id]: value,
     }));
+  };
+
+  const handleConfigureLater = () => {
+    setConfigureLater(true);
   };
 
   const buildFullPreferencesObject = () => {
@@ -110,7 +118,11 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
         </ScrollView>
 
         <ThemedView style={styles.actionsWrapper}>
-          <Button variant="outline" title="Configurar mais tarde" />
+          <Button
+            variant="outline"
+            onPress={handleConfigureLater}
+            title="Configurar mais tarde"
+          />
           <Button
             loading={loading}
             title="Salvar"
@@ -120,10 +132,34 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
 
         {successMessage && (
           <Modal
+            contentType="feedbackMessage"
             open={successMessage}
             onClose={() => setSuccessMessage(false)}
             text="Preferências salvas com sucesso!"
           />
+        )}
+        {configureLater && (
+          <Modal
+            contentType="withActions"
+            open={configureLater}
+            onPressActionA={() => setConfigureLater(false)}
+            onPressActionB={() => {
+              setConfigureLater(false);
+              navigation.navigate("index" as never);
+            }}
+            textButtonActionA="Configurar agora"
+            textButtonActionB="Confirmar"
+            onClose={() => setConfigureLater(false)}
+          >
+            <View>
+              <Text style={[styles.warningMessage]}>
+                Deseja mesmo configurar suas preferências mais tarde?
+              </Text>
+              <Text style={[styles.warningMessage, styles.warningMessageSmall]}>
+                Suas preferências atuais não serão salvas.
+              </Text>
+            </View>
+          </Modal>
         )}
       </>
     </ThemedView>
