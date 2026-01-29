@@ -1,5 +1,5 @@
-import { Colors } from "../../../constants/theme";
 import { StyleSheet } from "react-native";
+import { Colors } from "../../constants/theme";
 
 export function styles(colorScheme: 'light' | 'dark' = 'dark') {
     const colors = Colors[colorScheme];

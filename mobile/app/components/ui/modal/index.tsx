@@ -1,9 +1,9 @@
+import { Colors } from "@/app/constants/theme";
 import { IModal } from "@/app/interface/modal";
-import { Colors } from "@/constants/theme";
 import React from "react";
 import { ActivityIndicator, Text, useColorScheme, View } from "react-native";
-import { ThemedView } from "../themed-view";
-import { Button } from "../ui/button";
+import { ThemedView } from "../../themed-view";
+import { Button } from "../button";
 import { createStyles } from "./styles";
 
 export const Modal: React.FC<IModal> = ({

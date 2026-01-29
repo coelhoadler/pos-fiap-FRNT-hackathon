@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/app/constants/theme";
 import { StyleSheet } from "react-native";
 
 export function createStyles(colorScheme: "light" | "dark" = "dark") {
