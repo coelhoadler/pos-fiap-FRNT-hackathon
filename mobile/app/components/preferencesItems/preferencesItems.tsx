@@ -7,10 +7,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View, useColorScheme } from "react-native";
-import { Modal } from "../modal";
+
 import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
 import { Button } from "../ui/button";
+import { Modal } from "../ui/modal";
 import { ToggleItem } from "../ui/toggleItem/toggleItem";
 import { createStyles } from "./styles";
 

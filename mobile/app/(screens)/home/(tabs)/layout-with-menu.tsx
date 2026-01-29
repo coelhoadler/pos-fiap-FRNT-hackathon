@@ -1,10 +1,11 @@
 import { Tabs } from "expo-router";
 import React from "react";
 
-import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { HapticTab } from "@/app/components/haptic-tab";
+import { IconSymbol } from "@/app/components/ui/icon-symbol";
+import { Colors } from "@/app/constants/theme";
+import { useColorScheme } from "@/app/hooks/use-color-scheme";
+import { Timer } from "lucide-react-native";
 import { HamburgerMenuButton } from "../hamburger-menu-button";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
 
@@ -25,7 +26,7 @@ export const LayoutWithMenu: React.FC = () => {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Tarefas",
+            title: "Ínicio",
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
             ),
@@ -35,9 +36,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="explore"
           options={{
             title: "Focar",
-            tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="paperplane.fill" color={color} />
-            ),
+            tabBarIcon: ({ color }) => <Timer size={28} color={color} />,
           }}
         />
         <Tabs.Screen

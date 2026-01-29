@@ -1,11 +1,10 @@
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
 
+import ParallaxScrollView from "@/app/components/parallax-scroll-view";
+import { ThemedText } from "@/app/components/themed-text";
+import { ThemedView } from "@/app/components/themed-view";
 import { getAuth } from "@/app/services/firebaseAuth";
-import { HelloWave } from "@/components/hello-wave";
-import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { router } from "expo-router";
 
 export default function HomeScreen() {
@@ -27,7 +26,6 @@ export default function HomeScreen() {
     >
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Boas Vindas!</ThemedText>
-        <HelloWave />
       </ThemedView>
     </ParallaxScrollView>
   );

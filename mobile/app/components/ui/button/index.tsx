@@ -1,12 +1,12 @@
+import { ThemedText } from "@/app/components/themed-text";
+import { Colors } from "@/app/constants/theme";
 import { TButton } from "@/app/types/button";
-import { ThemedText } from "@/components/themed-text";
-import { Colors } from "@/constants/theme";
 import { X } from "lucide-react-native";
 import React from "react";
 import {
-  ActivityIndicator,
-  TouchableOpacity,
-  useColorScheme,
+    ActivityIndicator,
+    TouchableOpacity,
+    useColorScheme,
 } from "react-native";
 import { createStyles } from "./styles";
 
