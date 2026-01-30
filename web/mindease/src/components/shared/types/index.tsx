@@ -1,6 +1,14 @@
+import type { ButtonProps } from "@mui/material/Button";
+import type { TextFieldProps } from "@mui/material/TextField";
+
 export type WrapperButtonProps = {
+    label: string;   
+} & Partial<ButtonProps> & {
+    className?: string;
+}
+
+export type WrapperInputProps = {
     label: string;
-    variant?: 'text' | 'outlined' | 'contained';
-    color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
-    onClick?: () => void;
+} & Partial<TextFieldProps> & {
+    className?: string;
 }

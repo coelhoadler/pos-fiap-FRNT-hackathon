@@ -1,5 +1,5 @@
-import { LoginButton } from './LoginButton';
-import { SaveButton } from './SaveButton';
-import { CancelButton } from './CancelButton';
+import { LoginButton } from './loginButton';
+import { SaveButton } from './saveButton';
+import { CancelButton } from './cancelButton';
 
 export { LoginButton, SaveButton, CancelButton };
