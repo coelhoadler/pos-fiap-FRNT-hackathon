@@ -1,5 +1,5 @@
-import { WrapperButton } from '../../Shared/WrapperButton';
-import type { WrapperButtonProps } from '../../Shared/Types';
+import { WrapperButton } from '../../shared/WrapperButton';
+import type { WrapperButtonProps } from '../../shared/types';
 
 export const CancelButton = ({
   label = 'Cancelar',
