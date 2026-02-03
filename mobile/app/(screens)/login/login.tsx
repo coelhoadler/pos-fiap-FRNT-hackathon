@@ -3,6 +3,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from 'react-native-toast-message';
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -89,7 +90,14 @@ export default function LoginScreen() {
     const loginPassword = (typeof passwordToUse === "string") ? passwordToUse : password;
 
     if (loginEmail === "" || loginPassword === "") {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      Toast.show({
+        type: 'info',
+        text1: 'Atenção',
+        text2: '⚠️ Por favor, preencha todos os campos.',
+        text1Style: { fontSize: 16, fontWeight: 'bold' },
+        text2Style: { fontSize: 14 },
+        swipeable: true,
+      });
       return;
     }
 
@@ -241,6 +249,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </View>
+        <Toast />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
