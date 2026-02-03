@@ -1,9 +1,9 @@
+import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { signIn } from "@/app/services/firebaseAuth";
-import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Toast from 'react-native-toast-message';
+import * as LocalAuthentication from "expo-local-authentication";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -19,7 +19,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import * as LocalAuthentication from "expo-local-authentication";
+import Toast from 'react-native-toast-message';
 import { styles } from "./styles";
 
 export default function LoginScreen() {
@@ -41,15 +41,16 @@ export default function LoginScreen() {
 
       // Carrega a preferência de biometria salva
       if (compatible) {
-        const savedBiometricPref = await AsyncStorage.getItem('@biometric_enabled');
+        const savedBiometricPref =
+          await AsyncStorage.getItem("@biometric_enabled");
         if (savedBiometricPref !== null) {
-          const isActivated = savedBiometricPref === 'true';
+          const isActivated = savedBiometricPref === "true";
           setBiometricEnabled(isActivated);
           if (isActivated) {
             const success = await handleBiometricAuth();
             if (success) {
-              const storedEmail = await AsyncStorage.getItem('@email');
-              const storedPassword = await AsyncStorage.getItem('@password');
+              const storedEmail = await AsyncStorage.getItem("@email");
+              const storedPassword = await AsyncStorage.getItem("@password");
               if (storedEmail && storedPassword) {
                 setEmail(storedEmail);
                 setPassword(storedPassword);
@@ -59,7 +60,6 @@ export default function LoginScreen() {
           }
         }
       }
-
     })();
   }, []);
 
@@ -86,8 +86,9 @@ export default function LoginScreen() {
   };
 
   const handleLogin = async (emailToUse?: string, passwordToUse?: string) => {
-    const loginEmail = (typeof emailToUse === "string") ? emailToUse : email;
-    const loginPassword = (typeof passwordToUse === "string") ? passwordToUse : password;
+    const loginEmail = typeof emailToUse === "string" ? emailToUse : email;
+    const loginPassword =
+      typeof passwordToUse === "string" ? passwordToUse : password;
 
     if (loginEmail === "" || loginPassword === "") {
       Toast.show({
@@ -105,8 +106,8 @@ export default function LoginScreen() {
 
     signIn(loginEmail, loginPassword)
       .then(async () => {
-        await AsyncStorage.setItem('@email', loginEmail);
-        await AsyncStorage.setItem('@password', loginPassword);
+        await AsyncStorage.setItem("@email", loginEmail);
+        await AsyncStorage.setItem("@password", loginPassword);
         router.replace("/(screens)/home/(tabs)");
       })
       .catch((error) => {
@@ -125,7 +126,7 @@ export default function LoginScreen() {
   const handleBiometricToggle = async (value: boolean) => {
     setBiometricEnabled(value);
     if (value) {
-      await AsyncStorage.setItem('@biometric_enabled', value.toString());
+      await AsyncStorage.setItem("@biometric_enabled", value.toString());
     } else {
       await handleBiometricDisable();
     }
@@ -133,8 +134,8 @@ export default function LoginScreen() {
 
   const handleBiometricDisable = async () => {
     setBiometricEnabled(false);
-    await AsyncStorage.setItem('@biometric_enabled', 'false');
-  }
+    await AsyncStorage.setItem("@biometric_enabled", "false");
+  };
 
   const resetLoginData = () => {
     setEmail("");

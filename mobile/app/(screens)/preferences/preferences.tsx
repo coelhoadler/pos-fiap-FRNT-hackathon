@@ -1,7 +1,7 @@
-import { PreferencesItems } from "@/components/preferencesItems/preferencesItems";
-import { ThemedView } from "@/components/themed-view";
-import { useColorScheme } from "@/hooks/use-color-scheme.web";
-import { genericStyle } from "@/styles/genericStyles";
+import { PreferencesItems } from "@/app/components/preferencesItems/preferencesItems";
+import { ThemedView } from "@/app/components/themed-view";
+import { useColorScheme } from "@/app/hooks/use-color-scheme.web";
+import { genericStyle } from "@/app/styles/genericStyles";
 import { preferencesConstantsItems } from "./constants";
 import { styles } from "./styles";
 

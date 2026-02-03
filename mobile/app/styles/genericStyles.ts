@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors } from "@/app/constants/theme";
 import { Dimensions, StyleSheet } from "react-native";
 
 export const genericStyle = (colorScheme: "light" | "dark") => {

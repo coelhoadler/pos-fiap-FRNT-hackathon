@@ -1,5 +1,5 @@
+import { Colors } from "@/app/constants/theme";
 import { IToggleItem } from "@/app/interface/toogle";
-import { Colors } from "@/constants/theme";
 import React from "react";
 import { Pressable, Switch, useColorScheme } from "react-native";
 import { createStyles } from "./styles";
