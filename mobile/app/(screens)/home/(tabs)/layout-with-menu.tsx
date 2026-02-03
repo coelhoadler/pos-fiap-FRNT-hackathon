@@ -33,7 +33,7 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
         <Tabs.Screen
-          name="explore"
+          name="focus"
           options={{
             title: "Focar",
             tabBarIcon: ({ color }) => <Timer size={28} color={color} />,

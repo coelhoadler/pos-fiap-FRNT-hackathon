@@ -93,7 +93,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
     {
       icon: <Timer size={24} />,
       label: "Focar",
-      onPress: () => navigateTo("/(screens)/home/(tabs)/explore"),
+      onPress: () => navigateTo("/(screens)/home/(tabs)/focus"),
     },
     {
       icon: "gearshape.fill",
