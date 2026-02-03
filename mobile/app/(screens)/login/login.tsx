@@ -6,19 +6,20 @@ import * as LocalAuthentication from "expo-local-authentication";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  ActivityIndicator,
+  Alert,
+  Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
+import Toast from 'react-native-toast-message';
 import { styles } from "./styles";
 
 export default function LoginScreen() {
@@ -90,7 +91,14 @@ export default function LoginScreen() {
       typeof passwordToUse === "string" ? passwordToUse : password;
 
     if (loginEmail === "" || loginPassword === "") {
-      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+      Toast.show({
+        type: 'info',
+        text1: 'Atenção',
+        text2: '⚠️ Por favor, preencha todos os campos.',
+        text1Style: { fontSize: 16, fontWeight: 'bold' },
+        text2Style: { fontSize: 14 },
+        swipeable: true,
+      });
       return;
     }
 
@@ -242,6 +250,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </View>
+        <Toast />
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
