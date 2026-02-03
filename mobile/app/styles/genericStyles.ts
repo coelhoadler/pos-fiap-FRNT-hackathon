@@ -13,5 +13,10 @@ export const genericStyle = (colorScheme: "light" | "dark") => {
       justifyContent: "center",
       alignItems: "center",
     },
+    headerRightButtons: {
+     flexDirection: "row",
+     gap:10,
+     paddingRight:10,
+    },
   });
 };

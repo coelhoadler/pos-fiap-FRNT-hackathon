@@ -50,11 +50,11 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, label, onPress }) => {
 
 export const HamburgerMenuDrawer: React.FC = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
-  const [slideAnim] = useState(new Animated.Value(-DRAWER_WIDTH));
+  const [slideAnim] = useState(new Animated.Value(DRAWER_WIDTH));
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    const toValue = isMenuOpen ? 0 : -DRAWER_WIDTH;
+    const toValue = isMenuOpen ? 0 : DRAWER_WIDTH;
 
     Animated.spring(slideAnim, {
       toValue,
@@ -94,6 +94,11 @@ export const HamburgerMenuDrawer: React.FC = () => {
       icon: <Timer size={24} />,
       label: "Focar",
       onPress: () => navigateTo("/(screens)/home/(tabs)/explore"),
+    },
+    {
+      icon: <Timer size={24} />,
+      label: "Projetos",
+      onPress: () => navigateTo("/(screens)/home/(tabs)/projects"),
     },
     {
       icon: "gearshape.fill",
@@ -199,13 +204,13 @@ const styles = StyleSheet.create({
   },
   drawer: {
     position: "absolute",
-    left: 0,
+    right: 0,
     top: 0,
     bottom: 0,
     width: DRAWER_WIDTH,
     elevation: 16,
     shadowColor: "#000",
-    shadowOffset: { width: 2, height: 0 },
+    shadowOffset: { width: -2, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
   },

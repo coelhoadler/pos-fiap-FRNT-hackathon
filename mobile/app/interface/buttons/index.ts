@@ -1,8 +1,11 @@
 import { StyleProp, TextStyle, ViewStyle } from "react-native";
 
-export type ButtonVariant = "primary" | "secondary" | "outline" | "close";
-export type TButton = {
-    title: string;
+export interface ButtonVariant {
+  value: "primary" | "secondary" | "outline" | "close";
+}
+
+export interface IButton  {
+    title?: string;
     onPress?: () => void;
     variant?: ButtonVariant;
     disabled?: boolean;
@@ -11,4 +14,8 @@ export type TButton = {
     textStyle?: StyleProp<TextStyle>;
     size?:number;
     colorIcon?: string;
+}
+
+export interface IIconButton extends IButton {
+    icon: React.ReactElement;
 }
