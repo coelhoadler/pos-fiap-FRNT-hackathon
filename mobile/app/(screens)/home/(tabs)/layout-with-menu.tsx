@@ -1,32 +1,59 @@
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
+import { IconButton } from "@/app/components/ui/iconButton";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
-import { Timer } from "lucide-react-native";
+import { ArrowLeft, Timer } from "lucide-react-native";
 import { HamburgerMenuButton } from "../hamburger-menu-button";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
 
 export const LayoutWithMenu: React.FC = () => {
-  const colorScheme = useColorScheme();
+  const colorSchemeRaw = useColorScheme();
+  const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
+  const colors = Colors[colorScheme];
 
   return (
     <>
       <Tabs
+        backBehavior="history"
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
-          headerLeft: () => <HamburgerMenuButton />,
-          headerTitle: "",
+          headerLeftContainerStyle: { paddingLeft: 5, paddingTop: 2 },
+          headerTitleStyle: {
+            color: Colors[colorScheme ?? "light"].text,
+          },
+          headerRight: () => <HamburgerMenuButton />,
           tabBarButton: HapticTab,
+          headerLeft: () => (
+            <IconButton
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                } else {
+                  router.replace("/");
+                }
+              }}
+              icon={
+                <ArrowLeft
+                  size={22}
+                  color={Colors[colorScheme ?? "light"].text}
+                />
+              }
+            />
+          ),
         }}
       >
         <Tabs.Screen
           name="index"
           options={{
             title: "Ínicio",
+            headerTitle: "",
+            headerLeft: () => null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
             ),
@@ -54,6 +81,20 @@ export const LayoutWithMenu: React.FC = () => {
             title: "Perfil",
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="person.circle.fill" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="projects"
+          options={{
+            href: null,
+            title: "Projetos",
+            headerTitle: "Projetos",
+            headerRight: () => (
+              <>
+                <ActionsButtonsProjects />
+                {/* <HamburgerMenuButton /> */}
+              </>
             ),
           }}
         />
