@@ -61,23 +61,26 @@ export default function TabTwoScreen() {
                 </ThemedText>
             </TouchableOpacity>
 
-            {/* Label POMODORO */}
-            <ThemedText style={styles.pomodoroLabel}>POMODORO</ThemedText>
+            {/* Conteúdo inferior */}
+            <View style={styles.bottomContent}>
+                {/* Label POMODORO */}
+                <ThemedText style={styles.pomodoroLabel}>POMODORO</ThemedText>
 
-            {/* Timer */}
-            <ThemedText style={styles.timer}>{formatTime(timeLeft)}</ThemedText>
+                {/* Timer */}
+                <ThemedText style={styles.timer}>{formatTime(timeLeft)}</ThemedText>
 
-            {/* Ciclos (bolinhas) */}
-            <View style={styles.cyclesContainer}>
-                {Array.from({ length: TOTAL_CYCLES }).map((_, index) => (
-                    <View
-                        key={index}
-                        style={[
-                            styles.cycle,
-                            index < completedCycles && styles.cycleCompleted,
-                        ]}
-                    />
-                ))}
+                {/* Ciclos (bolinhas) */}
+                <View style={styles.cyclesContainer}>
+                    {Array.from({ length: TOTAL_CYCLES }).map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.cycle,
+                                index < completedCycles && styles.cycleCompleted,
+                            ]}
+                        />
+                    ))}
+                </View>
             </View>
 
             {/* Botão de Reset (opcional) */}
@@ -139,6 +142,11 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: "bold",
         color: "#000000",
+    },
+    bottomContent: {
+        marginTop: "auto",
+        alignItems: "center",
+        marginBottom: 40,
     },
     pomodoroLabel: {
         fontSize: 28,
