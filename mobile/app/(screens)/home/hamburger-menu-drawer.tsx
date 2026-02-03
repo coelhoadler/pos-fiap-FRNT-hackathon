@@ -5,7 +5,7 @@ import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { getAuth, signOut } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";
-import { Timer } from "lucide-react-native";
+import { FileCheckCorner, Timer } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   Animated,
@@ -96,7 +96,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
       onPress: () => navigateTo("/(screens)/home/(tabs)/explore"),
     },
     {
-      icon: <Timer size={24} />,
+      icon: <FileCheckCorner size={22} />,
       label: "Projetos",
       onPress: () => navigateTo("/(screens)/home/(tabs)/projects"),
     },
