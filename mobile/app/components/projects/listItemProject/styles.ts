@@ -16,6 +16,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       alignItems:'center',
       borderRadius:5,
       marginBottom:10,
+      maxHeight:55,
     },
     actionsWrapper:{
       display:'flex',

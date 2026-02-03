@@ -21,6 +21,27 @@ export default function ProjectsScreens() {
           onPressMoreOptions={() => {}}
           onPressView={() => {}}
         />
+        <ListItemProject
+          nameProject="Projeto 1"
+          onPressEdit={() => {}}
+          onPressDelete={() => {}}
+          onPressMoreOptions={() => {}}
+          onPressView={() => {}}
+        />
+        <ListItemProject
+          nameProject="Projeto 1"
+          onPressEdit={() => {}}
+          onPressDelete={() => {}}
+          onPressMoreOptions={() => {}}
+          onPressView={() => {}}
+        />
+        <ListItemProject
+          nameProject="Projeto 1"
+          onPressEdit={() => {}}
+          onPressDelete={() => {}}
+          onPressMoreOptions={() => {}}
+          onPressView={() => {}}
+        />
       </ScrollView>
     </ThemedView>
   );
