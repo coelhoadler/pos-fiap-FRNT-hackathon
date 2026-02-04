@@ -23,7 +23,7 @@ export const IconButton: React.FC<IIconButton> = ({
   return (
     <TouchableOpacity
       style={[style]}
-      onPress={onPress}
+      onPress={onPress ? onPress : () => {}}
       disabled={disabled || loading}
     >
       {loading ? (

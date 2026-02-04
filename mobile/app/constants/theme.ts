@@ -10,7 +10,7 @@ const tintColorDark = '#A3BACF';
 
 // TODO: ajustar as cores
 
-const baseColors = {
+export const baseColors = {
   colorPrimary: '#0a7ea4',
   colorSecondary: '#F5EFE6',
   colorTertiary: '#687076',
@@ -27,6 +27,8 @@ export const Colors = {
     colorWhite: baseColors.colorWhite,
     colorBlack: baseColors.colorBlack,
     colorSuccess: baseColors.colorSuccess,
+    colorTertiary: baseColors.colorTertiary,
+    colorSecondary: baseColors.colorSecondary,
     background: baseColors.colorSecondary,
     buttonBackground: baseColors.colorPrimary,
     borderButton: baseColors.colorPrimary,
@@ -42,6 +44,8 @@ export const Colors = {
     colorWhite: baseColors.colorWhite,
     colorBlack: baseColors.colorBlack,
     colorSuccess: baseColors.colorSuccess,
+    colorTertiary: baseColors.colorTertiary,
+    colorSecondary: baseColors.colorSecondary,
     text: '#F9F7F2',
     background: '#4A6572',
     buttonBackground: baseColors.colorPrimary,
