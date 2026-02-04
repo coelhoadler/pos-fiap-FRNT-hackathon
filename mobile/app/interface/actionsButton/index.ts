@@ -3,4 +3,6 @@ export interface IActionsButton {
 }
 export interface IActionsButtonProjects {
     pathAdd?:string;
+    openModal?: () => void;
+    onlyInformationButton?:boolean;
 }

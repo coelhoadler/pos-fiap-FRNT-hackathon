@@ -11,7 +11,13 @@ export interface IModal {
     textButtonActionB?: string;
     onPressActionA?: () => void;
     onPressActionB?: () => void;
-    contentType: "feedbackMessage" | "withActions" | 'loading';
+    contentType: "feedbackMessage" | "withActions" | 'loading' | 'legend';
     textLoading?: string;
     sizeLoading?: number;
+}
+
+export interface IModalLegend {
+    onClose?: () => void;
+    open?: boolean;
+    style?: StyleProp<ViewStyle>;
 }

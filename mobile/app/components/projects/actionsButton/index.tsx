@@ -8,6 +8,8 @@ import { ActionsButtons } from "../../ui/actionsButton";
 import { IconButton } from "../../ui/iconButton";
 export const ActionsButtonsProjects: React.FC<IActionsButtonProjects> = ({
   pathAdd,
+  onlyInformationButton,
+  openModal,
 }) => {
   const colorSchemeRaw = useColorScheme();
   const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
@@ -20,13 +22,25 @@ export const ActionsButtonsProjects: React.FC<IActionsButtonProjects> = ({
   return (
     <ActionsButtons>
       <>
-        <IconButton
-          onPress={() => {
-            pathAdd && navigateTo(pathAdd);
-          }}
-          icon={<CirclePlus size={28} color={colors.text} />}
-        />
-        <IconButton icon={<Info size={28} color={colors.text} />} />
+        {onlyInformationButton ? (
+          <IconButton
+            onPress={openModal}
+            icon={<Info size={28} color={colors.text} />}
+          />
+        ) : (
+          <>
+            <IconButton
+              onPress={() => {
+                pathAdd && navigateTo(pathAdd);
+              }}
+              icon={<CirclePlus size={28} color={colors.text} />}
+            />
+            <IconButton
+              onPress={openModal}
+              icon={<Info size={28} color={colors.text} />}
+            />
+          </>
+        )}
       </>
     </ActionsButtons>
   );
