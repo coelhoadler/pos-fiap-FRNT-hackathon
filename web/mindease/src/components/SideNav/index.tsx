@@ -6,14 +6,16 @@ import {
   Home,
   Settings,
   Target,
+  LogOut,
 } from 'lucide-react';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import type { NavItem } from './interfaces';
 import mindeaseLogo from '../../assets/favicon.svg';
+import { logoutUser } from '../../api';
 
 const navItems: NavItem[] = [
-  { label: 'Home', icon: <Home size={20} />, path: '/' },
+  { label: 'Home', icon: <Home size={20} />, path: '/home' },
   {
     label: 'Tasks',
     icon: <CircleCheckBig size={20} />,
@@ -33,15 +35,23 @@ const navItems: NavItem[] = [
 
 const SideNav = () => {
   const [open, setOpen] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // const handleNavigate = (path: string) => {
-  //   navigate(path);
-  //   setOpen(false);
-  // };
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      navigate('/');
+      setOpen(false);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      // Mesmo com erro, redirecionar para login
+      navigate('/');
+      setOpen(false);
+    }
+  };
 
   return (
     <aside className="flex h-screen fixed left-0 top-0 z-50">
@@ -115,19 +125,29 @@ const SideNav = () => {
             </nav>
           </div>
 
-          {/* PREFERÊNCIAS */}
-          <NavLink
-            to="/preferences"
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded hover:bg-cyan-100 ${
-                isActive ? 'bg-cyan-100' : ''
-              }`
-            }
-            onClick={() => setOpen(false)}
-          >
-            <Settings size={20} />
-            <span>Preferências</span>
-          </NavLink>
+          {/* PREFERÊNCIAS E LOGOUT */}
+          <div className="flex flex-col gap-2">
+            <NavLink
+              to="/preferences"
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-3 py-2 rounded hover:bg-cyan-100 ${
+                  isActive ? 'bg-cyan-100' : ''
+                }`
+              }
+              onClick={() => setOpen(false)}
+            >
+              <Settings size={20} />
+              <span>Preferências</span>
+            </NavLink>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-3 py-2 rounded hover:bg-red-100 text-red-600 transition-colors"
+            >
+              <LogOut size={20} />
+              <span>Sair</span>
+            </button>
+          </div>
         </div>
       )}
     </aside>
