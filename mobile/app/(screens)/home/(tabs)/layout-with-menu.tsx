@@ -85,15 +85,31 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
         <Tabs.Screen
-          name="projects"
+          name="projects/projects"
           options={{
             href: null,
             title: "Projetos",
             headerTitle: "Projetos",
             headerRight: () => (
               <>
-                <ActionsButtonsProjects />
+                <ActionsButtonsProjects
+                  pathAdd={"/(screens)/home/(tabs)/projects/addProject"}
+                />
                 {/* <HamburgerMenuButton /> */}
+              </>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="projects/addProject"
+          options={{
+            href: null,
+            title: "Novo Projeto",
+            headerTitle: "Novo Projeto",
+            headerRight: () => (
+              <>
+                {/* <ActionsButtonsProjects /> */}
+                <HamburgerMenuButton />
               </>
             ),
           }}

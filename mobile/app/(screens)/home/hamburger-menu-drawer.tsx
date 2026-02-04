@@ -98,7 +98,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
     {
       icon: <FileCheckCorner size={22} />,
       label: "Projetos",
-      onPress: () => navigateTo("/(screens)/home/(tabs)/projects"),
+      onPress: () => navigateTo("/(screens)/home/(tabs)/projects/projects"),
     },
     {
       icon: "gearshape.fill",
