@@ -1,6 +1,6 @@
 import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { ListItemProject } from "@/app/components/projects/listItemProject";
-import { ModalLegend } from "@/app/components/projects/modalLegend";
+import { ModalLegendProjects } from "@/app/components/projects/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { DropdownContent } from "@/app/components/ui/dropdown/dropdownContent";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
@@ -9,7 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Tabs } from "expo-router";
 import { useCallback, useState } from "react";
 import { Pressable, ScrollView, Text } from "react-native";
-import { dropdownItemsProjects } from "./constants";
+import { dropdownItemsProjects, legendContentItems } from "./constants";
 import { createStyles } from "./styles";
 
 export default function ProjectsScreens() {
@@ -39,7 +39,6 @@ export default function ProjectsScreens() {
 
   const handleOpenModalLegend = () => {
     setOpenModalLegend(true);
-    console.log("modal de legenda clicado");
   };
 
   return (
@@ -86,7 +85,9 @@ export default function ProjectsScreens() {
       </ScrollView>
 
       {openModalLegend && (
-        <ModalLegend
+        <ModalLegendProjects
+          legendContentItems={legendContentItems}
+          subtitleContentItem="Explicação dos items abaixo"
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />
