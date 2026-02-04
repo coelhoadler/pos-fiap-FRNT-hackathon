@@ -1,13 +1,12 @@
-import { router, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
 import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
-import { IconButton } from "@/app/components/ui/iconButton";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
-import { ArrowLeft, Timer } from "lucide-react-native";
+import { Timer } from "lucide-react-native";
 import { HamburgerMenuButton } from "../hamburger-menu-button";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
 
@@ -19,7 +18,7 @@ export const LayoutWithMenu: React.FC = () => {
   return (
     <>
       <Tabs
-        backBehavior="history"
+        // backBehavior="history"
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
@@ -27,25 +26,25 @@ export const LayoutWithMenu: React.FC = () => {
           headerTitleStyle: {
             color: Colors[colorScheme ?? "light"].text,
           },
-          headerRight: () => <HamburgerMenuButton />,
+          headerLeft: () => <HamburgerMenuButton />,
           tabBarButton: HapticTab,
-          headerLeft: () => (
-            <IconButton
-              onPress={() => {
-                if (router.canGoBack()) {
-                  router.back();
-                } else {
-                  router.replace("/");
-                }
-              }}
-              icon={
-                <ArrowLeft
-                  size={22}
-                  color={Colors[colorScheme ?? "light"].text}
-                />
-              }
-            />
-          ),
+          // headerLeft: () => (
+          //   <IconButton
+          //     onPress={() => {
+          //       if (router.canGoBack()) {
+          //         router.back();
+          //       } else {
+          //         router.replace("/");
+          //       }
+          //     }}
+          //     icon={
+          //       <ArrowLeft
+          //         size={22}
+          //         color={Colors[colorScheme ?? "light"].text}
+          //       />
+          //     }
+          //   />
+          // ),
         }}
       >
         <Tabs.Screen
@@ -53,7 +52,7 @@ export const LayoutWithMenu: React.FC = () => {
           options={{
             title: "Ínicio",
             headerTitle: "",
-            headerLeft: () => null,
+            // headerLeft: () => null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
             ),
@@ -106,12 +105,7 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Novo Projeto",
             headerTitle: "Novo Projeto",
-            headerRight: () => (
-              <>
-                {/* <ActionsButtonsProjects /> */}
-                <HamburgerMenuButton />
-              </>
-            ),
+            headerRight: () => <>{/* <ActionsButtonsProjects /> */}</>,
           }}
         />
       </Tabs>
