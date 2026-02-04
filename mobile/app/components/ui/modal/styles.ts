@@ -70,12 +70,12 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     backdrop: {
       backgroundColor: 'rgba(0, 0, 0, 0.09)',
       height: height,
-      width: '100%',
+      width: width + 50,
       minWidth: '100%',
       position: 'absolute',
       top: -20,
-      left: 0,
-      right: 0,
+      left: -25,
+      // right: 0,
     },
     loadingContent:{
       height: '100%',

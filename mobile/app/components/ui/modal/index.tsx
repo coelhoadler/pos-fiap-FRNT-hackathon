@@ -1,7 +1,13 @@
 import { Colors } from "@/app/constants/theme";
 import { IModal } from "@/app/interface/modal";
 import React from "react";
-import { ActivityIndicator, Text, useColorScheme, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 import { ThemedView } from "../../themed-view";
 import { Button } from "../button";
 import { createStyles } from "./styles";
@@ -114,7 +120,9 @@ export const Modal: React.FC<IModal> = ({
       {/* MODAL LOADING  */}
 
       {/* backdrop */}
-      <ThemedView style={styles.backdrop}></ThemedView>
+      <Pressable style={styles.backdrop} onPress={onClose}>
+        <ThemedView></ThemedView>
+      </Pressable>
       {/* backdrop */}
     </View>
   );

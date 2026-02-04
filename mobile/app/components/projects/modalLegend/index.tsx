@@ -1,34 +1,20 @@
-import { Colors } from "@/app/constants/theme";
-import { useColorScheme } from "@/app/hooks/use-color-scheme";
-import { IModalLegend } from "@/app/interface/modal";
 import React from "react";
-import { Text, View } from "react-native";
-import { Modal } from "../../ui/modal";
-import { createStyles } from "./styles";
-export const ModalLegend: React.FC<IModalLegend> = ({
+
+import { LegendContent } from "@/app/components/ui/legend/legendContent";
+import { ModalLegend } from "@/app/components/ui/legend/modalLegend";
+import { IModalLegendProjects } from "@/app/interface/modal";
+export const ModalLegendProjects: React.FC<IModalLegendProjects> = ({
   onClose,
   open,
-  style,
+  legendContentItems,
+  subtitleContentItem,
 }) => {
-  const colorScheme = useColorScheme() === "light" ? "light" : "dark";
-  const styles = createStyles(colorScheme);
-  const colors = Colors[colorScheme];
-
   return (
-    <Modal
-      style={[styles.modalLegendWrapper, style]}
-      onClose={onClose}
-      open={open}
-      contentType={"legend"}
-    >
-      <View>
-        <Text style={styles.title}>Legenda</Text>
-        <View style={styles.itemsWrapper}>
-          <Text style={styles.item}>Item 1</Text>
-          <Text style={styles.item}>Item 1</Text>
-          <Text style={styles.item}>Item 1</Text>
-        </View>
-      </View>
-    </Modal>
+    <ModalLegend onClose={onClose} open={open}>
+      <LegendContent
+        legendItems={legendContentItems}
+        subtitle={subtitleContentItem}
+      />
+    </ModalLegend>
   );
 };

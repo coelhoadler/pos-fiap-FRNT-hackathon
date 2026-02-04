@@ -20,4 +20,19 @@ export interface IModalLegend {
     onClose?: () => void;
     open?: boolean;
     style?: StyleProp<ViewStyle>;
+    children?: React.ReactNode;
+}
+export interface IModalLegendProjects extends IModalLegend {
+    legendContentItems?: ILegendContentItem[];
+    subtitleContentItem?:string;
+}
+
+export interface ILegendContent{
+    style?: StyleProp<ViewStyle>;
+    subtitle?:string;
+    legendItems?: ILegendContentItem[];
+}
+export interface ILegendContentItem{
+    description:string;
+    icon?: React.ReactElement;
 }
