@@ -19,6 +19,11 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       bottom: 0,
       zIndex: 1,
     },
+    modalContainerLegend:{
+      justifyContent: 'flex-start',
+      top:20,
+      paddingTop:60
+    },
     modalContent: {
       backgroundColor: colors.colorPrimary,
       maxWidth: 340,

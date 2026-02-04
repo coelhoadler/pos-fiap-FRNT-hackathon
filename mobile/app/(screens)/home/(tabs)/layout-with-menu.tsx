@@ -89,14 +89,13 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Projetos",
             headerTitle: "Projetos",
-            headerRight: () => (
-              <>
-                <ActionsButtonsProjects
-                  pathAdd={"/(screens)/home/(tabs)/projects/addProject"}
-                />
-                {/* <HamburgerMenuButton /> */}
-              </>
-            ),
+            // headerRight: () => (
+            //   <>
+            //     <ActionsButtonsProjects
+            //       pathAdd={"/(screens)/home/(tabs)/projects/addProject"}
+            //     />
+            //   </>
+            // ),
           }}
         />
         <Tabs.Screen
@@ -105,7 +104,9 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Novo Projeto",
             headerTitle: "Novo Projeto",
-            headerRight: () => <>{/* <ActionsButtonsProjects /> */}</>,
+            headerRight: () => (
+              <>{<ActionsButtonsProjects onlyInformationButton />}</>
+            ),
           }}
         />
       </Tabs>
