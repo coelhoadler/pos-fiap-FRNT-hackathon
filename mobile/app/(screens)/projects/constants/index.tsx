@@ -1,26 +1,34 @@
 import { baseColors } from "@/app/constants/theme";
 import { IDropdownItem } from "@/app/interface/dropdown";
 import { ILegendContentItem } from "@/app/interface/modal";
-import { EllipsisVertical, Eye, Pencil, Trash } from "lucide-react-native";
+import {
+  CirclePlus,
+  EllipsisVertical,
+  Eye,
+  Pencil,
+  Play,
+  Settings,
+  Trash,
+} from "lucide-react-native";
 
 export const dropdownItemsProjects: IDropdownItem[] = [
   {
     id: "1",
-    name: "Share Project",
+    name: "Iniciar tarefa",
     onPress: () => {},
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    icon: <Play size={16} color={baseColors.colorPrimary} />,
   },
   {
     id: "2",
-    name: "Share Project",
+    name: "Nova tarefa",
     onPress: () => {},
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    icon: <CirclePlus size={17} color={baseColors.colorPrimary} />,
   },
   {
     id: "3",
-    name: "Share Project",
+    name: "Configurações",
     onPress: () => {},
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    icon: <Settings size={16} color={baseColors.colorPrimary} />,
   },
 ];
 export const legendContentItems: ILegendContentItem[] = [
