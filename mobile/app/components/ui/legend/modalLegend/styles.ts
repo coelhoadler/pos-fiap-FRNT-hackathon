@@ -7,16 +7,19 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   return StyleSheet.create({
     modalLegendWrapper: {
         width:'100%',
-        backgroundColor:colors.colorWhite
+        backgroundColor:colors.colorWhite,
     },
     title:{
       color:colors.colorPrimary,
-      fontSize:20,
-      fontWeight:'bold'
+      fontSize:26,
+      fontWeight:'bold',
+      width:'100%',
+      textAlign:'center',
+      marginBottom:5
     },
     itemsWrapper:{
       marginTop:15,
-      width:'100%'
+      width:'100%',
     },
     item:{
       marginBottom:10,

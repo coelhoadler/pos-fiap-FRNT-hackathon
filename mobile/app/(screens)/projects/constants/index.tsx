@@ -1,7 +1,7 @@
 import { baseColors } from "@/app/constants/theme";
 import { IDropdownItem } from "@/app/interface/dropdown";
 import { ILegendContentItem } from "@/app/interface/modal";
-import { Pencil } from "lucide-react-native";
+import { EllipsisVertical, Eye, Pencil, Trash } from "lucide-react-native";
 
 export const dropdownItemsProjects: IDropdownItem[] = [
   {
@@ -25,15 +25,22 @@ export const dropdownItemsProjects: IDropdownItem[] = [
 ];
 export const legendContentItems: ILegendContentItem[] = [
   {
-    description: "Descrição Legenda",
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    description: "Visualizar o projeto e suas tarefas",
+    icon: <Eye size={20} color={baseColors.text} />,
   },
   {
-    description: "Descrição Legenda",
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    description: "Excluir o projeto e todas as suas tarefas.",
+    icon: <Trash size={20} color={baseColors.text} />,
+    styleLegendIcon: { marginTop: 5 },
   },
   {
-    description: "Descrição Legenda",
-    icon: <Pencil size={18} color={baseColors.colorPrimary} />,
+    description: "Editar nome e configurações básicas do projeto.",
+    icon: <Pencil size={19} color={baseColors.text} />,
+    styleLegendIcon: { marginTop: 5 },
+  },
+  {
+    description: "Visualizar mais opções de configuração do projeto.",
+    icon: <EllipsisVertical size={24} color={baseColors.text} />,
+    styleLegendIcon: { marginTop: 3 },
   },
 ];
