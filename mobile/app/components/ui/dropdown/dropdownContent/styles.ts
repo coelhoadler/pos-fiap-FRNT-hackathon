@@ -28,7 +28,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     dropdownItemWrapper: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
+      justifyContent: "flex-start",
       paddingVertical: 10,
       gap: 8,
       borderBottomColor: colors.colorPrimary,
