@@ -2,6 +2,7 @@ import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { Audio } from "expo-av";
 
 const POMODORO_TIME = 3 * 60; // 25 minutos em segundos
 const TOTAL_CYCLES = 5;
@@ -10,6 +11,29 @@ export default function TabTwoScreen() {
     const [isRunning, setIsRunning] = useState(false);
     const [timeLeft, setTimeLeft] = useState(POMODORO_TIME);
     const [completedCycles, setCompletedCycles] = useState(0);
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+    // Configurar o modo de áudio ao montar o componente
+    useEffect(() => {
+        async function setupAudio() {
+            try {
+                await Audio.setAudioModeAsync({
+                    playsInSilentModeIOS: true,
+                    shouldDuckAndroid: true,
+                });
+            } catch (error) {
+                console.error("Erro ao configurar áudio:", error);
+            }
+        }
+        setupAudio();
+
+        // Cleanup ao desmontar
+        return () => {
+            if (sound) {
+                sound.unloadAsync();
+            }
+        };
+    }, []);
 
     useEffect(() => {
         let interval: any = null;
@@ -30,14 +54,60 @@ export default function TabTwoScreen() {
         };
     }, [isRunning, timeLeft, completedCycles]);
 
-    const toggleTimer = () => {
-        setIsRunning(!isRunning);
+    const toggleTimer = async () => {
+        const newIsRunning = !isRunning;
+        setIsRunning(newIsRunning);
+
+        if (newIsRunning) {
+            // Iniciar a música
+            await playSound();
+        } else {
+            // Pausar a música
+            await pauseSound();
+        }
     };
 
-    const resetTimer = () => {
+    const playSound = async () => {
+        try {
+            // Se já existe um som, apenas retomar
+            if (sound) {
+                await sound.playAsync();
+            } else {
+                // Criar e tocar um novo som
+                // Você pode usar uma URL de música ou um arquivo local
+                const { sound: newSound } = await Audio.Sound.createAsync(
+                    // Exemplo com URL - substitua pela sua música de foco
+                    { uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                    { shouldPlay: true, isLooping: true, volume: 0.5 }
+                );
+                setSound(newSound);
+            }
+        } catch (error) {
+            console.error("Erro ao tocar música:", error);
+        }
+    };
+
+    const pauseSound = async () => {
+        try {
+            if (sound) {
+                await sound.pauseAsync();
+            }
+        } catch (error) {
+            console.error("Erro ao pausar música:", error);
+        }
+    };
+
+    const resetTimer = async () => {
         setIsRunning(false);
         setTimeLeft(POMODORO_TIME);
         setCompletedCycles(0);
+
+        // Parar e limpar a música
+        if (sound) {
+            await sound.stopAsync();
+            await sound.unloadAsync();
+            setSound(null);
+        }
     };
 
     const formatTime = (seconds: number) => {
