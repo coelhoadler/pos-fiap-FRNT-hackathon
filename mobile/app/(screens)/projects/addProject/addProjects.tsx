@@ -10,8 +10,9 @@ import { createProject } from "@/app/services/projects";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
 import auth from "@react-native-firebase/auth";
+import { useFocusEffect } from "@react-navigation/native"; // Importação importante
 import { Tabs, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { addProjectLegendContent } from "../constants";
 import { createStyles } from "./styles";
@@ -32,6 +33,23 @@ export default function AddProjectScreens() {
   const [errors, setErrors] = useState({
     nomeProjeto: "",
   });
+
+  const resetForm = () => {
+    setFormData({
+      nomeProjeto: "",
+      descricaoProjeto: "",
+    });
+    setErrors({
+      nomeProjeto: "",
+    });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      resetForm();
+      return () => resetForm();
+    }, []),
+  );
 
   const handleValuesChange = (id: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -61,6 +79,7 @@ export default function AddProjectScreens() {
       });
 
       Alert.alert("Sucesso", "Projeto criado com sucesso!");
+      resetForm(); // Limpa após salvar
       router.back();
     } catch (error) {
       console.error(error);
