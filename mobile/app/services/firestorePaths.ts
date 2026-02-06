@@ -14,3 +14,16 @@ export function getPreferencesDocRef() {
     .collection("preferences")
     .doc("settings");
 }
+
+export function getProjectsCollectionRef() {
+  const user = auth().currentUser;
+
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+  
+  return firestore()
+    .collection("users")
+    .doc(user.uid)
+    .collection("projects");
+}

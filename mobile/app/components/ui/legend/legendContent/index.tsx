@@ -16,12 +16,16 @@ export const LegendContent: React.FC<ILegendContent> = ({
 
   return (
     <View style={[styles.legendContent, style]}>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       {legendItems && (
         <>
           {legendItems?.map((item, index) => (
-            <View style={styles.wrapperItems} key={index}>
-              {item.icon && <View style={styles.wrapperIcon}>{item.icon}</View>}
+            <View style={styles.wrapperItem} key={index}>
+              {item.icon && (
+                <View style={[styles.wrapperIcon, item.styleLegendIcon]}>
+                  {item.icon}
+                </View>
+              )}
               <Text style={styles.descriptionItem}>{item.description}</Text>
             </View>
           ))}

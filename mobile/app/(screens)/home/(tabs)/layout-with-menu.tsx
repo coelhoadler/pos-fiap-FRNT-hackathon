@@ -2,7 +2,6 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
-import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
@@ -104,9 +103,6 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Novo Projeto",
             headerTitle: "Novo Projeto",
-            headerRight: () => (
-              <>{<ActionsButtonsProjects onlyInformationButton />}</>
-            ),
           }}
         />
       </Tabs>

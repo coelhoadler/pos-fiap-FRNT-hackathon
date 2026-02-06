@@ -87,7 +87,7 @@ export default function ProjectsScreens() {
       {openModalLegend && (
         <ModalLegendProjects
           legendContentItems={legendContentItems}
-          subtitleContentItem="Explicação dos items abaixo"
+          subtitleContentItem="Aqui vamos explicar o que significa cada ícone."
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />
