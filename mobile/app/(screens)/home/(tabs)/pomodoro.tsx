@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
 import { Audio } from "expo-av";
 import { useRouter } from "expo-router";
-import { hasPomodoroSettings } from "@/app/services/pomodoroSettings";
+import { getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { TabsRoutes } from "./tabsRouters";
 
 const POMODORO_TIME = 3 * 60; // 25 minutos em segundos
@@ -22,11 +22,11 @@ export default function TabTwoScreen() {
     useEffect(() => {
         async function checkPomodoroSettings() {
             try {
-                const hasSettings = await hasPomodoroSettings();
-                debugger
-                if (!hasSettings) {
+                const settings = await getPomodoroSettings();
+                if (!settings) {
                     // Redirecionar para a tela de configurações
                     router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
+                    setIsLoading(false);
                 } else {
                     setIsLoading(false);
                 }
@@ -193,10 +193,11 @@ export default function TabTwoScreen() {
                 </View>
             </View>
 
-            {/* Botão de Reset (opcional) */}
-            {/* <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
-                <ThemedText style={styles.resetButtonText}>Reset</ThemedText>
-            </TouchableOpacity> */}
+            {(completedCycles > 0 || timeLeft !== POMODORO_TIME) && (
+                <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
+                    <ThemedText style={styles.resetButtonText}>Reiniciar</ThemedText>
+                </TouchableOpacity>
+            )}
         </ThemedView>
     );
 }
