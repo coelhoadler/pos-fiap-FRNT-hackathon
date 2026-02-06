@@ -1,11 +1,13 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
-import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
 import { TabsRoutes } from "./tabsRouters";
+import { savePomodoroSettings, getPomodoroSettings } from "@/app/services/pomodoroSettings";
+import { IPomodoroSettings } from "@/app/interface/pomodoro";
 
 export default function PomodoroSettings() {
     const router = useRouter();
@@ -13,7 +15,57 @@ export default function PomodoroSettings() {
     const [shortBreak, setShortBreak] = useState(5);
     const [longBreak, setLongBreak] = useState(10);
     const [musicEnabled, setMusicEnabled] = useState(false);
-    const [soundEnabled, setSoundEnabled] = useState(false);
+    const [soundEnabledWhenFinish, setSoundEnabledWhenFinish] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Carregar configurações ao montar o componente
+    useEffect(() => {
+        loadSettings();
+    }, []);
+
+    const loadSettings = async () => {
+        try {
+            setIsLoading(true);
+            const settings = await getPomodoroSettings();
+            if (settings) {
+                setPomodoroTime(settings.pomodoroTime);
+                setShortBreak(settings.shortBreak);
+                setLongBreak(settings.longBreak);
+                setMusicEnabled(settings.musicEnabled);
+                setSoundEnabledWhenFinish(settings.soundEnabledWhenFinish);
+            }
+        } catch (error) {
+            console.error("Erro ao carregar configurações:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleSave = async () => {
+        try {
+            setIsSaving(true);
+            const settings: IPomodoroSettings = {
+                pomodoroTime,
+                shortBreak,
+                longBreak,
+                musicEnabled,
+                soundEnabledWhenFinish,
+            };
+            await savePomodoroSettings(settings);
+            Alert.alert("Sucesso", "Configurações salvas com sucesso!", [
+                {
+                    text: "OK",
+                    onPress: () => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`),
+                },
+            ]);
+        } catch (error) {
+            console.error("Erro ao salvar configurações:", error);
+            Alert.alert("Erro", "Não foi possível salvar as configurações. Tente novamente.");
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     return (
         <ThemedView style={styles.container}>
@@ -72,13 +124,26 @@ export default function PomodoroSettings() {
                     <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
                     <ToggleItem
                         id="sound-toggle"
-                        value={soundEnabled}
-                        onChange={setSoundEnabled}
+                        value={soundEnabledWhenFinish}
+                        onChange={setSoundEnabledWhenFinish}
                         containerStyle={{ marginRight: 7 }}
                     />
                     <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                 </View>
             </View>
+
+            {/* Botão Salvar */}
+            <TouchableOpacity
+                style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
+                onPress={handleSave}
+                disabled={isSaving || isLoading}
+            >
+                {isSaving ? (
+                    <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                    <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
+                )}
+            </TouchableOpacity>
         </ThemedView>
     );
 }
@@ -157,5 +222,32 @@ const styles = StyleSheet.create({
     toggleLabel: {
         fontSize: 14,
         color: "#5A5A5A",
+    },
+    saveButton: {
+        backgroundColor: "#4A90E2",
+        paddingVertical: 16,
+        paddingHorizontal: 40,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        minHeight: 56,
+    },
+    saveButtonDisabled: {
+        backgroundColor: "#A0A0A0",
+        opacity: 0.6,
+    },
+    saveButtonText: {
+        color: "#FFFFFF",
+        fontSize: 18,
+        fontWeight: "bold",
     },
 });

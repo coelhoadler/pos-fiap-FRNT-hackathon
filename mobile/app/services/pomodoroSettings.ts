@@ -1,13 +1,6 @@
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-
-export interface PomodoroSettings {
-    pomodoroTime: number;
-    shortBreak: number;
-    longBreak: number;
-    musicEnabled: boolean;
-    soundEnabled: boolean;
-}
+import { IPomodoroSettings } from "../interface/pomodoro";
 
 export function getPomodoroSettingsDocRef(): any {
     const user = auth().currentUser;
@@ -23,7 +16,7 @@ export function getPomodoroSettingsDocRef(): any {
         .doc("settings");
 }
 
-export async function getPomodoroSettings(): Promise<PomodoroSettings | null> {
+export async function getPomodoroSettings(): Promise<IPomodoroSettings | null> {
     try {
         const docRef = getPomodoroSettingsDocRef();
         const doc = await docRef.get();
@@ -32,14 +25,14 @@ export async function getPomodoroSettings(): Promise<PomodoroSettings | null> {
             return null;
         }
 
-        return doc.data() as PomodoroSettings;
+        return doc.data() as IPomodoroSettings;
     } catch (error) {
         console.error("Erro ao buscar configurações do Pomodoro:", error);
         throw error;
     }
 }
 
-export async function savePomodoroSettings(settings: PomodoroSettings): Promise<void> {
+export async function savePomodoroSettings(settings: IPomodoroSettings): Promise<void> {
     try {
         const docRef = getPomodoroSettingsDocRef();
         await docRef.set(settings, { merge: true });
