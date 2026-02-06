@@ -3,11 +3,13 @@ import { ThemedView } from "@/app/components/themed-view";
 import { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { Audio } from "expo-av";
+import { useRouter } from "expo-router";
 
 const POMODORO_TIME = 3 * 60; // 25 minutos em segundos
 const TOTAL_CYCLES = 5;
 
 export default function TabTwoScreen() {
+    const router = useRouter();
     const [isRunning, setIsRunning] = useState(false);
     const [timeLeft, setTimeLeft] = useState(POMODORO_TIME);
     const [completedCycles, setCompletedCycles] = useState(0);
@@ -120,8 +122,12 @@ export default function TabTwoScreen() {
         <ThemedView style={styles.container}>
             {/* Header com botões histórico e configurações */}
             <View style={styles.topButtons}>
-                <Text style={styles.topButton}>histórico</Text>
-                <Text style={styles.topButton}>configurações</Text>
+                <TouchableOpacity onPress={() => console.log("Histórico")}>
+                    <Text style={styles.topButton}>histórico</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-settings")}>
+                    <Text style={styles.topButton}>configurações</Text>
+                </TouchableOpacity>
             </View>
 
             {/* Botão Start/Pause */}

@@ -105,6 +105,14 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Novo Projeto",
           }}
         />
+        <Tabs.Screen
+          name="pomodoro-settings"
+          options={{
+            href: null,
+            title: "Configurações",
+            headerTitle: "Configurações do Pomodoro",
+          }}
+        />
       </Tabs>
       <HamburgerMenuDrawer />
     </>
