@@ -1,9 +1,11 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
 import { Audio } from "expo-av";
 import { useRouter } from "expo-router";
+import { hasPomodoroSettings } from "@/app/services/pomodoroSettings";
+import { TabsRoutes } from "./tabsRouters";
 
 const POMODORO_TIME = 3 * 60; // 25 minutos em segundos
 const TOTAL_CYCLES = 5;
@@ -14,6 +16,28 @@ export default function TabTwoScreen() {
     const [timeLeft, setTimeLeft] = useState(POMODORO_TIME);
     const [completedCycles, setCompletedCycles] = useState(0);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Verificar se o usuário tem configurações do Pomodoro
+    useEffect(() => {
+        async function checkPomodoroSettings() {
+            try {
+                const hasSettings = await hasPomodoroSettings();
+                debugger
+                if (!hasSettings) {
+                    // Redirecionar para a tela de configurações
+                    router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
+                } else {
+                    setIsLoading(false);
+                }
+            } catch (error) {
+                console.error("Erro ao verificar configurações do Pomodoro:", error);
+                setIsLoading(false);
+            }
+        }
+
+        checkPomodoroSettings();
+    }, []);
 
     // Configurar o modo de áudio ao montar o componente
     useEffect(() => {
@@ -117,6 +141,16 @@ export default function TabTwoScreen() {
         const secs = seconds % 60;
         return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     };
+
+    // Mostrar loading enquanto verifica as configurações
+    if (isLoading) {
+        return (
+            <ThemedView style={[styles.container, styles.centerContent]}>
+                <ActivityIndicator size="large" color="#4A90E2" />
+                <ThemedText style={styles.loadingText}>Carregando...</ThemedText>
+            </ThemedView>
+        );
+    }
 
     return (
         <ThemedView style={styles.container}>
@@ -252,6 +286,14 @@ const styles = StyleSheet.create({
     cycleCompleted: {
         backgroundColor: "#4A90E2",
         borderColor: "#4A90E2",
+    },
+    centerContent: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
     },
     resetButton: {
         marginTop: 20,

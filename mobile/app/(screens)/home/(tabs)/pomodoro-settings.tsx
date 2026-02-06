@@ -1,9 +1,10 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Switch } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
 
 export default function PomodoroSettings() {
     const router = useRouter();
@@ -20,7 +21,6 @@ export default function PomodoroSettings() {
                 <TouchableOpacity onPress={() => router.navigate("/(screens)/home/(tabs)/focus")} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={28} color="#5A5A5A" />
                 </TouchableOpacity>
-                <ThemedText style={styles.title}>Focar</ThemedText>
                 <View style={styles.placeholder} />
             </View>
 
@@ -54,11 +54,11 @@ export default function PomodoroSettings() {
                 <ThemedText style={styles.toggleTitle}>Música durante pomodoro</ThemedText>
                 <View style={styles.toggleRow}>
                     <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
-                    <Switch
+                    <ToggleItem
+                        id="music-toggle"
                         value={musicEnabled}
-                        onValueChange={setMusicEnabled}
-                        trackColor={{ false: "#D1D1D1", true: "#4A90E2" }}
-                        thumbColor="#FFFFFF"
+                        onChange={setMusicEnabled}
+                        containerStyle={{ marginRight: 7 }}
                     />
                     <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                 </View>
@@ -69,11 +69,11 @@ export default function PomodoroSettings() {
                 <ThemedText style={styles.toggleTitle}>Som ao terminar o ciclo</ThemedText>
                 <View style={styles.toggleRow}>
                     <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
-                    <Switch
+                    <ToggleItem
+                        id="sound-toggle"
                         value={soundEnabled}
-                        onValueChange={setSoundEnabled}
-                        trackColor={{ false: "#D1D1D1", true: "#4A90E2" }}
-                        thumbColor="#FFFFFF"
+                        onChange={setSoundEnabled}
+                        containerStyle={{ marginRight: 7 }}
                     />
                     <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                 </View>
