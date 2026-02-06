@@ -17,7 +17,7 @@ export default function PomodoroSettings() {
         <ThemedView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.navigate("/(screens)/home/(tabs)/focus")} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={28} color="#5A5A5A" />
                 </TouchableOpacity>
                 <ThemedText style={styles.title}>Focar</ThemedText>
@@ -44,7 +44,7 @@ export default function PomodoroSettings() {
                     <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
                     <ThemedText style={styles.timeLabel}>minutos</ThemedText>
                     <ThemedText style={styles.timeDescription}>
-                        pausa longa após{"\n"}5 Pomodoros
+                        pausa longa
                     </ThemedText>
                 </View>
             </View>
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#000000",
         marginBottom: 5,
+        lineHeight: 60,
     },
     timeLabel: {
         fontSize: 12,
