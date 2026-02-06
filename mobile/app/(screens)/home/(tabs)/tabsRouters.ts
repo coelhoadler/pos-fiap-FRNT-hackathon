@@ -1,6 +1,6 @@
 export enum TabsRoutes {
     Home = "index",
-    Focus = "focus",
+    Focus = "pomodoro",
     Preferences = "preferences",
     PomodoroSettings = "pomodoro-settings",
 }

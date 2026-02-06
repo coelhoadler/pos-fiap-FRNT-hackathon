@@ -5,6 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
+import { TabsRoutes } from "./tabsRouters";
 
 export default function PomodoroSettings() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function PomodoroSettings() {
         <ThemedView style={styles.container}>
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.navigate("/(screens)/home/(tabs)/focus")} style={styles.backButton}>
+                <TouchableOpacity onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={28} color="#5A5A5A" />
                 </TouchableOpacity>
                 <View style={styles.placeholder} />
