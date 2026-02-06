@@ -31,6 +31,7 @@ export const dropdownItemsProjects: IDropdownItem[] = [
     icon: <Settings size={16} color={baseColors.colorPrimary} />,
   },
 ];
+
 export const legendContentItems: ILegendContentItem[] = [
   {
     description: "Visualizar o projeto e suas tarefas",
@@ -52,9 +53,13 @@ export const legendContentItems: ILegendContentItem[] = [
     styleLegendIcon: { marginTop: 3 },
   },
 ];
+
 export const addProjectLegendContent: ILegendContentItem[] = [
   {
     description:
       "Essa página é para ser criado o seu projeto e vincular tarefas a ele.",
+  },
+  {
+    description: "Campos com o '*' são obrigatórios.",
   },
 ];

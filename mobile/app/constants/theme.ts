@@ -18,6 +18,7 @@ export const baseColors = {
   colorWhite: '#FFFFFF',
   colorBlack: '#000000',
   colorSuccess: '#E0EADD',
+  colorError: '#F64141',
 }
 
 export const Colors = {
@@ -38,6 +39,7 @@ export const Colors = {
     tabIconSelected: tintColorLight,
     textButton: baseColors.colorWhite,
     textButtonOutline: baseColors.colorPrimary,
+    error:baseColors.colorError,
   },
   dark: {
     colorPrimary: baseColors.colorPrimary,
@@ -56,6 +58,7 @@ export const Colors = {
     tabIconSelected: tintColorDark,
     textButton: baseColors.colorWhite,
     textButtonOutline: baseColors.colorPrimary,
+    error:baseColors.colorError,
   },
 };
 
