@@ -17,7 +17,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       left: 0,
       right: 0,
       bottom: 0,
-      zIndex: 1,
+      zIndex: 100,
     },
     modalContainerLegend:{
       justifyContent: 'flex-start',
@@ -78,17 +78,24 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       // right: 0,
     },
     loadingContent:{
-      height: '100%',
-      width: '100%',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
       gap: 15,
+      backgroundColor:colors.colorWhite,
+      maxWidth: 340,
+      padding: 20,
+      borderRadius: 10,
+      borderColor:colors.colorPrimary,
+      borderWidth:1
     },
     loadingText:{
-      fontSize:16,
+      fontSize:18,
       color: colors.colorPrimary,
     },
+    modalContainerLoading:{
+      top:20,
+    }
   });
 }

@@ -4,6 +4,7 @@ import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
 import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
 import { Input } from "@/app/components/ui/input";
+import { Modal } from "@/app/components/ui/modal";
 import { TextArea } from "@/app/components/ui/textarea";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { createProject } from "@/app/services/projects";
@@ -13,7 +14,7 @@ import auth from "@react-native-firebase/auth";
 import { useFocusEffect } from "@react-navigation/native"; // Importação importante
 import { Tabs, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { Alert, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { addProjectLegendContent } from "../constants";
 import { createStyles } from "./styles";
 
@@ -24,6 +25,9 @@ export default function AddProjectScreens() {
 
   const [openModalLegend, setOpenModalLegend] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingToProjectsList, setLoadingToProjectsList] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
 
   const [formData, setFormData] = useState({
     nomeProjeto: "",
@@ -44,10 +48,22 @@ export default function AddProjectScreens() {
     });
   };
 
+  const returnToProjectsList = () => {
+    setSuccessMessage(false);
+    setLoadingToProjectsList(true);
+    setTimeout(() => {
+      router.navigate("/(screens)/home/(tabs)/projects/projects");
+      setLoadingToProjectsList(false);
+    }, 1000);
+  };
+
   useFocusEffect(
     useCallback(() => {
       resetForm();
-      return () => resetForm();
+      return () => {
+        resetForm();
+        setOpenModalLegend(false);
+      };
     }, []),
   );
 
@@ -78,12 +94,11 @@ export default function AddProjectScreens() {
         columns: [],
       });
 
-      Alert.alert("Sucesso", "Projeto criado com sucesso!");
-      resetForm(); // Limpa após salvar
-      router.back();
+      setSuccessMessage(true);
+      resetForm();
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Não foi possível salvar o projeto no momento.");
+      setErrorMessage(true);
     } finally {
       setLoading(false);
     }
@@ -106,11 +121,11 @@ export default function AddProjectScreens() {
       <Text style={styles.title}>Criar Projeto</Text>
 
       <ScrollView
-        style={{ width: "100%", height: "100%" }}
+        style={styles.formContainer}
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.subtitle}>
-          Preencha os detalhes básicos para iniciar seu novo projeto.
+          Preencha os campos para criar seu novo projeto.
         </Text>
 
         <View style={styles.form}>
@@ -146,12 +161,12 @@ export default function AddProjectScreens() {
           <View>
             <TextArea
               id="descricaoProjeto"
-              text="Descrição (Opcional)"
+              text="Descrição"
               value={formData.descricaoProjeto}
               onChangeText={(text) =>
                 handleValuesChange("descricaoProjeto", text)
               }
-              placeholder="Explique o objetivo deste projeto..."
+              placeholder="Explique sobre o projeto..."
               numberOfLines={6}
               autoCorrect={true}
             />
@@ -159,9 +174,9 @@ export default function AddProjectScreens() {
 
           <Button
             title="Criar Projeto"
-            style={[styles.button, { marginTop: 10 }]}
-            loading={loading}
+            style={[styles.button]}
             onPress={handleSave}
+            loading={loading}
           />
         </View>
       </ScrollView>
@@ -169,10 +184,39 @@ export default function AddProjectScreens() {
       {openModalLegend && (
         <ModalLegendProjects
           legendContentItems={addProjectLegendContent}
-          subtitleContentItem="Preencha os campos para organizar seu fluxo de trabalho."
+          subtitleContentItem="Explicando um pouco sobre a página de criação de projeto."
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />
+      )}
+
+      {successMessage && (
+        <Modal
+          contentType={"feedbackMessage"}
+          text="Projeto criado com sucesso"
+          hasCloseButton={false}
+          onPress={returnToProjectsList}
+        />
+      )}
+      {errorMessage && (
+        <Modal
+          contentType={"feedbackMessage"}
+          text="Não foi possível salvar o projeto no momento."
+          onClose={() => setErrorMessage(false)}
+          onPress={() => setErrorMessage(false)}
+        />
+      )}
+
+      {loading && (
+        <Modal
+          hasCloseButton={false}
+          textLoading="Criando projeto"
+          contentType="loading"
+        />
+      )}
+
+      {loadingToProjectsList && (
+        <Modal hasCloseButton={false} loading={true} contentType="loading" />
       )}
     </ThemedView>
   );
