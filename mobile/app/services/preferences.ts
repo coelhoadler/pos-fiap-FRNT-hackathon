@@ -2,7 +2,6 @@ import firestore from "@react-native-firebase/firestore";
 import { getPreferencesDocRef } from "./firestorePaths";
 
 export type PreferencesFlags = Record<string, boolean>;
-
 export async function savePreferences(
   preferences: PreferencesFlags
 ): Promise<void> {
