@@ -8,9 +8,11 @@ import { genericStyle } from "@/app/styles/genericStyles";
 import { useFocusEffect } from "@react-navigation/native";
 import { Tabs } from "expo-router";
 import { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { dropdownItemsProjects, legendContentItems } from "./constants";
 import { createStyles } from "./styles";
+
+// const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
 export default function ProjectsScreens() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -22,7 +24,6 @@ export default function ProjectsScreens() {
     useCallback(() => {
       setOpenModalLegend(false);
       setActiveDropdownId(null);
-
       return () => {};
     }, []),
   );
@@ -37,25 +38,14 @@ export default function ProjectsScreens() {
     { id: "p3", name: "Projeto 3" },
   ];
 
-  const handleOpenModalLegend = () => {
-    setOpenModalLegend(true);
-  };
-
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
-      {activeDropdownId !== null && (
-        <Pressable
-          style={[styles.dropdownBackDrop]}
-          onPress={() => setActiveDropdownId(null)}
-        />
-      )}
-
       <Tabs.Screen
         options={{
           headerRight: () => (
             <ActionsButtonsProjects
               pathAdd="/(screens)/home/(tabs)/projects/addProject"
-              openModal={handleOpenModalLegend}
+              openModal={() => setOpenModalLegend(true)}
             />
           ),
         }}
@@ -67,27 +57,37 @@ export default function ProjectsScreens() {
         style={{ width: "100%", height: "100%" }}
         onScrollBeginDrag={() => setActiveDropdownId(null)}
       >
-        {myProjects.map((item) => (
-          <ListItemProject
-            key={item.id}
-            id={item.id}
-            nameProject={item.name}
-            onPressEdit={() => {}}
-            onPressDelete={() => {}}
-            onPressView={() => {}}
-            openDropdownActions={activeDropdownId === item.id}
-            onPressMoreOptions={() => handleToggleDropdown(item.id)}
-            dropdownActions={
-              <DropdownContent dropdownItems={dropdownItemsProjects} />
-            }
-          />
-        ))}
+        {myProjects.map((item) => {
+          const isDropDownOpened = activeDropdownId === item.id;
+          return (
+            <View key={item.id} style={{ zIndex: isDropDownOpened ? 999 : 1 }}>
+              <ListItemProject
+                id={item.id}
+                nameProject={item.name}
+                openDropdownActions={isDropDownOpened}
+                onPressMoreOptions={() => handleToggleDropdown(item.id)}
+                dropdownActions={
+                  <DropdownContent
+                    onClose={() => {
+                      if (isDropDownOpened) {
+                        setActiveDropdownId(null);
+                      }
+                    }}
+                    dropdownItems={dropdownItemsProjects}
+                  />
+                }
+                onPressEdit={() => {}}
+                onPressDelete={() => {}}
+                onPressView={() => {}}
+              />
+            </View>
+          );
+        })}
       </ScrollView>
 
       {openModalLegend && (
         <ModalLegendProjects
           legendContentItems={legendContentItems}
-          subtitleContentItem="Aqui vamos explicar o que significa cada ícone."
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />
