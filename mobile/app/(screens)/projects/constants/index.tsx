@@ -15,7 +15,9 @@ export const dropdownItemsProjects: IDropdownItem[] = [
   {
     id: "1",
     name: "Iniciar tarefa",
-    onPress: () => {},
+    onPress: () => {
+      console.log("Clicado iniciar tarefa");
+    },
     icon: <Play size={16} color={baseColors.colorPrimary} />,
   },
   {

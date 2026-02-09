@@ -1,8 +1,9 @@
 import { Colors } from "@/app/constants/theme";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export function createStyles(colorScheme: "light" | "dark" = "dark") {
   const colors = Colors[colorScheme];
+  const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
   return StyleSheet.create({
     dropdownWrapper: {
@@ -37,7 +38,16 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     dropdownItem: {
       color: colors.colorPrimary,
-      fontWeight:'500'
+      fontWeight: '500'
+    },
+    backdrop: {
+      position: "absolute",
+      // Dimensões gigantes para garantir cobertura total fora do dropdown
+      width: screenWidth * 2,
+      height: screenHeight * 2,
+      left: -screenWidth,
+      top: -screenHeight,
+      backgroundColor: "transparent",
     }
   });
 }
