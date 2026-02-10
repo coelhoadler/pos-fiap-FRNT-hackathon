@@ -80,25 +80,73 @@ export default function PomodoroSettings() {
             {/* Cards de configuração de tempo */}
             <View style={styles.timeCardsContainer}>
                 <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
-                    <ThemedText style={styles.timeLabel}>minutos</ThemedText>
                     <ThemedText style={styles.timeDescription}>Pomodoro</ThemedText>
+                    <View style={styles.rangeControls}>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setPomodoroTime(Math.max(1, pomodoroTime - 1))}
+                        >
+                            <Ionicons name="remove" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                        <View style={styles.rangeValue}>
+                            <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
+                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setPomodoroTime(Math.min(60, pomodoroTime + 1))}
+                        >
+                            <Ionicons name="add" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
                 <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
-                    <ThemedText style={styles.timeLabel}>minutos</ThemedText>
                     <ThemedText style={styles.timeDescription}>
                         pausa entre{"\n"}Pomodoros
                     </ThemedText>
+                    <View style={styles.rangeControls}>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setShortBreak(Math.max(1, shortBreak - 1))}
+                        >
+                            <Ionicons name="remove" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                        <View style={styles.rangeValue}>
+                            <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
+                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setShortBreak(Math.min(30, shortBreak + 1))}
+                        >
+                            <Ionicons name="add" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
                 <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
-                    <ThemedText style={styles.timeLabel}>minutos</ThemedText>
                     <ThemedText style={styles.timeDescription}>
                         pausa longa
                     </ThemedText>
+                    <View style={styles.rangeControls}>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setLongBreak(Math.max(5, longBreak - 1))}
+                        >
+                            <Ionicons name="remove" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                        <View style={styles.rangeValue}>
+                            <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
+                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.rangeButton}
+                            onPress={() => setLongBreak(Math.min(60, longBreak + 1))}
+                        >
+                            <Ionicons name="add" size={24} color="#4A90E2" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
 
@@ -183,20 +231,45 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         alignItems: "center",
-        minHeight: 140,
+        minHeight: 160,
+        justifyContent: "center",
+    },
+    rangeControls: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        marginTop: 15,
+    },
+    rangeButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: "#FFFFFF",
+        alignItems: "center",
+        justifyContent: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    rangeValue: {
+        alignItems: "center",
         justifyContent: "center",
     },
     timeNumber: {
-        fontSize: 56,
+        fontSize: 36,
         fontWeight: "bold",
         color: "#000000",
-        marginBottom: 5,
-        lineHeight: 60,
+        lineHeight: 40,
     },
     timeLabel: {
-        fontSize: 12,
+        fontSize: 11,
         color: "#000000",
-        marginBottom: 10,
     },
     timeDescription: {
         fontSize: 14,
@@ -204,6 +277,7 @@ const styles = StyleSheet.create({
         color: "#000000",
         textAlign: "center",
         lineHeight: 18,
+        marginBottom: 10,
     },
     toggleContainer: {
         marginBottom: 30,

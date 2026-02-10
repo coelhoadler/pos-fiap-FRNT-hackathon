@@ -1,12 +1,13 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
 import { Audio } from "expo-av";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import { getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { TabsRoutes } from "./tabsRouters";
 import { IPomodoroSettings } from "@/app/interface/pomodoro";
+import Toast from "react-native-toast-message";
 
 const TOTAL_CYCLES = 5;
 
@@ -19,30 +20,39 @@ export default function TabTwoScreen() {
     const [isLoading, setIsLoading] = useState(true);
     let [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
 
-    // Verificar se o usuário tem configurações do Pomodoro
-    useEffect(() => {
-        async function checkPomodoroSettings() {
-            try {
-                const settings: IPomodoroSettings | null = await getPomodoroSettings();
+    // Verificar se o usuário tem configurações do Pomodoro toda vez que entrar na página
+    useFocusEffect(
+        useCallback(() => {
+            async function checkPomodoroSettings() {
+                try {
+                    setIsLoading(true);
+                    const settings: IPomodoroSettings | null = await getPomodoroSettings();
 
-                if (!settings) {
-                    // Redirecionar para a tela de configurações
-                    router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
+                    if (!settings) {
+                        router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
+                        setIsLoading(false);
+                    } else {
+                        setIsLoading(false);
+                        setPomodoroTimer(settings.pomodoroTime);
+                        setTimeLeft(settings.pomodoroTime * 60);
+                    }
+                } catch (error) {
+                    Toast.show({
+                        type: 'error',
+                        text1: 'Erro',
+                        text2: 'Erro ao verificar configurações do Pomodoro: ' + String(error),
+                        text1Style: { fontSize: 16, fontWeight: 'bold' },
+                        text2Style: { fontSize: 14 },
+                        swipeable: true,
+                    });
+
                     setIsLoading(false);
-                } else {
-                    console.log('settings found', settings);
-                    setIsLoading(false);
-                    setPomodoroTimer(settings.pomodoroTime);
-                    setTimeLeft(settings.pomodoroTime * 60);
                 }
-            } catch (error) {
-                console.error("Erro ao verificar configurações do Pomodoro:", error);
-                setIsLoading(false);
             }
-        }
 
-        checkPomodoroSettings();
-    }, []);
+            checkPomodoroSettings();
+        }, [])
+    );
 
     // Configurar o modo de áudio ao montar o componente
     useEffect(() => {
@@ -74,10 +84,10 @@ export default function TabTwoScreen() {
                 setTimeLeft((prev) => prev! - 1);
             }, 1000);
         } else if (timeLeft === 0 && completedCycles < TOTAL_CYCLES) {
-            // Ciclo completo
             setCompletedCycles((prev) => prev + 1);
             setTimeLeft(pomodoroTimer * 60);
             setIsRunning(false);
+            sound?.stopAsync();
         }
 
         return () => {
@@ -203,6 +213,8 @@ export default function TabTwoScreen() {
                     <ThemedText style={styles.resetButtonText}>Reiniciar</ThemedText>
                 </TouchableOpacity>
             )}
+
+            <Toast />
         </ThemedView>
     );
 }
