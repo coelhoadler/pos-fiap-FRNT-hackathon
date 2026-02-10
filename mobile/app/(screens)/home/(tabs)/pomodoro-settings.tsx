@@ -8,6 +8,7 @@ import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
 import { TabsRoutes } from "./tabsRouters";
 import { savePomodoroSettings, getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { IPomodoroSettings } from "@/app/interface/pomodoro";
+import Toast from "react-native-toast-message";
 
 export default function PomodoroSettings() {
     const router = useRouter();
@@ -53,12 +54,13 @@ export default function PomodoroSettings() {
                 soundEnabledWhenFinish,
             };
             await savePomodoroSettings(settings);
-            Alert.alert("Sucesso", "Configurações salvas com sucesso!", [
-                {
-                    text: "OK",
-                    onPress: () => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`),
-                },
-            ]);
+            Toast.show({
+                type: 'success',
+                text1: 'Sucesso',
+                text2: 'Configurações salvas com sucesso!',
+                text1Style: { fontSize: 18, fontWeight: 'bold' },
+                text2Style: { fontSize: 16 },
+            });
         } catch (error) {
             console.error("Erro ao salvar configurações:", error);
             Alert.alert("Erro", "Não foi possível salvar as configurações. Tente novamente.");
@@ -192,6 +194,7 @@ export default function PomodoroSettings() {
                     <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
                 )}
             </TouchableOpacity>
+            <Toast />
         </ThemedView>
     );
 }
