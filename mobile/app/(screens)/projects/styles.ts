@@ -1,8 +1,9 @@
 import { Colors } from "@/app/constants/theme";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export function createStyles(colorScheme: "light" | "dark" = "dark") {
   const colors = Colors[colorScheme];
+  const { width, height } = Dimensions.get('window');
 
   return StyleSheet.create({
     container: {
@@ -25,6 +26,12 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       width: '100%',
       marginBottom: 14,
     },
+    modalLoading:{
+      width:'100%',
+      height:'100%',
+      position:'relative',
+      top:-80
+    }
     
   });
 }
