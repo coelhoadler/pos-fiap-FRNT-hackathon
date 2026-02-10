@@ -92,7 +92,7 @@ export default function PomodoroSettings() {
                         </TouchableOpacity>
                         <View style={styles.rangeValue}>
                             <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                            <ThemedText style={styles.timeLabel}>{pomodoroTime > 1 ? "minutos" : "minuto"}</ThemedText>
                         </View>
                         <TouchableOpacity
                             style={styles.rangeButton}
@@ -116,7 +116,7 @@ export default function PomodoroSettings() {
                         </TouchableOpacity>
                         <View style={styles.rangeValue}>
                             <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                            <ThemedText style={styles.timeLabel}>{shortBreak > 1 ? "minutos" : "minuto"}</ThemedText>
                         </View>
                         <TouchableOpacity
                             style={styles.rangeButton}
@@ -140,7 +140,7 @@ export default function PomodoroSettings() {
                         </TouchableOpacity>
                         <View style={styles.rangeValue}>
                             <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>minutos</ThemedText>
+                            <ThemedText style={styles.timeLabel}>{longBreak > 1 ? "minutos" : "minuto"}</ThemedText>
                         </View>
                         <TouchableOpacity
                             style={styles.rangeButton}
