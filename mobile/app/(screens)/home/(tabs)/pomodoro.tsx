@@ -6,29 +6,34 @@ import { Audio } from "expo-av";
 import { useRouter } from "expo-router";
 import { getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { TabsRoutes } from "./tabsRouters";
+import { IPomodoroSettings } from "@/app/interface/pomodoro";
 
-const POMODORO_TIME = 3 * 60; // 25 minutos em segundos
 const TOTAL_CYCLES = 5;
 
 export default function TabTwoScreen() {
     const router = useRouter();
     const [isRunning, setIsRunning] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(POMODORO_TIME);
+    const [timeLeft, setTimeLeft] = useState<number | undefined>(undefined);
     const [completedCycles, setCompletedCycles] = useState(0);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    let [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
 
     // Verificar se o usuário tem configurações do Pomodoro
     useEffect(() => {
         async function checkPomodoroSettings() {
             try {
-                const settings = await getPomodoroSettings();
+                const settings: IPomodoroSettings | null = await getPomodoroSettings();
+
                 if (!settings) {
                     // Redirecionar para a tela de configurações
                     router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
                     setIsLoading(false);
                 } else {
+                    console.log('settings found', settings);
                     setIsLoading(false);
+                    setPomodoroTimer(settings.pomodoroTime);
+                    setTimeLeft(settings.pomodoroTime * 60);
                 }
             } catch (error) {
                 console.error("Erro ao verificar configurações do Pomodoro:", error);
@@ -64,14 +69,14 @@ export default function TabTwoScreen() {
     useEffect(() => {
         let interval: any = null;
 
-        if (isRunning && timeLeft > 0) {
+        if (isRunning && timeLeft! > 0) {
             interval = setInterval(() => {
-                setTimeLeft((prev) => prev - 1);
+                setTimeLeft((prev) => prev! - 1);
             }, 1000);
         } else if (timeLeft === 0 && completedCycles < TOTAL_CYCLES) {
             // Ciclo completo
             setCompletedCycles((prev) => prev + 1);
-            setTimeLeft(POMODORO_TIME);
+            setTimeLeft(pomodoroTimer * 60);
             setIsRunning(false);
         }
 
@@ -125,7 +130,7 @@ export default function TabTwoScreen() {
 
     const resetTimer = async () => {
         setIsRunning(false);
-        setTimeLeft(POMODORO_TIME);
+        setTimeLeft(pomodoroTimer * 60);
         setCompletedCycles(0);
 
         // Parar e limpar a música
@@ -177,7 +182,7 @@ export default function TabTwoScreen() {
                 <ThemedText style={styles.pomodoroLabel}>POMODORO</ThemedText>
 
                 {/* Timer */}
-                <ThemedText style={styles.timer}>{formatTime(timeLeft)}</ThemedText>
+                <ThemedText style={styles.timer}>{formatTime(timeLeft!)}</ThemedText>
 
                 {/* Ciclos (bolinhas) */}
                 <View style={styles.cyclesContainer}>
@@ -193,7 +198,7 @@ export default function TabTwoScreen() {
                 </View>
             </View>
 
-            {(completedCycles > 0 || timeLeft !== POMODORO_TIME) && (
+            {(completedCycles > 0 || (timeLeft !== pomodoroTimer * 60)) && (
                 <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
                     <ThemedText style={styles.resetButtonText}>Reiniciar</ThemedText>
                 </TouchableOpacity>
