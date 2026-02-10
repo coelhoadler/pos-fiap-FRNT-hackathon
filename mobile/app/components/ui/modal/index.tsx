@@ -20,6 +20,7 @@ export const Modal: React.FC<IModal> = ({
   style,
   contentType = "feedbackMessage",
   styleLoading,
+  styleBackdrop,
   onPressActionA,
   onPressActionB,
   onPress,
@@ -135,7 +136,7 @@ export const Modal: React.FC<IModal> = ({
 
       {/* backdrop */}
       <Pressable
-        style={styles.backdrop}
+        style={[styles.backdrop, styleBackdrop]}
         onPress={hasCloseButton ? onClose : () => {}}
       >
         <ThemedView></ThemedView>

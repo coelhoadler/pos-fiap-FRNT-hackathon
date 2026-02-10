@@ -8,6 +8,7 @@ export interface IModal {
     open?: boolean;
     style?: StyleProp<ViewStyle>;
     styleLoading?: StyleProp<ViewStyle>;
+    styleBackdrop?: StyleProp<ViewStyle>;
     textButton?: string;
     textButtonActionA?: string;
     textButtonActionB?: string;
