@@ -5,8 +5,9 @@ import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from "rea
 import { Audio } from "expo-av";
 import { useRouter, useFocusEffect } from "expo-router";
 import { getPomodoroSettings } from "@/app/services/pomodoroSettings";
+import { savePomodoroHistory } from "@/app/services/pomodoroHistory";
 import { TabsRoutes } from "./tabsRouters";
-import { IPomodoroSettings } from "@/app/interface/pomodoro";
+import { IPomodoroSettings, IPomodoroHistory } from "@/app/interface/pomodoro";
 import Toast from "react-native-toast-message";
 
 const TOTAL_CYCLES = 5;
@@ -84,6 +85,24 @@ export default function TabTwoScreen() {
                 setTimeLeft((prev) => prev! - 1);
             }, 1000);
         } else if (timeLeft === 0 && completedCycles < TOTAL_CYCLES) {
+            // Salvar histórico de conclusão
+            const saveCompletionHistory = async () => {
+                try {
+                    const historyEntry: IPomodoroHistory = {
+                        timestamp: new Date(),
+                        completedCycles: completedCycles + 1,
+                        timeRemainingInSeconds: 0,
+                        action: "complete",
+                        pomodoroTimeInSeconds: pomodoroTimer * 60,
+                    };
+                    await savePomodoroHistory(historyEntry);
+                } catch (error) {
+                    console.error("Erro ao salvar histórico de conclusão:", error);
+                }
+            };
+
+            saveCompletionHistory();
+
             setCompletedCycles((prev) => prev + 1);
             setTimeLeft(pomodoroTimer * 60);
             setIsRunning(false);
@@ -98,6 +117,28 @@ export default function TabTwoScreen() {
     const toggleTimer = async () => {
         const newIsRunning = !isRunning;
         setIsRunning(newIsRunning);
+
+        // Salvar histórico no Firestore
+        try {
+            const historyEntry: IPomodoroHistory = {
+                timestamp: new Date(),
+                completedCycles: completedCycles,
+                timeRemainingInSeconds: timeLeft || 0,
+                action: newIsRunning ? "start" : "pause",
+                pomodoroTimeInSeconds: pomodoroTimer * 60,
+            };
+            await savePomodoroHistory(historyEntry);
+        } catch (error) {
+            console.error("Erro ao salvar histórico:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Erro',
+                text2: 'Não foi possível salvar o histórico',
+                text1Style: { fontSize: 16, fontWeight: 'bold' },
+                text2Style: { fontSize: 14 },
+                swipeable: true,
+            });
+        }
 
         if (newIsRunning) {
             // Iniciar a música
@@ -148,6 +189,27 @@ export default function TabTwoScreen() {
             await sound.stopAsync();
             await sound.unloadAsync();
             setSound(null);
+        }
+
+        try {
+            const historyEntry: IPomodoroHistory = {
+                timestamp: new Date(),
+                completedCycles: completedCycles,
+                timeRemainingInSeconds: timeLeft || 0,
+                action: "reset",
+                pomodoroTimeInSeconds: pomodoroTimer * 60,
+            };
+            await savePomodoroHistory(historyEntry);
+        } catch (error) {
+            console.error("Erro ao salvar histórico:", error);
+            Toast.show({
+                type: 'error',
+                text1: 'Erro',
+                text2: 'Não foi possível salvar o histórico',
+                text1Style: { fontSize: 16, fontWeight: 'bold' },
+                text2Style: { fontSize: 14 },
+                swipeable: true,
+            });
         }
     };
 
