@@ -3,4 +3,5 @@ export enum TabsRoutes {
     Focus = "pomodoro",
     Preferences = "preferences",
     PomodoroSettings = "pomodoro-settings",
+    PomodoroHistory = "pomodoro-history",
 }

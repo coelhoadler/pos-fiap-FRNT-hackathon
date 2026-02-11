@@ -107,6 +107,14 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
         <Tabs.Screen
+          name="pomodoro-history"
+          options={{
+            href: null,
+            title: "Histórico",
+            headerTitle: "Histórico de execuções",
+          }}
+        />
+        <Tabs.Screen
           name="projects/editProject/[id]"
           options={{
             href: null,
