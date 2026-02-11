@@ -1,7 +1,7 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Alert, ActivityIndicator, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
@@ -71,130 +71,135 @@ export default function PomodoroSettings() {
 
     return (
         <ThemedView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)} style={styles.backButton}>
-                    <Ionicons name="arrow-back" size={28} color="#5A5A5A" />
+            <ScrollView contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
+                {/* Header */}
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)} style={styles.backButton}>
+                        <Ionicons name="arrow-back" size={24} color="#4A90E2" />
+                        <ThemedText style={styles.backText}>Voltar</ThemedText>
+                    </TouchableOpacity>
+                    <View style={styles.placeholder} />
+                </View>
+
+                {/* Cards de configuração de tempo */}
+                <View style={styles.timeCardsContainer}>
+                    <View style={styles.timeCard}>
+                        <ThemedText style={styles.timeDescription}>Pomodoro</ThemedText>
+                        <View style={styles.rangeControls}>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setPomodoroTime(Math.max(1, pomodoroTime - 1))}
+                            >
+                                <Ionicons name="remove" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                            <View style={styles.rangeValue}>
+                                <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
+                                <ThemedText style={styles.timeLabel}>{pomodoroTime > 1 ? "minutos" : "minuto"}</ThemedText>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setPomodoroTime(Math.min(60, pomodoroTime + 1))}
+                            >
+                                <Ionicons name="add" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.timeCard}>
+                        <ThemedText style={styles.timeDescription}>
+                            pausa entre{"\n"}Pomodoros
+                        </ThemedText>
+                        <View style={styles.rangeControls}>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setShortBreak(Math.max(1, shortBreak - 1))}
+                            >
+                                <Ionicons name="remove" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                            <View style={styles.rangeValue}>
+                                <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
+                                <ThemedText style={styles.timeLabel}>{shortBreak > 1 ? "minutos" : "minuto"}</ThemedText>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setShortBreak(Math.min(30, shortBreak + 1))}
+                            >
+                                <Ionicons name="add" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.timeCard}>
+                        <ThemedText style={styles.timeDescription}>
+                            pausa longa
+                        </ThemedText>
+                        <View style={styles.rangeControls}>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setLongBreak(Math.max(5, longBreak - 1))}
+                            >
+                                <Ionicons name="remove" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                            <View style={styles.rangeValue}>
+                                <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
+                                <ThemedText style={styles.timeLabel}>{longBreak > 1 ? "minutos" : "minuto"}</ThemedText>
+                            </View>
+                            <TouchableOpacity
+                                style={styles.rangeButton}
+                                onPress={() => setLongBreak(Math.min(60, longBreak + 1))}
+                            >
+                                <Ionicons name="add" size={24} color="#4A90E2" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+
+                {/* Toggle Música */}
+                <View style={styles.toggleContainer}>
+                    <ThemedText style={styles.toggleTitle}>Música durante pomodoro</ThemedText>
+                    <View style={styles.toggleRow}>
+                        <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
+                        <ToggleItem
+                            id="music-toggle"
+                            value={musicEnabled}
+                            onChange={setMusicEnabled}
+                            containerStyle={{ marginRight: 7 }}
+                            disabled={true} // Desabilitado por enquanto, pois a funcionalidade de música ainda não está implementada
+                        />
+                        <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
+                    </View>
+                </View>
+
+                {/* Toggle Som ao terminar */}
+                <View style={styles.toggleContainer}>
+                    <ThemedText style={styles.toggleTitle}>Som ao terminar o ciclo</ThemedText>
+                    <View style={styles.toggleRow}>
+                        <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
+                        <ToggleItem
+                            id="sound-toggle"
+                            value={soundEnabledWhenFinish}
+                            onChange={setSoundEnabledWhenFinish}
+                            containerStyle={{ marginRight: 7 }}
+                            disabled={true} // Desabilitado por enquanto, pois a funcionalidade de som ainda não está implementada
+                        />
+                        <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
+                    </View>
+                </View>
+
+                {/* Botão Salvar */}
+                <TouchableOpacity
+                    style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
+                    onPress={handleSave}
+                    disabled={isSaving || isLoading}
+                >
+                    {isSaving ? (
+                        <ActivityIndicator color="#FFFFFF" />
+                    ) : (
+                        <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
+                    )}
                 </TouchableOpacity>
-                <View style={styles.placeholder} />
-            </View>
-
-            {/* Cards de configuração de tempo */}
-            <View style={styles.timeCardsContainer}>
-                <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeDescription}>Pomodoro</ThemedText>
-                    <View style={styles.rangeControls}>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setPomodoroTime(Math.max(1, pomodoroTime - 1))}
-                        >
-                            <Ionicons name="remove" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                        <View style={styles.rangeValue}>
-                            <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>{pomodoroTime > 1 ? "minutos" : "minuto"}</ThemedText>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setPomodoroTime(Math.min(60, pomodoroTime + 1))}
-                        >
-                            <Ionicons name="add" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeDescription}>
-                        pausa entre{"\n"}Pomodoros
-                    </ThemedText>
-                    <View style={styles.rangeControls}>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setShortBreak(Math.max(1, shortBreak - 1))}
-                        >
-                            <Ionicons name="remove" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                        <View style={styles.rangeValue}>
-                            <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>{shortBreak > 1 ? "minutos" : "minuto"}</ThemedText>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setShortBreak(Math.min(30, shortBreak + 1))}
-                        >
-                            <Ionicons name="add" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                <View style={styles.timeCard}>
-                    <ThemedText style={styles.timeDescription}>
-                        pausa longa
-                    </ThemedText>
-                    <View style={styles.rangeControls}>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setLongBreak(Math.max(5, longBreak - 1))}
-                        >
-                            <Ionicons name="remove" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                        <View style={styles.rangeValue}>
-                            <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
-                            <ThemedText style={styles.timeLabel}>{longBreak > 1 ? "minutos" : "minuto"}</ThemedText>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.rangeButton}
-                            onPress={() => setLongBreak(Math.min(60, longBreak + 1))}
-                        >
-                            <Ionicons name="add" size={24} color="#4A90E2" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-
-            {/* Toggle Música */}
-            <View style={styles.toggleContainer}>
-                <ThemedText style={styles.toggleTitle}>Música durante pomodoro</ThemedText>
-                <View style={styles.toggleRow}>
-                    <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
-                    <ToggleItem
-                        id="music-toggle"
-                        value={musicEnabled}
-                        onChange={setMusicEnabled}
-                        containerStyle={{ marginRight: 7 }}
-                    />
-                    <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
-                </View>
-            </View>
-
-            {/* Toggle Som ao terminar */}
-            <View style={styles.toggleContainer}>
-                <ThemedText style={styles.toggleTitle}>Som ao terminar o ciclo</ThemedText>
-                <View style={styles.toggleRow}>
-                    <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
-                    <ToggleItem
-                        id="sound-toggle"
-                        value={soundEnabledWhenFinish}
-                        onChange={setSoundEnabledWhenFinish}
-                        containerStyle={{ marginRight: 7 }}
-                    />
-                    <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
-                </View>
-            </View>
-
-            {/* Botão Salvar */}
-            <TouchableOpacity
-                style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
-                onPress={handleSave}
-                disabled={isSaving || isLoading}
-            >
-                {isSaving ? (
-                    <ActivityIndicator color="#FFFFFF" />
-                ) : (
-                    <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
-                )}
-            </TouchableOpacity>
-            <Toast />
+                <Toast />
+            </ScrollView>
         </ThemedView>
     );
 }
@@ -212,7 +217,13 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     backButton: {
-        padding: 5,
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 4,
+    },
+    backText: {
+        color: "#4A90E2",
+        fontSize: 16,
     },
     title: {
         fontSize: 24,

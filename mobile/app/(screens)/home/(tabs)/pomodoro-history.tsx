@@ -175,7 +175,6 @@ export default function PomodoroHistory() {
                     <Ionicons name="arrow-back" size={24} color="#4A90E2" />
                     <ThemedText style={styles.backText}>Voltar</ThemedText>
                 </TouchableOpacity>
-                <ThemedText style={styles.title}>Histórico</ThemedText>
                 <View style={{ width: 80 }} />
             </View>
 

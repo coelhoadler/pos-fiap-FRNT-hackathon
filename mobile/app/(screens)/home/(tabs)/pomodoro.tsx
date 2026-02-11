@@ -270,14 +270,12 @@ export default function TabTwoScreen() {
                         />
                     ))}
                 </View>
+                {(completedCycles > 0 || (timeLeft !== pomodoroTimer * 60)) && (
+                    <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
+                        <ThemedText style={styles.resetButtonText}>Reiniciar</ThemedText>
+                    </TouchableOpacity>
+                )}
             </View>
-
-            {(completedCycles > 0 || (timeLeft !== pomodoroTimer * 60)) && (
-                <TouchableOpacity style={styles.resetButton} onPress={resetTimer}>
-                    <ThemedText style={styles.resetButtonText}>Reiniciar</ThemedText>
-                </TouchableOpacity>
-            )}
-
             <Toast />
         </ThemedView>
     );
@@ -379,8 +377,6 @@ const styles = StyleSheet.create({
     },
     resetButton: {
         marginTop: 20,
-        paddingHorizontal: 30,
-        paddingVertical: 10,
     },
     resetButtonText: {
         fontSize: 16,
