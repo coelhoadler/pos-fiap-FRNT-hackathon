@@ -137,6 +137,7 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
             open={successMessage}
             onClose={() => setSuccessMessage(false)}
             text="Preferências salvas com sucesso!"
+            onPress={() => setSuccessMessage(false)}
           />
         )}
         {configureLater && (

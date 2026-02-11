@@ -4,8 +4,11 @@ export interface IModal {
     children?: React.ReactNode;
     text?: string;
     onClose?: () => void;
+    onPress?: () => void;
     open?: boolean;
     style?: StyleProp<ViewStyle>;
+    styleLoading?: StyleProp<ViewStyle>;
+    styleBackdrop?: StyleProp<ViewStyle>;
     textButton?: string;
     textButtonActionA?: string;
     textButtonActionB?: string;
@@ -14,6 +17,8 @@ export interface IModal {
     contentType: "feedbackMessage" | "withActions" | 'loading' | 'legend';
     textLoading?: string;
     sizeLoading?: number;
+    loading?:boolean;
+    hasCloseButton?:boolean;
 }
 
 export interface IModalLegend {

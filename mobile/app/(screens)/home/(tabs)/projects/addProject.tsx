@@ -1,10 +1,10 @@
-import AddProjectScreens from "@/app/(screens)/projects/addProject/addProjects";
+import AddProject from "@/app/(screens)/projects/addProject/addProjects";
 import { ThemedView } from "@/app/components/themed-view";
 
-export default function PreferencesScreens() {
+export default function AddProjectScreens() {
   return (
     <ThemedView>
-      <AddProjectScreens />
+      <AddProject />
     </ThemedView>
   );
 }

@@ -9,7 +9,12 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     container: {
       paddingVertical: 20,
     },
-     title: {
+    formContainer: {
+      width: '100%',
+      height: '100%',
+    },
+
+    title: {
       color: colors.colorPrimary,
       fontSize: 24,
       fontWeight: "bold",
@@ -17,21 +22,21 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       width: '100%',
       marginBottom: 14,
     },
-    subtitle:{
-      fontSize:18,
-      marginBottom:6,
-      color:colors.text,
+    subtitle: {
+      fontSize: 18,
+      marginBottom: 6,
+      color: colors.text,
     },
-    form:{
-      marginVertical:16,
-      display:'flex',
-      flexDirection:'column',
-      gap:16
+    form: {
+      marginVertical: 16,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 16
     },
-    button:{
-      margin:  'auto',
-      marginTop: 16
+    button: {
+      margin: 'auto',
+      marginTop: 10
     }
-    
+
   });
 }

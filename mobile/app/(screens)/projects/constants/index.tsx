@@ -15,7 +15,9 @@ export const dropdownItemsProjects: IDropdownItem[] = [
   {
     id: "1",
     name: "Iniciar tarefa",
-    onPress: () => {},
+    onPress: () => {
+      console.log("Clicado iniciar tarefa");
+    },
     icon: <Play size={16} color={baseColors.colorPrimary} />,
   },
   {
@@ -58,6 +60,14 @@ export const addProjectLegendContent: ILegendContentItem[] = [
   {
     description:
       "Essa página é para ser criado o seu projeto e vincular tarefas a ele.",
+  },
+  {
+    description: "Campos com o '*' são obrigatórios.",
+  },
+];
+export const editProjectLegendContent: ILegendContentItem[] = [
+  {
+    description: "Essa página é para atualizar as informações do seu projeto.",
   },
   {
     description: "Campos com o '*' são obrigatórios.",

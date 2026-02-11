@@ -19,13 +19,18 @@ export const Modal: React.FC<IModal> = ({
   open = true,
   style,
   contentType = "feedbackMessage",
+  styleLoading,
+  styleBackdrop,
   onPressActionA,
   onPressActionB,
+  onPress,
   textButtonActionA = "Não",
   textButtonActionB = "Sim",
   textButton = "OK",
-  textLoading = "Salvando...",
+  textLoading = "Carregando...",
   sizeLoading = 30,
+  loading = false,
+  hasCloseButton = true,
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
@@ -36,36 +41,43 @@ export const Modal: React.FC<IModal> = ({
       style={[
         styles.modalContainer,
         contentType === "legend" ? styles.modalContainerLegend : {},
+        contentType === "loading" ? styles.modalContainerLoading : {},
         open ? { display: "flex" } : { display: "none" },
       ]}
     >
       {/* MODAL  */}
       {contentType !== "loading" && (
         <View style={[styles.modalContent, style]}>
-          <View
-            style={[
-              styles.modalHeader,
-              contentType === "legend" ? { marginBottom: 0 } : {},
-            ]}
-          >
-            <Button
+          {hasCloseButton && (
+            <View
               style={[
-                { paddingVertical: 0, paddingHorizontal: 0 },
-                contentType === "legend"
-                  ? {
-                      backgroundColor: "transparent",
-                      borderColor: "transparent",
-                    }
-                  : {},
+                styles.modalHeader,
+                contentType === "legend" ? { marginBottom: 0 } : {},
               ]}
-              variant="close"
-              title="Fechar"
-              colorIcon={contentType === "legend" ? colors.colorPrimary : ""}
-              onPress={onClose}
-            />
-          </View>
+            >
+              <Button
+                style={[
+                  { paddingVertical: 0, paddingHorizontal: 0 },
+                  contentType === "legend"
+                    ? {
+                        backgroundColor: "transparent",
+                        borderColor: "transparent",
+                      }
+                    : {},
+                ]}
+                variant="close"
+                title="Fechar"
+                colorIcon={contentType === "legend" ? colors.colorPrimary : ""}
+                onPress={onClose}
+              />
+            </View>
+          )}
           <View>
-            <Text style={[styles.textBody]}>{children || text}</Text>
+            <Text
+              style={[styles.textBody, { marginTop: hasCloseButton ? 0 : 15 }]}
+            >
+              {children || text}
+            </Text>
             {contentType !== "legend" && (
               <View
                 style={[
@@ -83,7 +95,8 @@ export const Modal: React.FC<IModal> = ({
                     style={styles.buttonModalOutline}
                     variant="outline"
                     title={textButton}
-                    onPress={onClose}
+                    onPress={onPress}
+                    loading={loading}
                   />
                 ) : (
                   <>
@@ -93,6 +106,7 @@ export const Modal: React.FC<IModal> = ({
                       variant="outline"
                       title={textButtonActionA}
                       onPress={onPressActionA}
+                      loading={loading}
                     />
                     <Button
                       textStyle={styles.buttonModalText}
@@ -100,6 +114,7 @@ export const Modal: React.FC<IModal> = ({
                       variant="outline"
                       title={textButtonActionB}
                       onPress={onPressActionB}
+                      loading={loading}
                     />
                   </>
                 )}
@@ -112,7 +127,7 @@ export const Modal: React.FC<IModal> = ({
 
       {/* MODAL LOADING  */}
       {contentType === "loading" && (
-        <View style={styles.loadingContent}>
+        <View style={[styles.loadingContent, styleLoading]}>
           <ActivityIndicator size={sizeLoading} color={colors.colorPrimary} />
           {textLoading && <Text style={styles.loadingText}>{textLoading}</Text>}
         </View>
@@ -120,7 +135,10 @@ export const Modal: React.FC<IModal> = ({
       {/* MODAL LOADING  */}
 
       {/* backdrop */}
-      <Pressable style={styles.backdrop} onPress={onClose}>
+      <Pressable
+        style={[styles.backdrop, styleBackdrop]}
+        onPress={hasCloseButton ? onClose : () => {}}
+      >
         <ThemedView></ThemedView>
       </Pressable>
       {/* backdrop */}

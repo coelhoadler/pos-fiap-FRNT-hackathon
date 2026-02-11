@@ -6,23 +6,55 @@ import { DropdownContent } from "@/app/components/ui/dropdown/dropdownContent";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { genericStyle } from "@/app/styles/genericStyles";
 import { useFocusEffect } from "@react-navigation/native";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
 import { useCallback, useState } from "react";
-import { Pressable, ScrollView, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { dropdownItemsProjects, legendContentItems } from "./constants";
 import { createStyles } from "./styles";
 
-export default function ProjectsScreens() {
+import { ProjectsNotFound } from "@/app/components/projects/projectsNotFound";
+import { Modal } from "@/app/components/ui/modal";
+import { Colors } from "@/app/constants/theme";
+import { IProjectService } from "@/app/interface/project";
+import { deleteProject, getProjects } from "@/app/services/projects";
+
+export default function Projects() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
+  const colors = Colors[colorScheme];
+
   const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
   const [openModalLegend, setOpenModalLegend] = useState(false);
 
+  const [projects, setProjects] = useState<IProjectService[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [openModalDelete, setOpenModalDelete] = useState(false);
+  const [projectToDelete, setProjectToDelete] =
+    useState<IProjectService | null>(null);
+
+  const navigationToNewProject = () => {
+    router.navigate("/(screens)/home/(tabs)/projects/addProject");
+  };
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const data = await getProjects();
+      setProjects(data);
+    } catch (error) {
+      console.error("Erro ao buscar projetos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
+      fetchProjects();
       setOpenModalLegend(false);
       setActiveDropdownId(null);
-
+      setOpenModalDelete(false);
       return () => {};
     }, []),
   );
@@ -31,31 +63,46 @@ export default function ProjectsScreens() {
     setActiveDropdownId((prevId) => (prevId === id ? null : id));
   };
 
-  const myProjects = [
-    { id: "p1", name: "Projeto 1" },
-    { id: "p2", name: "Projeto 23" },
-    { id: "p3", name: "Projeto 3" },
-  ];
+  const handlePrepareDelete = (project: IProjectService) => {
+    setProjectToDelete(project);
+    setOpenModalDelete(true);
+  };
+  const handleEditProject = (project: IProjectService) => {
+    setActiveDropdownId(null);
+    router.push({
+      pathname: "/(screens)/home/(tabs)/projects/editProject/[id]",
+      params: {
+        id: project.id!,
+        name: project.name,
+        description: project.description,
+      },
+    });
+  };
 
-  const handleOpenModalLegend = () => {
-    setOpenModalLegend(true);
+  const handleDelete = async () => {
+    if (!projectToDelete?.id) return;
+
+    try {
+      setLoading(true);
+      await deleteProject(projectToDelete.id);
+      setOpenModalDelete(false);
+      setProjectToDelete(null);
+      fetchProjects();
+    } catch (error) {
+      console.log("error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
-      {activeDropdownId !== null && (
-        <Pressable
-          style={[styles.dropdownBackDrop]}
-          onPress={() => setActiveDropdownId(null)}
-        />
-      )}
-
       <Tabs.Screen
         options={{
           headerRight: () => (
             <ActionsButtonsProjects
               pathAdd="/(screens)/home/(tabs)/projects/addProject"
-              openModal={handleOpenModalLegend}
+              openModal={() => setOpenModalLegend(true)}
             />
           ),
         }}
@@ -63,33 +110,81 @@ export default function ProjectsScreens() {
 
       <Text style={styles.title}>Meus Projetos</Text>
 
-      <ScrollView
-        style={{ width: "100%", height: "100%" }}
-        onScrollBeginDrag={() => setActiveDropdownId(null)}
-      >
-        {myProjects.map((item) => (
-          <ListItemProject
-            key={item.id}
-            id={item.id}
-            nameProject={item.name}
-            onPressEdit={() => {}}
-            onPressDelete={() => {}}
-            onPressView={() => {}}
-            openDropdownActions={activeDropdownId === item.id}
-            onPressMoreOptions={() => handleToggleDropdown(item.id)}
-            dropdownActions={
-              <DropdownContent dropdownItems={dropdownItemsProjects} />
-            }
+      {loading && projects.length === 0 ? (
+        <View style={styles.modalLoading}>
+          <Modal
+            styleBackdrop={{ backgroundColor: "transparent" }}
+            hasCloseButton={false}
+            loading={loading}
+            contentType="loading"
           />
-        ))}
-      </ScrollView>
+        </View>
+      ) : (
+        <ScrollView
+          style={{ width: "100%", height: "100%" }}
+          onScrollBeginDrag={() => setActiveDropdownId(null)}
+        >
+          {projects.length === 0 ? (
+            <ProjectsNotFound
+              text="Crie um novo projeto"
+              message="Nenhum projeto encontrado"
+              onPress={navigationToNewProject}
+            />
+          ) : (
+            projects.map((item) => {
+              const isDropDownOpened = activeDropdownId === item.id;
+              return (
+                <View
+                  key={item.id}
+                  style={{ zIndex: isDropDownOpened ? 999 : 1 }}
+                >
+                  <ListItemProject
+                    id={item.id!}
+                    nameProject={item.name}
+                    openDropdownActions={isDropDownOpened}
+                    onPressMoreOptions={() => handleToggleDropdown(item.id!)}
+                    dropdownActions={
+                      <DropdownContent
+                        onClose={() =>
+                          isDropDownOpened && setActiveDropdownId(null)
+                        }
+                        dropdownItems={dropdownItemsProjects}
+                      />
+                    }
+                    onPressEdit={() => handleEditProject(item)}
+                    onPressDelete={() => handlePrepareDelete(item)}
+                    onPressView={() => {}}
+                  />
+                </View>
+              );
+            })
+          )}
+        </ScrollView>
+      )}
 
       {openModalLegend && (
         <ModalLegendProjects
           legendContentItems={legendContentItems}
-          subtitleContentItem="Aqui vamos explicar o que significa cada ícone."
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
+        />
+      )}
+
+      {openModalDelete && (
+        <Modal
+          contentType={"withActions"}
+          hasCloseButton={true}
+          loading={loading}
+          onClose={() => {
+            setOpenModalDelete(false);
+            setProjectToDelete(null);
+          }}
+          text={`Deseja excluir o projeto: "${projectToDelete?.name}"?`}
+          onPressActionB={handleDelete}
+          onPressActionA={() => {
+            setOpenModalDelete(false);
+            setProjectToDelete(null);
+          }}
         />
       )}
     </ThemedView>
