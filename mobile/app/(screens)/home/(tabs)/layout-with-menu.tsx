@@ -88,13 +88,6 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Projetos",
             headerTitle: "Projetos",
-            // headerRight: () => (
-            //   <>
-            //     <ActionsButtonsProjects
-            //       pathAdd={"/(screens)/home/(tabs)/projects/addProject"}
-            //     />
-            //   </>
-            // ),
           }}
         />
         <Tabs.Screen

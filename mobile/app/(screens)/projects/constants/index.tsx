@@ -65,3 +65,11 @@ export const addProjectLegendContent: ILegendContentItem[] = [
     description: "Campos com o '*' são obrigatórios.",
   },
 ];
+export const editProjectLegendContent: ILegendContentItem[] = [
+  {
+    description: "Essa página é para atualizar as informações do seu projeto.",
+  },
+  {
+    description: "Campos com o '*' são obrigatórios.",
+  },
+];

@@ -18,7 +18,7 @@ import { Colors } from "@/app/constants/theme";
 import { IProjectService } from "@/app/interface/project";
 import { deleteProject, getProjects } from "@/app/services/projects";
 
-export default function ProjectsScreens() {
+export default function Projects() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
   const colors = Colors[colorScheme];
@@ -66,6 +66,17 @@ export default function ProjectsScreens() {
   const handlePrepareDelete = (project: IProjectService) => {
     setProjectToDelete(project);
     setOpenModalDelete(true);
+  };
+  const handleEditProject = (project: IProjectService) => {
+    setActiveDropdownId(null);
+    router.push({
+      pathname: "/(screens)/projects/editProject/[id]",
+      params: {
+        id: project.id!,
+        name: project.name,
+        description: project.description,
+      },
+    });
   };
 
   const handleDelete = async () => {
@@ -140,7 +151,7 @@ export default function ProjectsScreens() {
                         dropdownItems={dropdownItemsProjects}
                       />
                     }
-                    onPressEdit={() => {}}
+                    onPressEdit={() => handleEditProject(item)}
                     onPressDelete={() => handlePrepareDelete(item)}
                     onPressView={() => {}}
                   />
