@@ -70,7 +70,7 @@ export default function Projects() {
   const handleEditProject = (project: IProjectService) => {
     setActiveDropdownId(null);
     router.push({
-      pathname: "/(screens)/projects/editProject/[id]",
+      pathname: "/(screens)/home/(tabs)/projects/editProject/[id]",
       params: {
         id: project.id!,
         name: project.name,
