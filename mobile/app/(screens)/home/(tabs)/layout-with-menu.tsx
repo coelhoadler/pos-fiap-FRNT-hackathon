@@ -98,6 +98,14 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Novo Projeto",
           }}
         />
+        <Tabs.Screen
+          name="projects/editProject/[id]"
+          options={{
+            href: null,
+            title: "Editar Projeto",
+            headerTitle: "Editar Projeto",
+          }}
+        />
       </Tabs>
       <HamburgerMenuDrawer />
     </>

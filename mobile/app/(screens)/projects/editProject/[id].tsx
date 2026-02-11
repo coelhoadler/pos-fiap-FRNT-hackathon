@@ -11,7 +11,7 @@ import { updateProject } from "@/app/services/projects";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
 import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { createStyles } from "../addProject/styles";
 import { editProjectLegendContent } from "../constants";
@@ -37,6 +37,13 @@ export default function EditProject() {
     nomeProjeto: name || "",
     descricaoProjeto: description || "",
   });
+
+  useEffect(() => {
+    setFormData({
+      nomeProjeto: name || "",
+      descricaoProjeto: description || "",
+    });
+  }, [name, description]);
 
   const [errors, setErrors] = useState({
     nomeProjeto: "",
