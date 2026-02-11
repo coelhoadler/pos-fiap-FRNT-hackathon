@@ -93,7 +93,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
     {
       icon: <Timer size={24} />,
       label: "Focar",
-      onPress: () => navigateTo("/(screens)/home/(tabs)/focus"),
+      onPress: () => navigateTo("/(screens)/home/(tabs)/pomodoro"),
     },
     {
       icon: <FileCheckCorner size={22} />,
@@ -103,7 +103,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
     {
       icon: "gearshape.fill",
       label: "Preferências",
-      onPress: () => navigateTo("/(screens)/home/(tabs)/modal"),
+      onPress: () => navigateTo("/(screens)/home/(tabs)/preferences"),
     },
     {
       icon: "person.circle.fill",
