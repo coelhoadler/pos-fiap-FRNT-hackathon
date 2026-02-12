@@ -256,10 +256,10 @@ export default function TabTwoScreen() {
             {!isRunning && (
                 <View style={styles.topButtons}>
                     <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-history")}>
-                        <Text style={styles.topButton}>histórico</Text>
+                        <ThemedText style={styles.topButton}>Histórico</ThemedText>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-settings")}>
-                        <Text style={styles.topButton}>configurações</Text>
+                        <ThemedText style={styles.topButton}>Configurações</ThemedText>
                     </TouchableOpacity>
                 </View>
             )}
@@ -324,11 +324,11 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     topButton: {
-        color: "#1619EB",
         textDecorationLine: "underline",
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 20,
+        fontSize: 14,
     },
     topButtonText: {
         color: "#FFFFFF",
