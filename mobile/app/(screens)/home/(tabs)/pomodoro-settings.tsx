@@ -81,6 +81,8 @@ export default function PomodoroSettings() {
                     <View style={styles.placeholder} />
                 </View>
 
+                <ThemedText style={styles.title}>Durações</ThemedText>
+
                 {/* Cards de configuração de tempo */}
                 <View style={styles.timeCardsContainer}>
                     <View style={styles.timeCard}>
@@ -226,8 +228,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: "600",
-        color: "#5A5A5A",
+        textAlign: "center",
+        marginBottom: 30,
     },
     placeholder: {
         width: 38,
