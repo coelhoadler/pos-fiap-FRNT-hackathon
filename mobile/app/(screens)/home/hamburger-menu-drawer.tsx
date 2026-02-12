@@ -4,6 +4,8 @@ import { IconSymbol } from "@/app/components/ui/icon-symbol";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { getAuth, signOut } from "@/app/services/firebaseAuth";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
+import { getPreferences } from "@/app/services/preferences";
 import { router } from "expo-router";
 import { FileCheckCorner, Timer } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
@@ -51,7 +53,20 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, label, onPress }) => {
 export const HamburgerMenuDrawer: React.FC = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
   const [slideAnim] = useState(new Animated.Value(-DRAWER_WIDTH));
+  const [focusModeEnabled, setFocusModeEnabled] = useState(false);
   const colorScheme = useColorScheme();
+
+  const loadFocusMode = () => {
+    getPreferences().then((prefs) => {
+      setFocusModeEnabled(!!prefs?.focusMode);
+    });
+  };
+
+  useEffect(() => {
+    loadFocusMode();
+    const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadFocusMode);
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     const toValue = isMenuOpen ? 0 : -DRAWER_WIDTH;
@@ -90,13 +105,13 @@ export const HamburgerMenuDrawer: React.FC = () => {
       label: "Início",
       onPress: () => navigateTo("/(screens)/home/(tabs)/"),
     },
-    {
-      icon: <Timer size={24} />,
+    focusModeEnabled && {
+      icon: <Timer size={24} color={Colors[colorScheme ?? "light"].text} />,
       label: "Focar",
       onPress: () => navigateTo("/(screens)/home/(tabs)/pomodoro"),
     },
     {
-      icon: <FileCheckCorner size={22} />,
+      icon: <FileCheckCorner size={22} color={Colors[colorScheme ?? "light"].text} />,
       label: "Projetos",
       onPress: () => navigateTo("/(screens)/home/(tabs)/projects/projects"),
     },
@@ -176,7 +191,7 @@ export const HamburgerMenuDrawer: React.FC = () => {
 
             {/* Items do menu */}
             <View style={styles.menuItems}>
-              {menuItems.map((item, index) => (
+              {(menuItems.filter(Boolean) as MenuItemProps[]).map((item, index) => (
                 <MenuItem
                   key={index}
                   icon={item.icon}

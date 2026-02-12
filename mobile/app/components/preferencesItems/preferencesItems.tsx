@@ -1,4 +1,5 @@
 import { IPreferencesItems } from "@/app/interface/preferences";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
 import {
   PreferencesFlags,
   getPreferences,
@@ -75,6 +76,7 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
       const fullPreferences = buildFullPreferencesObject();
 
       await savePreferences(fullPreferences);
+      eventBus.emit(PREFERENCES_UPDATED);
 
       console.log("Preferências salvas com sucesso!", fullPreferences);
     } catch (error) {

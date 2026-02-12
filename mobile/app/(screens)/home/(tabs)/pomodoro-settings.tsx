@@ -12,15 +12,16 @@ import Toast from "react-native-toast-message";
 
 export default function PomodoroSettings() {
     const router = useRouter();
-    const [pomodoroTime, setPomodoroTime] = useState(25);
-    const [shortBreak, setShortBreak] = useState(5);
-    const [longBreak, setLongBreak] = useState(10);
+    const [pomodoroTime, setPomodoroTime] = useState(5);
+    const [shortBreak, setShortBreak] = useState(1);
+    const [longBreak, setLongBreak] = useState(5);
     const [musicEnabled, setMusicEnabled] = useState(false);
     const [soundEnabledWhenFinish, setSoundEnabledWhenFinish] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     // Carregar configurações ao montar o componente
+
     useEffect(() => {
         loadSettings();
     }, []);
@@ -55,7 +56,7 @@ export default function PomodoroSettings() {
             };
             await savePomodoroSettings(settings);
             Toast.show({
-                type: 'success',
+                type: 'info',
                 text1: 'Sucesso',
                 text2: 'Configurações salvas com sucesso!',
                 text1Style: { fontSize: 18, fontWeight: 'bold' },
@@ -78,85 +79,63 @@ export default function PomodoroSettings() {
                         <Ionicons name="arrow-back" size={24} color="#4A90E2" />
                         <ThemedText style={styles.backText}>Voltar</ThemedText>
                     </TouchableOpacity>
-                    <View style={styles.placeholder} />
+                    <TouchableOpacity
+                        style={styles.saveButton}
+                        onPress={handleSave}
+                        disabled={isSaving || isLoading}
+                        activeOpacity={0.6}
+                    >
+                        {isSaving ? (
+                            <ActivityIndicator color="#4A90E2" size={20} />
+                        ) : (
+                            <>
+                                <Ionicons name="checkmark-circle-outline" size={22} color="#4A90E2" />
+                                <ThemedText style={styles.saveButtonText}>Salvar</ThemedText>
+                            </>
+                        )}
+                    </TouchableOpacity>
                 </View>
 
+                <ThemedText style={styles.title}>DURAÇÕES</ThemedText>
+
                 {/* Cards de configuração de tempo */}
-                <View style={styles.timeCardsContainer}>
-                    <View style={styles.timeCard}>
-                        <ThemedText style={styles.timeDescription}>Pomodoro</ThemedText>
-                        <View style={styles.rangeControls}>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setPomodoroTime(Math.max(1, pomodoroTime - 1))}
-                            >
-                                <Ionicons name="remove" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                            <View style={styles.rangeValue}>
-                                <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
-                                <ThemedText style={styles.timeLabel}>{pomodoroTime > 1 ? "minutos" : "minuto"}</ThemedText>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setPomodoroTime(Math.min(60, pomodoroTime + 1))}
-                            >
-                                <Ionicons name="add" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                <View style={styles.timeCardsWrapper}>
+                    <View style={styles.timeCardsContainer}>
+                        <TouchableOpacity
+                            style={styles.timeCard}
+                            onPress={() => setPomodoroTime(Math.min(60, pomodoroTime + 1))}
+                            onLongPress={() => setPomodoroTime(Math.max(1, pomodoroTime - 1))}
+                            activeOpacity={0.7}
+                        >
+                            <ThemedText style={styles.timeNumber}>{pomodoroTime}</ThemedText>
+                            <ThemedText style={styles.timeDescription}>POMODORO</ThemedText>
+                        </TouchableOpacity>
 
-                    <View style={styles.timeCard}>
-                        <ThemedText style={styles.timeDescription}>
-                            pausa entre{"\n"}Pomodoros
-                        </ThemedText>
-                        <View style={styles.rangeControls}>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setShortBreak(Math.max(1, shortBreak - 1))}
-                            >
-                                <Ionicons name="remove" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                            <View style={styles.rangeValue}>
-                                <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
-                                <ThemedText style={styles.timeLabel}>{shortBreak > 1 ? "minutos" : "minuto"}</ThemedText>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setShortBreak(Math.min(30, shortBreak + 1))}
-                            >
-                                <Ionicons name="add" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                        <TouchableOpacity
+                            style={styles.timeCard}
+                            onPress={() => setShortBreak(Math.min(30, shortBreak + 1))}
+                            onLongPress={() => setShortBreak(Math.max(1, shortBreak - 1))}
+                            activeOpacity={0.7}
+                        >
+                            <ThemedText style={styles.timeNumber}>{shortBreak}</ThemedText>
+                            <ThemedText style={styles.timeDescription}>PAUSA</ThemedText>
+                        </TouchableOpacity>
 
-                    <View style={styles.timeCard}>
-                        <ThemedText style={styles.timeDescription}>
-                            pausa longa
-                        </ThemedText>
-                        <View style={styles.rangeControls}>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setLongBreak(Math.max(5, longBreak - 1))}
-                            >
-                                <Ionicons name="remove" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                            <View style={styles.rangeValue}>
-                                <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
-                                <ThemedText style={styles.timeLabel}>{longBreak > 1 ? "minutos" : "minuto"}</ThemedText>
-                            </View>
-                            <TouchableOpacity
-                                style={styles.rangeButton}
-                                onPress={() => setLongBreak(Math.min(60, longBreak + 1))}
-                            >
-                                <Ionicons name="add" size={24} color="#4A90E2" />
-                            </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity
+                            style={styles.timeCard}
+                            onPress={() => setLongBreak(Math.min(60, longBreak + 1))}
+                            onLongPress={() => setLongBreak(Math.max(5, longBreak - 1))}
+                            activeOpacity={0.7}
+                        >
+                            <ThemedText style={styles.timeNumber}>{longBreak}</ThemedText>
+                            <ThemedText style={styles.timeDescription}>PAUSA LONGA</ThemedText>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
                 {/* Toggle Música */}
                 <View style={styles.toggleContainer}>
-                    <ThemedText style={styles.toggleTitle}>Música durante pomodoro</ThemedText>
+                    <ThemedText style={styles.title}>Música durante pomodoro</ThemedText>
                     <View style={styles.toggleRow}>
                         <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
                         <ToggleItem
@@ -164,7 +143,6 @@ export default function PomodoroSettings() {
                             value={musicEnabled}
                             onChange={setMusicEnabled}
                             containerStyle={{ marginRight: 7 }}
-                            disabled={true} // Desabilitado por enquanto, pois a funcionalidade de música ainda não está implementada
                         />
                         <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                     </View>
@@ -172,7 +150,7 @@ export default function PomodoroSettings() {
 
                 {/* Toggle Som ao terminar */}
                 <View style={styles.toggleContainer}>
-                    <ThemedText style={styles.toggleTitle}>Som ao terminar o ciclo</ThemedText>
+                    <ThemedText style={styles.title}>Som ao terminar o ciclo</ThemedText>
                     <View style={styles.toggleRow}>
                         <ThemedText style={styles.toggleLabel}>desativado</ThemedText>
                         <ToggleItem
@@ -184,21 +162,9 @@ export default function PomodoroSettings() {
                         <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                     </View>
                 </View>
-
-                {/* Botão Salvar */}
-                <TouchableOpacity
-                    style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
-                    onPress={handleSave}
-                    disabled={isSaving || isLoading}
-                >
-                    {isSaving ? (
-                        <ActivityIndicator color="#FFFFFF" />
-                    ) : (
-                        <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
-                    )}
-                </TouchableOpacity>
                 <Toast />
             </ScrollView>
+            <ThemedText style={styles.resetWarning}>** ao salvar o seu Pomodoro será resetado.</ThemedText>
         </ThemedView>
     );
 }
@@ -225,72 +191,47 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     title: {
-        fontSize: 24,
-        fontWeight: "600",
-        color: "#5A5A5A",
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+        textTransform: "uppercase",
+        letterSpacing: 2,
+        marginBottom: 16,
+        color: "#AAAAAA",
     },
-    placeholder: {
-        width: 38,
+
+    timeCardsWrapper: {
+        padding: 10,
+        marginBottom: 40,
     },
     timeCardsContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: 40,
         gap: 10,
     },
     timeCard: {
         flex: 1,
-        backgroundColor: "#E8E8E8",
+        backgroundColor: "#6B6B6B",
         borderRadius: 10,
-        padding: 20,
-        alignItems: "center",
-        minHeight: 160,
-        justifyContent: "center",
-    },
-    rangeControls: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        marginTop: 15,
-    },
-    rangeButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: "#FFFFFF",
-        alignItems: "center",
-        justifyContent: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    rangeValue: {
+        paddingVertical: 18,
+        paddingHorizontal: 8,
         alignItems: "center",
         justifyContent: "center",
     },
     timeNumber: {
-        fontSize: 36,
+        fontSize: 48,
         fontWeight: "bold",
-        color: "#000000",
-        lineHeight: 40,
-    },
-    timeLabel: {
-        fontSize: 11,
-        color: "#000000",
+        color: "#FFFFFF",
+        lineHeight: 54,
     },
     timeDescription: {
-        fontSize: 14,
-        fontWeight: "600",
-        color: "#000000",
+        fontSize: 12,
+        fontWeight: "bold",
+        color: "#FFFFFF",
         textAlign: "center",
-        lineHeight: 18,
-        marginBottom: 10,
+        textTransform: "uppercase",
+        letterSpacing: 1,
+        marginTop: 4,
     },
     toggleContainer: {
         marginBottom: 30,
@@ -308,33 +249,21 @@ const styles = StyleSheet.create({
     },
     toggleLabel: {
         fontSize: 14,
-        color: "#5A5A5A",
     },
     saveButton: {
-        backgroundColor: "#4A90E2",
-        paddingVertical: 16,
-        paddingHorizontal: 40,
-        borderRadius: 10,
+        flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        marginTop: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        minHeight: 56,
-    },
-    saveButtonDisabled: {
-        backgroundColor: "#A0A0A0",
-        opacity: 0.6,
+        gap: 6,
     },
     saveButtonText: {
-        color: "#FFFFFF",
-        fontSize: 18,
-        fontWeight: "bold",
+        color: "#4A90E2",
+        fontSize: 16,
+        fontWeight: "600",
     },
+    resetWarning: {
+        textDecorationLine: "underline",
+        fontSize: 12,
+        color: "#FF4D4D",
+        textAlign: "center",
+    }
 });

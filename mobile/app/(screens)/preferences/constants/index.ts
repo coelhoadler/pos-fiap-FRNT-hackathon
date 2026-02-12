@@ -4,7 +4,7 @@ export const preferencesConstantsItems: TPreferencesItems[] = [
   {
     id: "focusMode",
     title: "Modo foco",
-    description: "Descrição modo foco",
+    description: "Ativa a opção de Focar (Pomodoro) no menu",
   },
   {
     id: "summaryMode",

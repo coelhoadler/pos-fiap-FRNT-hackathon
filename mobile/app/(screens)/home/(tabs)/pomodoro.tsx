@@ -20,7 +20,8 @@ export default function TabTwoScreen() {
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [soundToFinish, setSoundToFinish] = useState<boolean>(false);
-    let [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
+    const [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
+    const [musicEnabled, setMusicEnabled] = useState<boolean>(false);
 
     // Verificar se o usuário tem configurações do Pomodoro toda vez que entrar na página
     useFocusEffect(
@@ -38,6 +39,7 @@ export default function TabTwoScreen() {
                         setIsLoading(false);
                         setPomodoroTimer(settings?.pomodoroTime);
                         setTimeLeft(settings?.pomodoroTime * 60);
+                        setMusicEnabled(settings?.musicEnabled);
                         setSoundToFinish(settings?.soundEnabledWhenFinish);
                     }
                 } catch (error) {
@@ -148,7 +150,9 @@ export default function TabTwoScreen() {
 
         if (newIsRunning) {
             // Iniciar a música
-            await playSound();
+            if (musicEnabled) {
+                await playSound();
+            }
         } else {
             // Pausar a música
             await pauseSound();
@@ -253,16 +257,14 @@ export default function TabTwoScreen() {
     return (
         <ThemedView style={styles.container}>
             {/* Header com botões histórico e configurações */}
-            {!isRunning && (
-                <View style={styles.topButtons}>
-                    <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-history")}>
-                        <Text style={styles.topButton}>histórico</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-settings")}>
-                        <Text style={styles.topButton}>configurações</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
+            <View style={styles.topButtons}>
+                <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-history")} disabled={isRunning}>
+                    <ThemedText style={styles.topButton}>Histórico</ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-settings")} disabled={isRunning}>
+                    <ThemedText style={styles.topButton}>Configurações</ThemedText>
+                </TouchableOpacity>
+            </View>
 
             {/* Botão Start/Pause */}
             <TouchableOpacity style={styles.startButton} onPress={toggleTimer}>
@@ -324,11 +326,11 @@ const styles = StyleSheet.create({
         marginBottom: 40,
     },
     topButton: {
-        color: "#1619EB",
         textDecorationLine: "underline",
         paddingHorizontal: 20,
         paddingVertical: 10,
         borderRadius: 20,
+        fontSize: 14,
     },
     topButtonText: {
         color: "#FFFFFF",
