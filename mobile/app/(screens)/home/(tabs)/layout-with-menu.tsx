@@ -5,6 +5,7 @@ import { HapticTab } from "@/app/components/haptic-tab";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
 import { getPreferences } from "@/app/services/preferences";
 import { Timer } from "lucide-react-native";
 import { HamburgerMenuButton } from "../hamburger-menu-button";
@@ -16,10 +17,16 @@ export const LayoutWithMenu: React.FC = () => {
   const colors = Colors[colorScheme];
   const [focusModeEnabled, setFocusModeEnabled] = useState(false);
 
-  useEffect(() => {
+  const loadFocusMode = () => {
     getPreferences().then((prefs) => {
       setFocusModeEnabled(!!prefs?.focusMode);
     });
+  };
+
+  useEffect(() => {
+    loadFocusMode();
+    const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadFocusMode);
+    return unsubscribe;
   }, []);
 
   return (

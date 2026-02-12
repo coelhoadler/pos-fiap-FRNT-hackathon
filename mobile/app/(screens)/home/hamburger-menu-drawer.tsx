@@ -4,6 +4,7 @@ import { IconSymbol } from "@/app/components/ui/icon-symbol";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { getAuth, signOut } from "@/app/services/firebaseAuth";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
 import { getPreferences } from "@/app/services/preferences";
 import { router } from "expo-router";
 import { FileCheckCorner, Timer } from "lucide-react-native";
@@ -55,6 +56,18 @@ export const HamburgerMenuDrawer: React.FC = () => {
   const [focusModeEnabled, setFocusModeEnabled] = useState(false);
   const colorScheme = useColorScheme();
 
+  const loadFocusMode = () => {
+    getPreferences().then((prefs) => {
+      setFocusModeEnabled(!!prefs?.focusMode);
+    });
+  };
+
+  useEffect(() => {
+    loadFocusMode();
+    const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadFocusMode);
+    return unsubscribe;
+  }, []);
+
   useEffect(() => {
     const toValue = isMenuOpen ? 0 : -DRAWER_WIDTH;
 
@@ -64,12 +77,6 @@ export const HamburgerMenuDrawer: React.FC = () => {
       tension: 65,
       friction: 11,
     }).start();
-
-    if (isMenuOpen) {
-      getPreferences().then((prefs) => {
-        setFocusModeEnabled(!!prefs?.focusMode);
-      });
-    }
   }, [isMenuOpen]);
 
   const handleSignOut = async () => {
