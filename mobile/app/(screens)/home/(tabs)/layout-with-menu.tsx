@@ -58,7 +58,7 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
         <Tabs.Screen
-          name="explore"
+          name="pomodoro"
           options={{
             title: "Focar",
             tabBarIcon: ({ color }) => <Timer size={28} color={color} />,
@@ -99,6 +99,22 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
         <Tabs.Screen
+          name="pomodoro-settings"
+          options={{
+            href: null,
+            title: "Configurações",
+            headerTitle: "Configurações do Pomodoro",
+          }}
+        />
+        <Tabs.Screen
+          name="pomodoro-history"
+          options={{
+            href: null,
+            title: "Histórico",
+            headerTitle: "Histórico de execuções",
+          }}
+        />
+        <Tabs.Screen
           name="projects/editProject/[id]"
           options={{
             href: null,
@@ -107,6 +123,7 @@ export const LayoutWithMenu: React.FC = () => {
           }}
         />
       </Tabs>
+
       <HamburgerMenuDrawer />
     </>
   );

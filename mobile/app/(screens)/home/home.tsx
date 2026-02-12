@@ -82,7 +82,7 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ children }) => {
     {
       icon: "paperplane.fill",
       label: "Focar",
-      onPress: () => navigateTo("/(screens)/home/(tabs)/explore"),
+      onPress: () => navigateTo("/(screens)/home/(tabs)/focus"),
     },
     {
       icon: "gearshape.fill",
