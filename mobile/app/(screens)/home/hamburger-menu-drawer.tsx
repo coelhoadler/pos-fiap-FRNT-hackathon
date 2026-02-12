@@ -91,12 +91,12 @@ export const HamburgerMenuDrawer: React.FC = () => {
       onPress: () => navigateTo("/(screens)/home/(tabs)/"),
     },
     {
-      icon: <Timer size={24} />,
+      icon: <Timer size={24} color={Colors[colorScheme ?? "light"].text} />,
       label: "Focar",
       onPress: () => navigateTo("/(screens)/home/(tabs)/pomodoro"),
     },
     {
-      icon: <FileCheckCorner size={22} />,
+      icon: <FileCheckCorner size={22} color={Colors[colorScheme ?? "light"].text} />,
       label: "Projetos",
       onPress: () => navigateTo("/(screens)/home/(tabs)/projects/projects"),
     },
