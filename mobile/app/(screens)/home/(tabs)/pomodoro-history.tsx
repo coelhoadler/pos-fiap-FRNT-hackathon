@@ -77,10 +77,14 @@ function groupByDate(history: IPomodoroHistory[]): GroupedHistory[] {
     }));
 }
 
+const PAGE_SIZE = 30;
+
 export default function PomodoroHistory() {
     const router = useRouter();
     const [history, setHistory] = useState<IPomodoroHistory[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
 
     useFocusEffect(
         useCallback(() => {
@@ -91,8 +95,9 @@ export default function PomodoroHistory() {
     const loadHistory = async () => {
         try {
             setIsLoading(true);
-            const data = await getPomodoroHistory();
+            const data = await getPomodoroHistory(PAGE_SIZE);
             setHistory(data);
+            setHasMore(data.length >= PAGE_SIZE);
         } catch (error) {
             Toast.show({
                 type: "error",
@@ -104,6 +109,28 @@ export default function PomodoroHistory() {
             });
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const loadMore = async () => {
+        if (isLoadingMore || !hasMore) return;
+        try {
+            setIsLoadingMore(true);
+            const nextPage = history.length + PAGE_SIZE;
+            const data = await getPomodoroHistory(nextPage);
+            setHistory(data);
+            setHasMore(data.length >= nextPage);
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Erro",
+                text2: "Não foi possível carregar mais registros",
+                text1Style: { fontSize: 16, fontWeight: "bold" },
+                text2Style: { fontSize: 14 },
+                swipeable: true,
+            });
+        } finally {
+            setIsLoadingMore(false);
         }
     };
 
@@ -205,6 +232,23 @@ export default function PomodoroHistory() {
                             )}
                         </View>
                     )}
+                    ListFooterComponent={
+                        hasMore ? (
+                            <TouchableOpacity
+                                style={styles.loadMoreButton}
+                                onPress={loadMore}
+                                disabled={isLoadingMore}
+                            >
+                                {isLoadingMore ? (
+                                    <ActivityIndicator size="small" color="#4A90E2" />
+                                ) : (
+                                    <ThemedText style={styles.loadMoreText}>
+                                        Carregar mais registros
+                                    </ThemedText>
+                                )}
+                            </TouchableOpacity>
+                        ) : null
+                    }
                 />
             )}
 
@@ -328,5 +372,16 @@ const styles = StyleSheet.create({
         color: "#BBB",
         textAlign: "center",
         paddingHorizontal: 40,
+    },
+    loadMoreButton: {
+        alignItems: "center",
+        paddingVertical: 16,
+        marginBottom: 10,
+    },
+    loadMoreText: {
+        color: "#4A90E2",
+        fontSize: 15,
+        fontWeight: "600",
+        textDecorationLine: "underline",
     },
 });

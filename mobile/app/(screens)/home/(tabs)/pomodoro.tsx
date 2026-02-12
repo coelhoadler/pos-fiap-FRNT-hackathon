@@ -253,16 +253,16 @@ export default function TabTwoScreen() {
     return (
         <ThemedView style={styles.container}>
             {/* Header com botões histórico e configurações */}
-            <View style={styles.topButtons}>
-                <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-history")}>
-                    <Text style={styles.topButton}>histórico</Text>
-                </TouchableOpacity>
-                {!isRunning && (
+            {!isRunning && (
+                <View style={styles.topButtons}>
+                    <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-history")}>
+                        <Text style={styles.topButton}>histórico</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => router.push("/(screens)/home/(tabs)/pomodoro-settings")}>
                         <Text style={styles.topButton}>configurações</Text>
                     </TouchableOpacity>
-                )}
-            </View>
+                </View>
+            )}
 
             {/* Botão Start/Pause */}
             <TouchableOpacity style={styles.startButton} onPress={toggleTimer}>

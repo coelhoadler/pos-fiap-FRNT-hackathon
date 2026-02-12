@@ -14,7 +14,7 @@ export async function savePomodoroHistory(history: IPomodoroHistory): Promise<vo
     }
 }
 
-export async function getPomodoroHistory(limit: number = 50): Promise<IPomodoroHistory[]> {
+export async function getPomodoroHistory(limit: number = 30): Promise<IPomodoroHistory[]> {
     try {
         const historyRef = getPomodoroHistoryCollectionRef();
         const snapshot = await historyRef
