@@ -180,7 +180,6 @@ export default function PomodoroSettings() {
                             value={soundEnabledWhenFinish}
                             onChange={setSoundEnabledWhenFinish}
                             containerStyle={{ marginRight: 7 }}
-                            disabled={true} // Desabilitado por enquanto, pois a funcionalidade de som ainda não está implementada
                         />
                         <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                     </View>

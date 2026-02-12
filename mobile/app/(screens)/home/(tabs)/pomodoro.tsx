@@ -19,6 +19,7 @@ export default function TabTwoScreen() {
     const [completedCycles, setCompletedCycles] = useState(0);
     const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [soundToFinish, setSoundToFinish] = useState<boolean>(false);
     let [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
 
     // Verificar se o usuário tem configurações do Pomodoro toda vez que entrar na página
@@ -32,10 +33,12 @@ export default function TabTwoScreen() {
                     if (!settings) {
                         router.replace(`/(screens)/home/(tabs)/${TabsRoutes.PomodoroSettings}`);
                         setIsLoading(false);
+
                     } else {
                         setIsLoading(false);
-                        setPomodoroTimer(settings.pomodoroTime);
-                        setTimeLeft(settings.pomodoroTime * 60);
+                        setPomodoroTimer(settings?.pomodoroTime);
+                        setTimeLeft(settings?.pomodoroTime * 60);
+                        setSoundToFinish(settings?.soundEnabledWhenFinish);
                     }
                 } catch (error) {
                     Toast.show({
@@ -67,6 +70,7 @@ export default function TabTwoScreen() {
                 console.error("Erro ao configurar áudio:", error);
             }
         }
+
         setupAudio();
 
         // Cleanup ao desmontar
@@ -85,6 +89,8 @@ export default function TabTwoScreen() {
                 setTimeLeft((prev) => prev! - 1);
             }, 1000);
         } else if (timeLeft === 0 && completedCycles < TOTAL_CYCLES) {
+            playDoneSound();
+
             // Salvar histórico de conclusão
             const saveCompletionHistory = async () => {
                 try {
@@ -158,12 +164,27 @@ export default function TabTwoScreen() {
                 // Criar e tocar um novo som
                 // Você pode usar uma URL de música ou um arquivo local
                 const { sound: newSound } = await Audio.Sound.createAsync(
-                    // Exemplo com URL - substitua pela sua música de foco
-                    { uri: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-                    { shouldPlay: true, isLooping: true, volume: 0.5 }
+                    require("../../../../assets/audios/pomodoro.m4a"),
+                    { shouldPlay: true, isLooping: true, volume: 0.3 }
                 );
+
                 setSound(newSound);
             }
+        } catch (error) {
+            console.error("Erro ao tocar música:", error);
+        }
+    };
+
+    const playDoneSound = async () => {
+        try {
+            if (!soundToFinish) return;
+
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                require("../../../../assets/audios/pomodoro_done.mp3"),
+                { shouldPlay: true, volume: 0.3 }
+            );
+
+            newSound.playAsync();
         } catch (error) {
             console.error("Erro ao tocar música:", error);
         }

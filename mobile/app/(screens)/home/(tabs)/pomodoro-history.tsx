@@ -91,7 +91,7 @@ export default function PomodoroHistory() {
     const loadHistory = async () => {
         try {
             setIsLoading(true);
-            const data = await getPomodoroHistory(100);
+            const data = await getPomodoroHistory();
             setHistory(data);
         } catch (error) {
             Toast.show({
