@@ -56,7 +56,7 @@ export default function PomodoroSettings() {
             };
             await savePomodoroSettings(settings);
             Toast.show({
-                type: 'success',
+                type: 'info',
                 text1: 'Sucesso',
                 text2: 'Configurações salvas com sucesso!',
                 text1Style: { fontSize: 18, fontWeight: 'bold' },
@@ -79,7 +79,21 @@ export default function PomodoroSettings() {
                         <Ionicons name="arrow-back" size={24} color="#4A90E2" />
                         <ThemedText style={styles.backText}>Voltar</ThemedText>
                     </TouchableOpacity>
-                    <View style={styles.placeholder} />
+                    <TouchableOpacity
+                        style={styles.saveButton}
+                        onPress={handleSave}
+                        disabled={isSaving || isLoading}
+                        activeOpacity={0.6}
+                    >
+                        {isSaving ? (
+                            <ActivityIndicator color="#4A90E2" size={20} />
+                        ) : (
+                            <>
+                                <Ionicons name="checkmark-circle-outline" size={22} color="#4A90E2" />
+                                <ThemedText style={styles.saveButtonText}>Salvar</ThemedText>
+                            </>
+                        )}
+                    </TouchableOpacity>
                 </View>
 
                 <ThemedText style={styles.title}>DURAÇÕES</ThemedText>
@@ -148,21 +162,9 @@ export default function PomodoroSettings() {
                         <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                     </View>
                 </View>
-
-                {/* Botão Salvar */}
-                <TouchableOpacity
-                    style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
-                    onPress={handleSave}
-                    disabled={isSaving || isLoading}
-                >
-                    {isSaving ? (
-                        <ActivityIndicator color="#FFFFFF" />
-                    ) : (
-                        <ThemedText style={styles.saveButtonText}>Salvar Configurações</ThemedText>
-                    )}
-                </TouchableOpacity>
                 <Toast />
             </ScrollView>
+            <ThemedText style={styles.resetWarning}>** ao salvar o seu Pomodoro será resetado.</ThemedText>
         </ThemedView>
     );
 }
@@ -197,13 +199,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         color: "#AAAAAA",
     },
-    placeholder: {
-        width: 38,
-    },
+
     timeCardsWrapper: {
-        borderWidth: 2,
-        borderColor: "#6B6B6B",
-        borderRadius: 14,
         padding: 10,
         marginBottom: 40,
     },
@@ -254,30 +251,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     saveButton: {
-        backgroundColor: "#4A90E2",
-        paddingVertical: 16,
-        paddingHorizontal: 40,
-        borderRadius: 10,
+        flexDirection: "row",
         alignItems: "center",
-        justifyContent: "center",
-        marginTop: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        minHeight: 56,
-    },
-    saveButtonDisabled: {
-        backgroundColor: "#A0A0A0",
-        opacity: 0.6,
+        gap: 6,
     },
     saveButtonText: {
-        color: "#FFFFFF",
-        fontSize: 18,
-        fontWeight: "bold",
+        color: "#4A90E2",
+        fontSize: 16,
+        fontWeight: "600",
     },
+    resetWarning: {
+        textDecorationLine: "underline",
+        fontSize: 12,
+        color: "#FF4D4D",
+        textAlign: "center",
+    }
 });
