@@ -1,8 +1,4 @@
-import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
-
-import ParallaxScrollView from "@/app/components/parallax-scroll-view";
-import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { getAuth } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";

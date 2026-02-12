@@ -1,10 +1,11 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
+import { getPreferences } from "@/app/services/preferences";
 import { Timer } from "lucide-react-native";
 import { HamburgerMenuButton } from "../hamburger-menu-button";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
@@ -13,6 +14,13 @@ export const LayoutWithMenu: React.FC = () => {
   const colorSchemeRaw = useColorScheme();
   const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
   const colors = Colors[colorScheme];
+  const [focusModeEnabled, setFocusModeEnabled] = useState(false);
+
+  useEffect(() => {
+    getPreferences().then((prefs) => {
+      setFocusModeEnabled(!!prefs?.focusMode);
+    });
+  }, []);
 
   return (
     <>
@@ -61,6 +69,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="pomodoro"
           options={{
             title: "Focar",
+            href: focusModeEnabled ? undefined : null,
             tabBarIcon: ({ color }) => <Timer size={28} color={color} />,
           }}
         />
