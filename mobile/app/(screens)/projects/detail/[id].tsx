@@ -101,17 +101,18 @@ export default function ProjectDetail() {
               />
             </View>
           ) : (
-            <>
+            <View style={{ minWidth: "100%" }}>
               <AddContentButton
                 onPress={() => setOpenModalAddColumn(true)}
                 text="Adicione uma nova coluna"
+                style={{ width: "90%", margin: "auto" }}
               />
               {project?.columns?.map((column: any) => (
                 <View key={column.id}>
                   <Text>{column.title}</Text>
                 </View>
               ))}
-            </>
+            </View>
           )}
         </>
       </ScrollView>
