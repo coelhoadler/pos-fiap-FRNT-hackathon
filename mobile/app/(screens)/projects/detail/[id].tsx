@@ -1,5 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { useLocalSearchParams } from "expo-router";
+import { Tabs, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
 import {
   ScrollView,
@@ -68,6 +68,11 @@ export default function ProjectDetail() {
     <ThemedView
       style={[genericStyle(colorScheme).container, styles.detailProject]}
     >
+      <Tabs.Screen
+        options={{
+          headerTitle: project?.name || "Carregando...",
+        }}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text>{project?.name}</Text>
 
