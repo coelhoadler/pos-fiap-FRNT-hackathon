@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { ThemedView } from "@/app/components/themed-view";
+import { Accordion } from "@/app/components/ui/accordion";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
 import { Button } from "@/app/components/ui/button";
 import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
@@ -101,17 +102,33 @@ export default function ProjectDetail() {
               />
             </View>
           ) : (
-            <View style={{ minWidth: "100%" }}>
-              <AddContentButton
-                onPress={() => setOpenModalAddColumn(true)}
-                text="Adicione uma nova coluna"
-                style={{ width: "90%", margin: "auto" }}
-              />
+            <View style={{ minWidth: "100%", paddingBottom: 50 }}>
               {project?.columns?.map((column: any) => (
-                <View key={column.id}>
-                  <Text>{column.title}</Text>
-                </View>
+                <Accordion key={column.id} title={column.title}>
+                  <View>
+                    <Text style={{ color: colors.text }}>Tarefas aqui..</Text>
+                    <View style={{ marginTop: 10 }}>
+                      <AddContentButton
+                        onPress={() => {}}
+                        text="Crie uma nova tarefa"
+                        size={20}
+                        styleText={{ fontSize: 18 }}
+                        style={{
+                          width: "80%",
+                          margin: "auto",
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Accordion>
               ))}
+              <View style={{ marginTop: 15 }}>
+                <AddContentButton
+                  onPress={() => setOpenModalAddColumn(true)}
+                  text="Adicione uma nova coluna"
+                  style={{ width: "80%", margin: "auto" }}
+                />
+              </View>
             </View>
           )}
         </>

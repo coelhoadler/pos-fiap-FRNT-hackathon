@@ -9,7 +9,9 @@ export const AddContentButton: React.FC<IAddContentButton> = ({
   onPress,
   children,
   style,
+  styleText,
   text,
+  size = 22,
   ...props
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -20,8 +22,10 @@ export const AddContentButton: React.FC<IAddContentButton> = ({
     <View style={[styles.contentWrapper, style]}>
       <Pressable onPress={onPress}>
         <View style={styles.addContentButton}>
-          <CirclePlus size={22} color={colors.text} />
-          <Text style={styles.textContent}>{text || children}</Text>
+          <CirclePlus size={size} color={colors.text} />
+          <Text style={[styles.textContent, styleText]}>
+            {text || children}
+          </Text>
         </View>
       </Pressable>
     </View>
