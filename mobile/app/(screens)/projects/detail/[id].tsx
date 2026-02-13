@@ -2,11 +2,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
 import {
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { ThemedView } from "@/app/components/themed-view";
@@ -65,43 +65,21 @@ export default function ProjectDetail() {
   };
 
   return (
-    <ThemedView style={[genericStyle(colorScheme).container, { padding: 20 }]}>
+    <ThemedView
+      style={[genericStyle(colorScheme).container, styles.detailProject]}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={[styles.detailProject, { marginBottom: 4 }]}>
-          {project?.name}
-        </Text>
-        <Text style={{ color: colors.text, opacity: 0.6, marginBottom: 24 }}>
-          {project?.description}
-        </Text>
+        <Text>{project?.name}</Text>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: colors.tint,
-            padding: 16,
-            borderRadius: 12,
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-          onPress={() => setOpenModalAddColumn(true)}
-        >
-          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 16 }}>
-            + Nova Coluna
-          </Text>
+        <Text>{project?.description}</Text>
+
+        <TouchableOpacity onPress={() => setOpenModalAddColumn(true)}>
+          <Text>+ Nova Coluna</Text>
         </TouchableOpacity>
 
-        {/* Mapeamento das colunas (Accordion) */}
         {project?.columns?.map((column: any) => (
-          <View
-            key={column.id}
-            style={{
-              backgroundColor: colorScheme === "light" ? "#f0f0f0" : "#333",
-              padding: 15,
-              borderRadius: 8,
-              marginBottom: 10,
-            }}
-          >
-            {/* Aqui você pode inserir seu componente de Accordion futuramente */}
-            <Text style={{ color: colors.text }}>{column.title}</Text>
+          <View key={column.id}>
+            <Text>{column.title}</Text>
           </View>
         ))}
       </ScrollView>
@@ -109,14 +87,6 @@ export default function ProjectDetail() {
       {openModalAddColumn && (
         <>
           <TextInput
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: colors.tint,
-              color: colors.text,
-              marginTop: 15,
-              padding: 8,
-              width: "100%",
-            }}
             placeholder="Ex: To Do, Doing..."
             placeholderTextColor="#888"
             value={newColumnName}
