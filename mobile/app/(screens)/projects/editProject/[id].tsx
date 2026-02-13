@@ -13,8 +13,9 @@ import { genericStyle } from "@/app/styles/genericStyles";
 import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { createStyles } from "../addProject/styles";
+
 import { editProjectLegendContent } from "../constants";
+import { createStyles } from "./styles";
 
 export default function EditProject() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";

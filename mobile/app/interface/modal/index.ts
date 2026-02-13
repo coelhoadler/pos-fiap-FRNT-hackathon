@@ -14,7 +14,7 @@ export interface IModal {
     textButtonActionB?: string;
     onPressActionA?: () => void;
     onPressActionB?: () => void;
-    contentType: "feedbackMessage" | "withActions" | 'loading' | 'legend';
+    contentType: "feedbackMessage" | "withActions" | 'loading' | 'legend' |'customModal';
     textLoading?: string;
     sizeLoading?: number;
     loading?:boolean;
