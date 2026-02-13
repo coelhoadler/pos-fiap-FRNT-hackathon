@@ -6,6 +6,7 @@ import { ScrollView, Text, View } from "react-native";
 import { ThemedView } from "@/app/components/themed-view";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
 import { Button } from "@/app/components/ui/button";
+import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
 import { Input } from "@/app/components/ui/input";
 import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
@@ -26,6 +27,7 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [openModalAddColumn, setOpenModalAddColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState("");
+  const [error, setError] = useState("");
 
   const fetchProjectDetail = async () => {
     try {
@@ -48,11 +50,18 @@ export default function ProjectDetail() {
   );
 
   const handleAddColumn = async () => {
-    if (!newColumnName.trim() || !id) return;
+    if (!newColumnName.trim()) {
+      setError("O campo 'nome da coluna' é obrigatório.");
+      return;
+    }
+
+    if (!id) return;
+
     try {
       setLoading(true);
       await addColumnToProject(id, newColumnName);
       setNewColumnName("");
+      setError("");
       setOpenModalAddColumn(false);
       fetchProjectDetail();
     } catch (error) {
@@ -111,7 +120,11 @@ export default function ProjectDetail() {
         <>
           <Modal
             style={{ width: "100%" }}
-            onClose={() => setOpenModalAddColumn(false)}
+            onClose={() => {
+              setOpenModalAddColumn(false);
+              setError("");
+              setNewColumnName("");
+            }}
             contentType="customModal"
           >
             <Text style={styles.textModalColumn}>
@@ -120,9 +133,13 @@ export default function ProjectDetail() {
             <Input
               text={"Digite o nome da coluna"}
               value={newColumnName}
-              onChangeText={setNewColumnName}
+              onChangeText={(text) => {
+                setNewColumnName(text);
+                if (error) setError("");
+              }}
               id={project?.id || ""}
             />
+            {error ? <FormErrorMessage message={error} /> : null}
             <Button
               title="Salvar"
               style={styles.btnModalColumn}
