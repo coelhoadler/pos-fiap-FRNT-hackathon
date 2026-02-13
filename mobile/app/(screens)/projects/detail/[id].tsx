@@ -1,21 +1,17 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TextInput, View } from "react-native";
 
 import { ThemedView } from "@/app/components/themed-view";
+import { AddContentButton } from "@/app/components/ui/addContentButton";
 import { Button } from "@/app/components/ui/button";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { IProjectService } from "@/app/interface/project";
 import { addColumnToProject, getProjectById } from "@/app/services/projects";
 import { genericStyle } from "@/app/styles/genericStyles";
+import { FileChartColumn } from "lucide-react-native";
 import { createStyles } from "./styles";
 
 export default function ProjectDetail() {
@@ -73,20 +69,40 @@ export default function ProjectDetail() {
           headerTitle: project?.name || "Carregando...",
         }}
       />
+
+      <Text style={styles.title}>{project?.name}</Text>
+      <Text style={styles.description}>{project?.description}</Text>
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text>{project?.name}</Text>
-
-        <Text>{project?.description}</Text>
-
-        <TouchableOpacity onPress={() => setOpenModalAddColumn(true)}>
-          <Text>+ Nova Coluna</Text>
-        </TouchableOpacity>
-
-        {project?.columns?.map((column: any) => (
-          <View key={column.id}>
-            <Text>{column.title}</Text>
-          </View>
-        ))}
+        <>
+          {project?.columns?.length === 0 ? (
+            <View style={styles.wrapperMessageNoColumn}>
+              <View style={styles.itemMessageNoColumn}>
+                <FileChartColumn size={35} color={colors.colorPrimary} />
+                <Text style={styles.noColumnTitle}>Nenhuma coluna ainda</Text>
+                <Text style={styles.noColumnDescription}>
+                  Clique abaixo para criar sua coluna.
+                </Text>
+              </View>
+              <AddContentButton
+                onPress={() => setOpenModalAddColumn(true)}
+                text="Criar coluna"
+              />
+            </View>
+          ) : (
+            <>
+              <AddContentButton
+                onPress={() => setOpenModalAddColumn(true)}
+                text="Adicione uma nova coluna"
+              />
+              {project?.columns?.map((column: any) => (
+                <View key={column.id}>
+                  <Text>{column.title}</Text>
+                </View>
+              ))}
+            </>
+          )}
+        </>
       </ScrollView>
 
       {openModalAddColumn && (
