@@ -31,6 +31,9 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       borderRadius: 10,
       zIndex: 5,
     },
+    customModalContent: {
+      backgroundColor: colors.colorWhite,
+    },
     modalHeader: {
       display: 'flex',
       alignItems: 'flex-end',
@@ -96,6 +99,9 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     modalContainerLoading:{
       top:20,
+    },
+    modalContainerCustomModal:{
+      top:20,paddingTop:60
     }
   });
 }

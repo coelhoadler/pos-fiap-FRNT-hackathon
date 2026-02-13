@@ -1,11 +1,13 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 import { ThemedView } from "@/app/components/themed-view";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
 import { Button } from "@/app/components/ui/button";
+import { Input } from "@/app/components/ui/input";
+import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { IProjectService } from "@/app/interface/project";
@@ -107,18 +109,26 @@ export default function ProjectDetail() {
 
       {openModalAddColumn && (
         <>
-          <TextInput
-            placeholder="Ex: To Do, Doing..."
-            placeholderTextColor="#888"
-            value={newColumnName}
-            onChangeText={setNewColumnName}
-            autoFocus
-          />
-          <Button
-            title="Salvar"
-            style={{ marginTop: 15 }}
-            onPress={handleAddColumn}
-          />
+          <Modal
+            style={{ width: "100%" }}
+            onClose={() => setOpenModalAddColumn(false)}
+            contentType="customModal"
+          >
+            <Text style={styles.textModalColumn}>
+              Preencha o campo abaixo para criar a coluna.
+            </Text>
+            <Input
+              text={"Digite o nome da coluna"}
+              value={newColumnName}
+              onChangeText={setNewColumnName}
+              id={project?.id || ""}
+            />
+            <Button
+              title="Salvar"
+              style={styles.btnModalColumn}
+              onPress={handleAddColumn}
+            />
+          </Modal>
         </>
       )}
     </ThemedView>

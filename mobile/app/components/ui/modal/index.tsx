@@ -42,12 +42,19 @@ export const Modal: React.FC<IModal> = ({
         styles.modalContainer,
         contentType === "legend" ? styles.modalContainerLegend : {},
         contentType === "loading" ? styles.modalContainerLoading : {},
+        contentType === "customModal" ? styles.modalContainerCustomModal : {},
         open ? { display: "flex" } : { display: "none" },
       ]}
     >
       {/* MODAL  */}
       {contentType !== "loading" && (
-        <View style={[styles.modalContent, style]}>
+        <View
+          style={[
+            styles.modalContent,
+            contentType === "customModal" ? styles.customModalContent : {},
+            style,
+          ]}
+        >
           {hasCloseButton && (
             <View
               style={[
@@ -63,22 +70,39 @@ export const Modal: React.FC<IModal> = ({
                         backgroundColor: "transparent",
                         borderColor: "transparent",
                       }
-                    : {},
+                    : contentType === "customModal"
+                      ? {
+                          backgroundColor: "transparent",
+                          borderColor: "transparent",
+                        }
+                      : {},
                 ]}
                 variant="close"
                 title="Fechar"
-                colorIcon={contentType === "legend" ? colors.colorPrimary : ""}
+                colorIcon={
+                  contentType === "legend"
+                    ? colors.colorPrimary
+                    : contentType === "customModal"
+                      ? colors.colorPrimary
+                      : ""
+                }
                 onPress={onClose}
               />
             </View>
           )}
           <View>
-            <Text
-              style={[styles.textBody, { marginTop: hasCloseButton ? 0 : 15 }]}
-            >
-              {children || text}
-            </Text>
-            {contentType !== "legend" && (
+            {contentType !== "customModal" && (
+              <Text
+                style={[
+                  styles.textBody,
+                  { marginTop: hasCloseButton ? 0 : 15 },
+                ]}
+              >
+                {children || text}
+              </Text>
+            )}
+            {contentType === "customModal" && children}
+            {contentType !== "legend" && contentType !== "customModal" && (
               <View
                 style={[
                   styles.modalActionsButtons,
