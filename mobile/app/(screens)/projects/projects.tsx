@@ -78,6 +78,16 @@ export default function Projects() {
       },
     });
   };
+  const handleProjectDetail = (project: IProjectService) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/projects/detail/[id]",
+      params: {
+        id: project.id!,
+        name: project.name,
+        description: project.description,
+      },
+    });
+  };
 
   const handleDelete = async () => {
     if (!projectToDelete?.id) return;
@@ -153,7 +163,7 @@ export default function Projects() {
                     }
                     onPressEdit={() => handleEditProject(item)}
                     onPressDelete={() => handlePrepareDelete(item)}
-                    onPressView={() => {}}
+                    onPressView={() => handleProjectDetail(item)}
                   />
                 </View>
               );
