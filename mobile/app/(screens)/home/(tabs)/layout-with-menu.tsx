@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
@@ -8,10 +8,11 @@ import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
 import { getPreferences } from "@/app/services/preferences";
 import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
-import { Timer } from "lucide-react-native";
+import { ArrowLeft, Timer } from "lucide-react-native";
 import { TouchableOpacity } from "react-native";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
 import { useMenu } from "../menu-context";
+import { TabsRoutes } from "./tabsRouters";
 
 const MenuTabButton: React.FC<BottomTabBarButtonProps> = (props) => {
   const { toggleMenu } = useMenu();
@@ -82,7 +83,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="index"
           options={{
             title: "Ínicio",
-            headerTitle: "",
+            headerTitle: "Bem vinda(o) de volta!",
             // headerLeft: () => null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
@@ -110,6 +111,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="profile"
           options={{
             title: "Perfil",
+            headerTitle: "Meu Perfil",
             href: null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="person.circle.fill" color={color} />
@@ -153,6 +155,15 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Configurações",
             headerTitle: "Configurações do Pomodoro",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                style={{ paddingHorizontal: 10 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <ArrowLeft size={22} color={Colors[colorScheme].text} />
+              </TouchableOpacity>
+            ),
           }}
         />
         <Tabs.Screen
@@ -161,6 +172,15 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Histórico",
             headerTitle: "Histórico de execuções",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                style={{ paddingHorizontal: 10 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <ArrowLeft size={22} color={Colors[colorScheme].text} />
+              </TouchableOpacity>
+            ),
           }}
         />
         <Tabs.Screen

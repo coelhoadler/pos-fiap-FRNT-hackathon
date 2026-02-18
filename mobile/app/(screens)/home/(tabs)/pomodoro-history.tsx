@@ -194,17 +194,6 @@ export default function PomodoroHistory() {
     return (
         <ThemedView style={styles.container}>
             {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => router.push(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
-                >
-                    <Ionicons name="arrow-back" size={24} color="#4A90E2" />
-                    <ThemedText style={styles.backText}>Voltar</ThemedText>
-                </TouchableOpacity>
-                <View style={{ width: 80 }} />
-            </View>
-
             {history.length === 0 ? (
                 <View style={styles.emptyContainer}>
                     <Ionicons name="document-text-outline" size={64} color="#CCC" />

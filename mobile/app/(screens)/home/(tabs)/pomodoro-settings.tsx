@@ -74,28 +74,6 @@ export default function PomodoroSettings() {
         <ThemedView style={styles.container}>
             <ScrollView contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
                 {/* Header */}
-                <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)} style={styles.backButton}>
-                        <Ionicons name="arrow-back" size={24} color="#4A90E2" />
-                        <ThemedText style={styles.backText}>Voltar</ThemedText>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.saveButton}
-                        onPress={handleSave}
-                        disabled={isSaving || isLoading}
-                        activeOpacity={0.6}
-                    >
-                        {isSaving ? (
-                            <ActivityIndicator color="#4A90E2" size={20} />
-                        ) : (
-                            <>
-                                <Ionicons name="checkmark-circle-outline" size={22} color="#4A90E2" />
-                                <ThemedText style={styles.saveButtonText}>Salvar</ThemedText>
-                            </>
-                        )}
-                    </TouchableOpacity>
-                </View>
-
                 <ThemedText style={styles.title}>DURAÇÕES</ThemedText>
 
                 {/* Cards de configuração de tempo */}
