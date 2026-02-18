@@ -55,7 +55,7 @@ export const LayoutWithMenu: React.FC = () => {
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
-          headerLeftContainerStyle: { paddingLeft: 5, paddingTop: 2 },
+          headerLeftContainerStyle: { paddingLeft: 0, paddingTop: 2 },
           headerTitleStyle: {
             color: Colors[colorScheme ?? "light"].text,
           },
