@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Tabs, router } from "expo-router";
 import React, { useEffect, useState } from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
@@ -7,9 +7,28 @@ import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
 import { getPreferences } from "@/app/services/preferences";
-import { Timer } from "lucide-react-native";
-import { HamburgerMenuButton } from "../hamburger-menu-button";
+import { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
+import { ArrowLeft, Timer } from "lucide-react-native";
+import { TouchableOpacity } from "react-native";
 import { HamburgerMenuDrawer } from "../hamburger-menu-drawer";
+import { useMenu } from "../menu-context";
+import { TabsRoutes } from "./tabsRouters";
+
+const MenuTabButton: React.FC<BottomTabBarButtonProps> = (props) => {
+  const { toggleMenu } = useMenu();
+  const colorScheme = useColorScheme();
+
+  return (
+    <TouchableOpacity
+      {...(props as any)}
+      onPress={(e) => {
+        e.preventDefault();
+        toggleMenu();
+      }}
+      style={[props.style, { justifyContent: "center", alignItems: "center" }]}
+    />
+  );
+};
 
 export const LayoutWithMenu: React.FC = () => {
   const colorSchemeRaw = useColorScheme();
@@ -40,7 +59,6 @@ export const LayoutWithMenu: React.FC = () => {
           headerTitleStyle: {
             color: Colors[colorScheme ?? "light"].text,
           },
-          headerLeft: () => <HamburgerMenuButton />,
           tabBarButton: HapticTab,
           // headerLeft: () => (
           //   <IconButton
@@ -65,7 +83,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="index"
           options={{
             title: "Ínicio",
-            headerTitle: "",
+            headerTitle: "Bem vinda(o) de volta!",
             // headerLeft: () => null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
@@ -93,9 +111,26 @@ export const LayoutWithMenu: React.FC = () => {
           name="profile"
           options={{
             title: "Perfil",
+            headerTitle: "Meu Perfil",
+            href: null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="person.circle.fill" color={color} />
             ),
+          }}
+        />
+        <Tabs.Screen
+          name="menu"
+          options={{
+            title: "Menu",
+            tabBarIcon: ({ color }) => (
+              <IconSymbol size={28} name="line.3.horizontal" color={color} />
+            ),
+            tabBarButton: (props) => <MenuTabButton {...props} />,
+          }}
+          listeners={{
+            tabPress: (e) => {
+              e.preventDefault();
+            },
           }}
         />
         <Tabs.Screen
@@ -120,6 +155,15 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Configurações",
             headerTitle: "Configurações do Pomodoro",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                style={{ paddingHorizontal: 10 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <ArrowLeft size={22} color={Colors[colorScheme].text} />
+              </TouchableOpacity>
+            ),
           }}
         />
         <Tabs.Screen
@@ -128,6 +172,15 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Histórico",
             headerTitle: "Histórico de execuções",
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                style={{ paddingHorizontal: 10 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <ArrowLeft size={22} color={Colors[colorScheme].text} />
+              </TouchableOpacity>
+            ),
           }}
         />
         <Tabs.Screen
