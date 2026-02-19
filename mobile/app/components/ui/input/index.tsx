@@ -11,6 +11,7 @@ export const Input: React.FC<IInput> = ({
   style,
   type = "text",
   value,
+  styleInput,
   ...props
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -21,7 +22,7 @@ export const Input: React.FC<IInput> = ({
     <View style={[genericFormStyles(colorScheme).defaultItemWrapper, style]}>
       <Text style={genericFormStyles(colorScheme).defaultLabel}>{text}</Text>
       <TextInput
-        style={genericFormStyles(colorScheme).defaultItem}
+        style={[genericFormStyles(colorScheme).defaultItem, styleInput]}
         value={value}
         secureTextEntry={type === "password"}
         keyboardType={

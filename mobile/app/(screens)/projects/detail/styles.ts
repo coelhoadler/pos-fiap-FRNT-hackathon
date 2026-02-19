@@ -9,6 +9,29 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     detailProject: {
       paddingVertical: 20,
     },
+    containerColumn: {
+      minWidth: "100%",
+      paddingBottom: 100
+    },
+
+    actionsColumn: {
+      marginBottom: 10,
+      borderRadius: 8,
+      backgroundColor: colors.colorWhite,
+      borderWidth: 1,
+      borderColor: colors.colorPrimary,
+      width: 50,
+      minHeight: 50,
+      padding: 16,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+
+    wrapperColumn: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      gap: 10,
+    },
     title: {
       color: colors.colorPrimary,
       fontSize: 24,
@@ -56,12 +79,45 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       fontSize: 18,
       fontWeight: 600,
       marginBottom: 15,
+      marginTop: 0,
       color: colors.colorPrimary
+    },
+    textModalColumnDescription: {
+      fontSize: 16,
+      paddingHorizontal:3,
+      marginTop:5,
+      color: colors.text
     },
     btnModalColumn: {
       marginTop: 15,
       minWidth: 100,
       margin: "auto",
-    }
+    },
+    optionsModalAddColumn: {
+      marginBottom: 15,
+      width: "100%",
+      gap: 8,
+    },
+    errorWrapper: {
+      marginBottom: 15,
+      width: '100%'
+    },
+    itemModalAddColumn: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: 14,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.colorPrimary,
+      backgroundColor: "transparent"
+    },
+    isSelectedItemModalAddColumn: {
+      borderColor: colors.colorPrimary,
+      backgroundColor: colors.colorPrimary + "10"
+    },
+    textItemModalAddColumn: {
+      color: colors.text,
+    },
   });
 }
