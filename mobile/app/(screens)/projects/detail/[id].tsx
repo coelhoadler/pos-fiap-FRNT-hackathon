@@ -27,6 +27,7 @@ import {
 import {
   addColumnToProject,
   deleteColumnFromProject,
+  deleteProject,
   getProjectById,
   updateColumnInProject,
 } from "@/app/services/projects";
@@ -62,6 +63,7 @@ export default function ProjectDetail() {
   const [activeDropdownColumnId, setActiveDropdownColumnId] = useState<
     string | null
   >(null);
+  const [openModalDeleteProject, setOpenModalDeleteProject] = useState(false);
 
   const [openModalAddColumn, setOpenModalAddColumn] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -104,7 +106,6 @@ export default function ProjectDetail() {
     useCallback(() => {
       setLoading(true);
       setProject(null);
-
       fetchProjectDetail();
 
       return () => {
@@ -117,10 +118,14 @@ export default function ProjectDetail() {
   );
 
   const handleCloseSuccess = () => {
+    const isProjectDeleted = successMessage === "Projeto excluído com sucesso!";
     setSuccessMessage("");
     setLoadingFeedback(true);
     setTimeout(() => {
       setLoadingFeedback(false);
+      if (isProjectDeleted) {
+        router.replace("/(screens)/home/(tabs)/projects/projects");
+      }
     }, 1000);
   };
 
@@ -264,6 +269,23 @@ export default function ProjectDetail() {
     }
   };
 
+  const handleDeleteProject = async () => {
+    if (!id) return;
+    setOpenModalDeleteProject(false);
+    setTextLoading("Excluindo projeto...");
+    setActionLoading(true);
+
+    try {
+      await deleteProject(id);
+      setSuccessMessage("Projeto excluído com sucesso!");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Erro ao excluir projeto.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const dropdownItemsProjectSetting = [
     {
       id: "proj-edit",
@@ -280,6 +302,15 @@ export default function ProjectDetail() {
         });
       },
       icon: <Pencil size={20} color={colors.colorPrimary} />,
+    },
+    {
+      id: "proj-delete",
+      name: "Excluir Projeto",
+      onPress: () => {
+        setShowDropdownSetting(false);
+        setOpenModalDeleteProject(true);
+      },
+      icon: <Trash2 size={20} color={colors.colorPrimary} />,
     },
   ];
 
@@ -543,7 +574,7 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO */}
+      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
@@ -552,6 +583,18 @@ export default function ProjectDetail() {
           onPressActionB={handleDeleteColumn}
           onPressActionA={() => setColumnToDelete(null)}
           onClose={() => setColumnToDelete(null)}
+        />
+      )}
+
+      {/* MODAL CONFIRMAR EXCLUSÃO PROJETO */}
+      {openModalDeleteProject && (
+        <Modal
+          contentType={"withActions"}
+          hasCloseButton={true}
+          onClose={() => setOpenModalDeleteProject(false)}
+          text={`Deseja excluir o projeto: "${project?.name}"?`}
+          onPressActionB={handleDeleteProject}
+          onPressActionA={() => setOpenModalDeleteProject(false)}
         />
       )}
 
