@@ -1,5 +1,5 @@
 import { IPreferencesItems } from "@/app/interface/preferences";
-import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
+import { PREFERENCES_UPDATED, eventBus } from "@/app/services/eventBus";
 import {
   PreferencesFlags,
   getPreferences,
@@ -126,11 +126,7 @@ export const PreferencesItems: React.FC<IPreferencesItems> = ({
             onPress={handleConfigureLater}
             title="Configurar mais tarde"
           />
-          <Button
-            loading={loading}
-            title="Salvar"
-            onPress={handlePreferencesSave}
-          />
+          <Button title="Salvar" onPress={handlePreferencesSave} />
         </ThemedView>
 
         {successMessage && (
