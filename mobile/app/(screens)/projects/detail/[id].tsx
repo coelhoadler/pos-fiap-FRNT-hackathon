@@ -50,7 +50,6 @@ export default function ProjectDetail() {
 
   const [project, setProject] = useState<IProjectService | null>(null);
 
-  // Estados de Loading e Feedback
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [textLoading, setTextLoading] = useState("");

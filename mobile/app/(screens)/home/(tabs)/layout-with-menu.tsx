@@ -1,8 +1,9 @@
-import { Tabs, router } from "expo-router";
+import { router, Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 
 import { HapticTab } from "@/app/components/haptic-tab";
 import { IconSymbol } from "@/app/components/ui/icon-symbol";
+import { IconButton } from "@/app/components/ui/iconButton";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
@@ -51,7 +52,7 @@ export const LayoutWithMenu: React.FC = () => {
   return (
     <>
       <Tabs
-        // backBehavior="history"
+        backBehavior="history"
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
@@ -60,23 +61,24 @@ export const LayoutWithMenu: React.FC = () => {
             color: Colors[colorScheme ?? "light"].text,
           },
           tabBarButton: HapticTab,
-          // headerLeft: () => (
-          //   <IconButton
-          //     onPress={() => {
-          //       if (router.canGoBack()) {
-          //         router.back();
-          //       } else {
-          //         router.replace("/");
-          //       }
-          //     }}
-          //     icon={
-          //       <ArrowLeft
-          //         size={22}
-          //         color={Colors[colorScheme ?? "light"].text}
-          //       />
-          //     }
-          //   />
-          // ),
+          headerLeft: () => (
+            <IconButton
+              style={{ paddingLeft: 15 }}
+              onPress={() => {
+                if (router.canGoBack()) {
+                  router.back();
+                } else {
+                  router.replace("/");
+                }
+              }}
+              icon={
+                <ArrowLeft
+                  size={22}
+                  color={Colors[colorScheme ?? "light"].text}
+                />
+              }
+            />
+          ),
         }}
       >
         <Tabs.Screen
@@ -84,7 +86,7 @@ export const LayoutWithMenu: React.FC = () => {
           options={{
             title: "Ínicio",
             headerTitle: "Bem vinda(o) de volta!",
-            // headerLeft: () => null,
+            headerLeft: () => null,
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="house.fill" color={color} />
             ),
@@ -157,7 +159,9 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Configurações do Pomodoro",
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                onPress={() =>
+                  router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)
+                }
                 style={{ paddingHorizontal: 10 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
@@ -174,7 +178,9 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Histórico de execuções",
             headerLeft: () => (
               <TouchableOpacity
-                onPress={() => router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)}
+                onPress={() =>
+                  router.navigate(`/(screens)/home/(tabs)/${TabsRoutes.Focus}`)
+                }
                 style={{ paddingHorizontal: 10 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
