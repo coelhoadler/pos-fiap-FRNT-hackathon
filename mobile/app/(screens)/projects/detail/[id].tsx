@@ -40,7 +40,7 @@ import {
   FileChartColumn,
   Pencil,
   Square,
-  Trash2
+  Trash2,
 } from "lucide-react-native";
 import { columnOptions, detailProjectLegendContent } from "./constants";
 import { createStyles } from "./styles";
@@ -410,7 +410,7 @@ export default function ProjectDetail() {
                     </Text>
                   </Accordion>
                 </View>
-                <View>
+                <View style={{ position: "relative" }}>
                   <Pressable
                     onPress={() =>
                       setActiveDropdownColumnId(
@@ -424,6 +424,7 @@ export default function ProjectDetail() {
                   </Pressable>
                   {activeDropdownColumnId === column.id && (
                     <DropdownContent
+                      style={{ right: 1, top: 61 }}
                       onClose={() => setActiveDropdownColumnId(null)}
                       dropdownItems={getDropdownColumnsSetting(column)}
                     />
