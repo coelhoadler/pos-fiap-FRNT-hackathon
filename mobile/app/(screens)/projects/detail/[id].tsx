@@ -108,6 +108,7 @@ export default function ProjectDetail() {
     useCallback(() => {
       setLoading(true);
       setProject(null);
+      setOpenModalLegend(false);
       fetchProjectDetail();
 
       return () => {
@@ -634,6 +635,7 @@ export default function ProjectDetail() {
 
       {openModalLegend && (
         <ModalLegendProjects
+          style={{ flex: 1 }}
           legendContentItems={detailProjectLegendContent}
           subtitleContentItem="Explicando um pouco sobre a página do projeto."
           open={openModalLegend}

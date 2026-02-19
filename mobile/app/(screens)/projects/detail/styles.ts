@@ -8,6 +8,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   return StyleSheet.create({
     detailProject: {
       paddingVertical: 20,
+      position:'relative',
+      minHeight:'100%'
     },
     containerColumn: {
       minWidth: "100%",
