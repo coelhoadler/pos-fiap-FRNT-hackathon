@@ -279,7 +279,7 @@ export default function ProjectDetail() {
           },
         });
       },
-      icon: <Pencil size={20} color={colors.text} />,
+      icon: <Pencil size={20} color={colors.colorPrimary} />,
     },
   ];
 
@@ -322,6 +322,7 @@ export default function ProjectDetail() {
               </TouchableOpacity>
               {showDropdownSetting && (
                 <DropdownContent
+                  style={{ right: 0 }}
                   onClose={() => setShowDropdownSetting(false)}
                   dropdownItems={dropdownItemsProjectSetting}
                 />
