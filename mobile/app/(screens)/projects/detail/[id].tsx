@@ -10,6 +10,8 @@ import {
   View,
 } from "react-native";
 
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendProjects } from "@/app/components/projects/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { Accordion } from "@/app/components/ui/accordion";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
@@ -37,11 +39,10 @@ import {
   EllipsisVertical,
   FileChartColumn,
   Pencil,
-  Settings,
   Square,
-  Trash2,
+  Trash2
 } from "lucide-react-native";
-import { columnOptions } from "./constants";
+import { columnOptions, detailProjectLegendContent } from "./constants";
 import { createStyles } from "./styles";
 
 export default function ProjectDetail() {
@@ -71,6 +72,7 @@ export default function ProjectDetail() {
   const [error, setError] = useState("");
   const [openModalConfirmAddMultiple, setOpenModalConfirmAddMultiple] =
     useState(false);
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const [columnsWithConflict, setColumnsWithConflict] = useState<string[]>([]);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
@@ -346,11 +348,13 @@ export default function ProjectDetail() {
           headerTitle: project?.name || "Projeto",
           headerRight: () => (
             <View style={{ marginRight: 15 }}>
-              <TouchableOpacity
-                onPress={() => setShowDropdownSetting(!showDropdownSetting)}
-              >
-                <Settings size={24} color={colors.text} />
-              </TouchableOpacity>
+              <ActionsButtonsProjects
+                hasSettingItem
+                onPressSetting={() =>
+                  setShowDropdownSetting(!showDropdownSetting)
+                }
+                openModal={() => setOpenModalLegend(true)}
+              />
               {showDropdownSetting && (
                 <DropdownContent
                   style={{ right: 0 }}
@@ -625,6 +629,15 @@ export default function ProjectDetail() {
       )}
       {loadingFeedback && (
         <Modal hasCloseButton={false} loading={true} contentType="loading" />
+      )}
+
+      {openModalLegend && (
+        <ModalLegendProjects
+          legendContentItems={detailProjectLegendContent}
+          subtitleContentItem="Explicando um pouco sobre a página do projeto."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
       )}
     </ThemedView>
   );
