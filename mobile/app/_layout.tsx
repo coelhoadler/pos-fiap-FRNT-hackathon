@@ -6,6 +6,9 @@ import {
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { LogBox } from "react-native";
+
+LogBox.ignoreAllLogs(); // desabilita todos os warnings visuais
 
 export const unstable_settings = {
   anchor: "(screens)",
