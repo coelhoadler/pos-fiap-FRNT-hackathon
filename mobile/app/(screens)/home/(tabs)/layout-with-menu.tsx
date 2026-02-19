@@ -96,6 +96,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="pomodoro"
           options={{
             title: "Focar",
+            headerLeft: () => null,
             href: focusModeEnabled ? undefined : null,
             tabBarIcon: ({ color }) => <Timer size={28} color={color} />,
           }}
@@ -103,6 +104,7 @@ export const LayoutWithMenu: React.FC = () => {
         <Tabs.Screen
           name="preferences"
           options={{
+            headerLeft: () => null,
             title: "Preferências",
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="gearshape.fill" color={color} />
@@ -139,6 +141,7 @@ export const LayoutWithMenu: React.FC = () => {
           name="projects/projects"
           options={{
             href: null,
+            headerLeft: () => null,
             title: "Projetos",
             headerTitle: "Projetos",
           }}
