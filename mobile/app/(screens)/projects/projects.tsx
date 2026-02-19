@@ -45,7 +45,9 @@ export default function Projects() {
     } catch (error) {
       console.error("Erro ao buscar projetos:", error);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 200);
     }
   };
 
