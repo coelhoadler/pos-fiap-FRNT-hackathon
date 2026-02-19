@@ -7,6 +7,7 @@ export interface IModal {
     onPress?: () => void;
     open?: boolean;
     style?: StyleProp<ViewStyle>;
+    styleContainer?: StyleProp<ViewStyle>;
     styleLoading?: StyleProp<ViewStyle>;
     styleBackdrop?: StyleProp<ViewStyle>;
     textButton?: string;

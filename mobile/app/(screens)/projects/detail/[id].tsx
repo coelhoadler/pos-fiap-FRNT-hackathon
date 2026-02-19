@@ -536,6 +536,7 @@ export default function ProjectDetail() {
       {/* MODAL CONFIRMAR EXCLUSÃO */}
       {columnToDelete && (
         <Modal
+          styleContainer={{ top: 20 }}
           contentType="withActions"
           text={`Deseja excluir a coluna "${columnToDelete.name}"?`}
           onPressActionB={handleDeleteColumn}
@@ -555,6 +556,7 @@ export default function ProjectDetail() {
 
       {successMessage !== "" && (
         <Modal
+          styleContainer={{ top: 20 }}
           contentType="feedbackMessage"
           text={successMessage}
           hasCloseButton={false}
