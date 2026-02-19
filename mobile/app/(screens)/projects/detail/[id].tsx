@@ -49,7 +49,14 @@ export default function ProjectDetail() {
   const colors = Colors[colorScheme];
 
   const [project, setProject] = useState<IProjectService | null>(null);
+
+  // Estados de Loading e Feedback
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [textLoading, setTextLoading] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loadingFeedback, setLoadingFeedback] = useState(false);
 
   const [showDropdownSetting, setShowDropdownSetting] = useState(false);
   const [activeDropdownColumnId, setActiveDropdownColumnId] = useState<
@@ -69,7 +76,7 @@ export default function ProjectDetail() {
   const [columnToEdit, setColumnToEdit] =
     useState<IProjectServiceColumn | null>(null);
   const [editColumnName, setEditColumnName] = useState("");
-  const [editError, setEditError] = useState(""); // Erro específico para edição
+  const [editError, setEditError] = useState("");
   const [columnToDelete, setColumnToDelete] =
     useState<IProjectServiceColumn | null>(null);
 
@@ -80,7 +87,6 @@ export default function ProjectDetail() {
 
   const fetchProjectDetail = async () => {
     try {
-      setLoading(true);
       if (id) {
         const data = await getProjectById(id);
         setProject(data);
@@ -102,47 +108,13 @@ export default function ProjectDetail() {
     }, [id]),
   );
 
-  const dropdownItemsProjectSetting = [
-    {
-      id: "proj-edit",
-      name: "Editar Projeto",
-      onPress: () => {
-        setShowDropdownSetting(false);
-        router.push({
-          pathname: "/(screens)/home/(tabs)/projects/editProject/[id]",
-          params: {
-            id: project?.id!,
-            name: project?.name,
-            description: project?.description,
-          },
-        });
-      },
-      icon: <Pencil size={20} color={colors.text} />,
-    },
-  ];
-
-  const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
-    {
-      id: `edit-${column.id}`,
-      name: "Editar Coluna",
-      onPress: () => {
-        setActiveDropdownColumnId(null);
-        setEditError("");
-        setColumnToEdit(column);
-        setEditColumnName(column.name);
-      },
-      icon: <Pencil size={20} color={colors.text} />,
-    },
-    {
-      id: `del-${column.id}`,
-      name: "Excluir Coluna",
-      onPress: () => {
-        setActiveDropdownColumnId(null);
-        setColumnToDelete(column);
-      },
-      icon: <Trash2 size={20} color={colors.text} />,
-    },
-  ];
+  const handleCloseSuccess = () => {
+    setSuccessMessage("");
+    setLoadingFeedback(true);
+    setTimeout(() => {
+      setLoadingFeedback(false);
+    }, 1000);
+  };
 
   const toggleOption = (option: string) => {
     setError("");
@@ -206,29 +178,30 @@ export default function ProjectDetail() {
       return;
     }
 
+    setOpenModalAddColumn(false);
+    setOpenModalConfirmAddMultiple(false);
+    setShowDuplicateWarning(false);
+    setTextLoading(
+      selectedOptions.length > 1 ? "Criando colunas..." : "Criando coluna...",
+    );
+    setActionLoading(true);
+
     try {
-      setLoading(true);
-      setOpenModalConfirmAddMultiple(false);
-      setShowDuplicateWarning(false);
-
       let tempColumns: IProjectServiceColumn[] = [...projectColumns];
-
       for (const option of selectedOptions) {
         const baseName = option === "Outro" ? newColumnName : option;
         const finalName = getUniqueColumnName(baseName, tempColumns);
-
         await addColumnToProject(id!, finalName);
         tempColumns.push({ id: Math.random().toString(), name: finalName });
       }
-
+      setSuccessMessage("Colunas adicionadas com sucesso!");
       setNewColumnName("");
       setSelectedOptions([]);
-      setOpenModalAddColumn(false);
       fetchProjectDetail();
     } catch (error) {
-      console.error(error);
+      setErrorMessage("Erro ao criar colunas.");
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
@@ -242,42 +215,88 @@ export default function ProjectDetail() {
     );
 
     if (nameExists) {
-      setEditError("Já existe uma coluna com este nome no projeto.");
+      setEditError("Já existe uma coluna com este nome.");
       return;
     }
 
+    setColumnToEdit(null);
+    setTextLoading("Atualizando coluna...");
+    setActionLoading(true);
+
     try {
-      setLoading(true);
       const updatedColumns = projectColumns.map((col) =>
         col.id === columnToEdit.id
           ? { ...col, name: editColumnName.trim() }
           : col,
       );
       await updateColumnInProject(id!, updatedColumns);
-      setColumnToEdit(null);
-      setEditColumnName("");
-      setEditError("");
+      setSuccessMessage("Coluna atualizada com sucesso!");
       fetchProjectDetail();
     } catch (error) {
-      console.error(error);
+      setErrorMessage("Erro ao atualizar coluna.");
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
   const handleDeleteColumn = async () => {
     if (!columnToDelete) return;
+    setColumnToDelete(null);
+    setTextLoading("Excluindo coluna...");
+    setActionLoading(true);
+
     try {
-      setLoading(true);
       await deleteColumnFromProject(id!, columnToDelete);
-      setColumnToDelete(null);
+      setSuccessMessage("Coluna excluída com sucesso!");
       fetchProjectDetail();
     } catch (error) {
-      console.error(error);
+      setErrorMessage("Erro ao excluir coluna.");
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
+
+  const dropdownItemsProjectSetting = [
+    {
+      id: "proj-edit",
+      name: "Editar Projeto",
+      onPress: () => {
+        setShowDropdownSetting(false);
+        router.push({
+          pathname: "/(screens)/home/(tabs)/projects/editProject/[id]",
+          params: {
+            id: project?.id!,
+            name: project?.name,
+            description: project?.description,
+          },
+        });
+      },
+      icon: <Pencil size={20} color={colors.text} />,
+    },
+  ];
+
+  const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
+    {
+      id: `edit-${column.id}`,
+      name: "Editar Coluna",
+      onPress: () => {
+        setActiveDropdownColumnId(null);
+        setEditError("");
+        setColumnToEdit(column);
+        setEditColumnName(column.name);
+      },
+      icon: <Pencil size={20} color={colors.text} />,
+    },
+    {
+      id: `del-${column.id}`,
+      name: "Excluir Coluna",
+      onPress: () => {
+        setActiveDropdownColumnId(null);
+        setColumnToDelete(column);
+      },
+      icon: <Trash2 size={20} color={colors.text} />,
+    },
+  ];
 
   return (
     <ThemedView
@@ -305,7 +324,6 @@ export default function ProjectDetail() {
       />
 
       {project?.name && <Text style={styles.title}>{project.name}</Text>}
-
       {project?.description && (
         <Text style={styles.description}>{project.description}</Text>
       )}
@@ -314,7 +332,13 @@ export default function ProjectDetail() {
         showsVerticalScrollIndicator={false}
         removeClippedSubviews={false}
       >
-        {projectColumns.length === 0 ? (
+        {loading ? (
+          <View style={{ marginTop: 20 }}>
+            <Text style={{ color: colors.text, textAlign: "center" }}>
+              Carregando colunas...
+            </Text>
+          </View>
+        ) : projectColumns.length === 0 ? (
           <View style={styles.wrapperMessageNoColumn}>
             <View style={styles.itemMessageNoColumn}>
               <FileChartColumn size={35} color={colors.colorPrimary} />
@@ -341,7 +365,6 @@ export default function ProjectDetail() {
                     </Text>
                   </Accordion>
                 </View>
-
                 <View>
                   <Pressable
                     onPress={() =>
@@ -363,7 +386,6 @@ export default function ProjectDetail() {
                 </View>
               </View>
             ))}
-
             <View style={{ marginTop: 15 }}>
               <AddContentButton
                 onPress={() => {
@@ -390,7 +412,6 @@ export default function ProjectDetail() {
           <Text style={styles.textModalColumn}>
             Escolha uma ou mais colunas
           </Text>
-
           <View style={[styles.optionsModalAddColumn]}>
             {columnOptions.map((option) => {
               const isSelected = selectedOptions.includes(option);
@@ -406,9 +427,7 @@ export default function ProjectDetail() {
                   <Text
                     style={[
                       styles.textItemModalAddColumn,
-                      {
-                        fontWeight: isSelected ? "600" : "400",
-                      },
+                      { fontWeight: isSelected ? "600" : "400" },
                     ]}
                   >
                     {option}
@@ -443,7 +462,6 @@ export default function ProjectDetail() {
               </>
             )}
           </View>
-
           {error ? (
             <View style={styles.errorWrapper}>
               <FormErrorMessage
@@ -468,7 +486,7 @@ export default function ProjectDetail() {
         <Modal
           onClose={() => setShowDuplicateWarning(false)}
           contentType="withActions"
-          text={`As colunas (${columnsWithConflict.join(", ")}) já existem. Deseja criar mesmo assim? `}
+          text={`As colunas (${columnsWithConflict.join(", ")}) já existem. Deseja criar mesmo assim?`}
           onPressActionB={() => handleAddColumn(true)}
           onPressActionA={() => setShowDuplicateWarning(false)}
         />
@@ -521,9 +539,40 @@ export default function ProjectDetail() {
           contentType="withActions"
           text={`Deseja excluir a coluna "${columnToDelete.name}"?`}
           onPressActionB={handleDeleteColumn}
-          onClose={() => setColumnToDelete(null)}
           onPressActionA={() => setColumnToDelete(null)}
+          onClose={() => setColumnToDelete(null)}
         />
+      )}
+
+      {/* --- MODAIS DE LOADING E FEEDBACK --- */}
+      {actionLoading && (
+        <Modal
+          hasCloseButton={false}
+          textLoading={textLoading}
+          contentType="loading"
+        />
+      )}
+
+      {successMessage !== "" && (
+        <Modal
+          contentType="feedbackMessage"
+          text={successMessage}
+          hasCloseButton={false}
+          onPress={handleCloseSuccess}
+        />
+      )}
+
+      {errorMessage !== "" && (
+        <Modal
+          contentType="feedbackMessage"
+          text={errorMessage}
+          onClose={() => setErrorMessage("")}
+          onPress={() => setErrorMessage("")}
+        />
+      )}
+
+      {loadingFeedback && (
+        <Modal hasCloseButton={false} loading={true} contentType="loading" />
       )}
     </ThemedView>
   );
