@@ -2,6 +2,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { router, Tabs, useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
@@ -50,7 +51,6 @@ export default function ProjectDetail() {
 
   const [project, setProject] = useState<IProjectService | null>(null);
 
-  // Estados de Loading e Feedback
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [textLoading, setTextLoading] = useState("");
@@ -94,16 +94,24 @@ export default function ProjectDetail() {
     } catch (error) {
       console.error("Erro ao buscar detalhes:", error);
     } finally {
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 800);
     }
   };
 
   useFocusEffect(
     useCallback(() => {
+      setLoading(true);
+      setProject(null);
+
       fetchProjectDetail();
+
       return () => {
         setActiveDropdownColumnId(null);
         setShowDropdownSetting(false);
+        setProject(null);
+        setLoading(true);
       };
     }, [id]),
   );
@@ -333,10 +341,11 @@ export default function ProjectDetail() {
         removeClippedSubviews={false}
       >
         {loading ? (
-          <View style={{ marginTop: 20 }}>
-            <Text style={{ color: colors.text, textAlign: "center" }}>
-              Carregando colunas...
-            </Text>
+          <View style={styles.wrapperMessageNoColumn}>
+            <View style={styles.itemMessageNoColumn}>
+              <ActivityIndicator size={35} color={colors.colorPrimary} />
+              <Text style={styles.noColumnTitle}>Carregando colunas...</Text>
+            </View>
           </View>
         ) : projectColumns.length === 0 ? (
           <View style={styles.wrapperMessageNoColumn}>
@@ -536,6 +545,7 @@ export default function ProjectDetail() {
       {/* MODAL CONFIRMAR EXCLUSÃO */}
       {columnToDelete && (
         <Modal
+          styleContainer={{ top: 20 }}
           contentType="withActions"
           text={`Deseja excluir a coluna "${columnToDelete.name}"?`}
           onPressActionB={handleDeleteColumn}
@@ -544,7 +554,7 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* --- MODAIS DE LOADING E FEEDBACK --- */}
+      {/* MODAIS DE LOADING E FEEDBACK */}
       {actionLoading && (
         <Modal
           hasCloseButton={false}
@@ -552,16 +562,15 @@ export default function ProjectDetail() {
           contentType="loading"
         />
       )}
-
       {successMessage !== "" && (
         <Modal
+          styleContainer={{ top: 20 }}
           contentType="feedbackMessage"
           text={successMessage}
           hasCloseButton={false}
           onPress={handleCloseSuccess}
         />
       )}
-
       {errorMessage !== "" && (
         <Modal
           contentType="feedbackMessage"
@@ -570,7 +579,6 @@ export default function ProjectDetail() {
           onPress={() => setErrorMessage("")}
         />
       )}
-
       {loadingFeedback && (
         <Modal hasCloseButton={false} loading={true} contentType="loading" />
       )}

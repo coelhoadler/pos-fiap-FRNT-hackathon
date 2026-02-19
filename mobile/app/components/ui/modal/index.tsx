@@ -18,6 +18,7 @@ export const Modal: React.FC<IModal> = ({
   onClose,
   open = true,
   style,
+  styleContainer,
   contentType = "feedbackMessage",
   styleLoading,
   styleBackdrop,
@@ -44,6 +45,7 @@ export const Modal: React.FC<IModal> = ({
         contentType === "loading" ? styles.modalContainerLoading : {},
         contentType === "customModal" ? styles.modalContainerCustomModal : {},
         open ? { display: "flex" } : { display: "none" },
+        styleContainer,
       ]}
     >
       {/* MODAL  */}
