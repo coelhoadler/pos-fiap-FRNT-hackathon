@@ -10,6 +10,8 @@ import {
   View,
 } from "react-native";
 
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendProjects } from "@/app/components/projects/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { Accordion } from "@/app/components/ui/accordion";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
@@ -27,6 +29,7 @@ import {
 import {
   addColumnToProject,
   deleteColumnFromProject,
+  deleteProject,
   getProjectById,
   updateColumnInProject,
 } from "@/app/services/projects";
@@ -36,11 +39,10 @@ import {
   EllipsisVertical,
   FileChartColumn,
   Pencil,
-  Settings,
   Square,
-  Trash2,
+  Trash2
 } from "lucide-react-native";
-import { columnOptions } from "./constants";
+import { columnOptions, detailProjectLegendContent } from "./constants";
 import { createStyles } from "./styles";
 
 export default function ProjectDetail() {
@@ -62,6 +64,7 @@ export default function ProjectDetail() {
   const [activeDropdownColumnId, setActiveDropdownColumnId] = useState<
     string | null
   >(null);
+  const [openModalDeleteProject, setOpenModalDeleteProject] = useState(false);
 
   const [openModalAddColumn, setOpenModalAddColumn] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
@@ -69,6 +72,7 @@ export default function ProjectDetail() {
   const [error, setError] = useState("");
   const [openModalConfirmAddMultiple, setOpenModalConfirmAddMultiple] =
     useState(false);
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const [columnsWithConflict, setColumnsWithConflict] = useState<string[]>([]);
   const [showDuplicateWarning, setShowDuplicateWarning] = useState(false);
@@ -104,7 +108,6 @@ export default function ProjectDetail() {
     useCallback(() => {
       setLoading(true);
       setProject(null);
-
       fetchProjectDetail();
 
       return () => {
@@ -117,10 +120,14 @@ export default function ProjectDetail() {
   );
 
   const handleCloseSuccess = () => {
+    const isProjectDeleted = successMessage === "Projeto excluído com sucesso!";
     setSuccessMessage("");
     setLoadingFeedback(true);
     setTimeout(() => {
       setLoadingFeedback(false);
+      if (isProjectDeleted) {
+        router.replace("/(screens)/home/(tabs)/projects/projects");
+      }
     }, 1000);
   };
 
@@ -264,6 +271,23 @@ export default function ProjectDetail() {
     }
   };
 
+  const handleDeleteProject = async () => {
+    if (!id) return;
+    setOpenModalDeleteProject(false);
+    setTextLoading("Excluindo projeto...");
+    setActionLoading(true);
+
+    try {
+      await deleteProject(id);
+      setSuccessMessage("Projeto excluído com sucesso!");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Erro ao excluir projeto.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const dropdownItemsProjectSetting = [
     {
       id: "proj-edit",
@@ -279,7 +303,16 @@ export default function ProjectDetail() {
           },
         });
       },
-      icon: <Pencil size={20} color={colors.text} />,
+      icon: <Pencil size={20} color={colors.colorPrimary} />,
+    },
+    {
+      id: "proj-delete",
+      name: "Excluir Projeto",
+      onPress: () => {
+        setShowDropdownSetting(false);
+        setOpenModalDeleteProject(true);
+      },
+      icon: <Trash2 size={20} color={colors.colorPrimary} />,
     },
   ];
 
@@ -315,13 +348,16 @@ export default function ProjectDetail() {
           headerTitle: project?.name || "Projeto",
           headerRight: () => (
             <View style={{ marginRight: 15 }}>
-              <TouchableOpacity
-                onPress={() => setShowDropdownSetting(!showDropdownSetting)}
-              >
-                <Settings size={24} color={colors.text} />
-              </TouchableOpacity>
+              <ActionsButtonsProjects
+                hasSettingItem
+                onPressSetting={() =>
+                  setShowDropdownSetting(!showDropdownSetting)
+                }
+                openModal={() => setOpenModalLegend(true)}
+              />
               {showDropdownSetting && (
                 <DropdownContent
+                  style={{ right: 0 }}
                   onClose={() => setShowDropdownSetting(false)}
                   dropdownItems={dropdownItemsProjectSetting}
                 />
@@ -542,7 +578,7 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO */}
+      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
@@ -551,6 +587,18 @@ export default function ProjectDetail() {
           onPressActionB={handleDeleteColumn}
           onPressActionA={() => setColumnToDelete(null)}
           onClose={() => setColumnToDelete(null)}
+        />
+      )}
+
+      {/* MODAL CONFIRMAR EXCLUSÃO PROJETO */}
+      {openModalDeleteProject && (
+        <Modal
+          contentType={"withActions"}
+          hasCloseButton={true}
+          onClose={() => setOpenModalDeleteProject(false)}
+          text={`Deseja excluir o projeto: "${project?.name}"?`}
+          onPressActionB={handleDeleteProject}
+          onPressActionA={() => setOpenModalDeleteProject(false)}
         />
       )}
 
@@ -581,6 +629,15 @@ export default function ProjectDetail() {
       )}
       {loadingFeedback && (
         <Modal hasCloseButton={false} loading={true} contentType="loading" />
+      )}
+
+      {openModalLegend && (
+        <ModalLegendProjects
+          legendContentItems={detailProjectLegendContent}
+          subtitleContentItem="Explicando um pouco sobre a página do projeto."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
       )}
     </ThemedView>
   );
