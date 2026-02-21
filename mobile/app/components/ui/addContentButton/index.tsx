@@ -1,6 +1,6 @@
 import { Colors } from "@/app/constants/theme";
 import { IAddContentButton } from "@/app/interface/addContentButton";
-import { CirclePlus } from "lucide-react-native";
+import { CirclePlus, Eye } from "lucide-react-native";
 import React from "react";
 import { Pressable, Text, useColorScheme, View } from "react-native";
 import { createStyles } from "./styles";
@@ -12,6 +12,9 @@ export const AddContentButton: React.FC<IAddContentButton> = ({
   styleText,
   text,
   size = 22,
+  colorIcon,
+  typeIcon = "add",
+  noIcon,
   ...props
 }) => {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -22,7 +25,19 @@ export const AddContentButton: React.FC<IAddContentButton> = ({
     <View style={[styles.contentWrapper, style]}>
       <Pressable onPress={onPress}>
         <View style={styles.addContentButton}>
-          <CirclePlus size={size} color={colors.text} />
+          {!noIcon && (
+            <>
+              {typeIcon === "add" && (
+                <CirclePlus
+                  size={size}
+                  color={colorIcon ? colorIcon : colors.text}
+                />
+              )}
+              {typeIcon === "view" && (
+                <Eye size={size} color={colorIcon ? colorIcon : colors.text} />
+              )}
+            </>
+          )}
           <Text style={[styles.textContent, styleText]}>
             {text || children}
           </Text>

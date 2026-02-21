@@ -208,6 +208,15 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Detalhe do Projeto",
           }}
         />
+
+        <Tabs.Screen
+          name="tasks/addTask"
+          options={{
+            href: null,
+            title: "Nova Tarefa",
+            headerTitle: "Nova Tarefa",
+          }}
+        />
       </Tabs>
 
       <HamburgerMenuDrawer />

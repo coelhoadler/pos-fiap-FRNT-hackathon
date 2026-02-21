@@ -12,6 +12,8 @@ import {
 
 import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { ModalLegendProjects } from "@/app/components/projects/modalLegend";
+import { SummaryCard } from "@/app/components/tasks/summaryCard";
+import { TasksNotFound } from "@/app/components/tasks/tasksNotFound";
 import { ThemedView } from "@/app/components/themed-view";
 import { Accordion } from "@/app/components/ui/accordion";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
@@ -26,6 +28,7 @@ import {
   IProjectService,
   IProjectServiceColumn,
 } from "@/app/interface/project";
+import { ITaskService } from "@/app/interface/tasks";
 import {
   addColumnToProject,
   deleteColumnFromProject,
@@ -33,6 +36,7 @@ import {
   getProjectById,
   updateColumnInProject,
 } from "@/app/services/projects";
+import { getLimitedTasksByColumn } from "@/app/services/tasks";
 import { genericStyle } from "@/app/styles/genericStyles";
 import {
   CheckSquare,
@@ -52,6 +56,9 @@ export default function ProjectDetail() {
   const colors = Colors[colorScheme];
 
   const [project, setProject] = useState<IProjectService | null>(null);
+  const [tasksByColumn, setTasksByColumn] = useState<{
+    [key: string]: ITaskService[];
+  }>({});
 
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -89,11 +96,32 @@ export default function ProjectDetail() {
     [project?.columns],
   );
 
+  const fetchTasksForColumns = async (columns: IProjectServiceColumn[]) => {
+    try {
+      const tasksMap: { [key: string]: ITaskService[] } = {};
+
+      const promises = columns.map(async (col) => {
+        const tasks = await getLimitedTasksByColumn(id!, col.id, 3);
+        tasksMap[col.id] = tasks;
+      });
+
+      await Promise.all(promises);
+      setTasksByColumn(tasksMap);
+    } catch (error) {
+      console.error("Erro ao buscar tarefas das colunas:", error);
+    }
+  };
+
   const fetchProjectDetail = async () => {
     try {
+      setLoading(true);
       if (id) {
         const data = await getProjectById(id);
         setProject(data);
+
+        if (data?.columns && data.columns.length > 0) {
+          await fetchTasksForColumns(data.columns);
+        }
       }
     } catch (error) {
       console.error("Erro ao buscar detalhes:", error);
@@ -106,16 +134,12 @@ export default function ProjectDetail() {
 
   useFocusEffect(
     useCallback(() => {
-      setLoading(true);
-      setProject(null);
-      setOpenModalLegend(false);
       fetchProjectDetail();
+      setOpenModalLegend(false);
 
       return () => {
         setActiveDropdownColumnId(null);
         setShowDropdownSetting(false);
-        setProject(null);
-        setLoading(true);
       };
     }, [id]),
   );
@@ -317,6 +341,17 @@ export default function ProjectDetail() {
     },
   ];
 
+  const navigationToNewTask = (column: IProjectServiceColumn) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/addTask",
+      params: {
+        projectId: id,
+        columnId: column.id,
+        columnName: column.name,
+      },
+    });
+  };
+
   const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
     {
       id: `edit-${column.id}`,
@@ -406,9 +441,56 @@ export default function ProjectDetail() {
               <View key={column.id} style={styles.wrapperColumn}>
                 <View style={{ flex: 1 }}>
                   <Accordion title={column.name}>
-                    <Text style={{ color: colors.text }}>
-                      Conteúdo da coluna...
-                    </Text>
+                    <View style={{ gap: 10 }}>
+                      {tasksByColumn[column.id] &&
+                      tasksByColumn[column.id].length > 0 ? (
+                        tasksByColumn[column.id].map((task) => (
+                          <SummaryCard
+                            key={task.id}
+                            title={task.nome}
+                            description={task.descricao}
+                            author={task.author || "Usuário"}
+                            time={task.tempoExecucao}
+                            date={task.dataFinalizar}
+                            onPressView={() => {}}
+                          />
+                        ))
+                      ) : (
+                        <>
+                          <TasksNotFound message="Nenhuma tarefa encontrada" />
+                        </>
+                      )}
+                    </View>
+
+                    {tasksByColumn[column.id] && (
+                      <View
+                        style={{
+                          marginVertical: 15,
+                          display: "flex",
+                          gap: 15,
+                        }}
+                      >
+                        <AddContentButton
+                          onPress={() => navigationToNewTask(column)}
+                          text="Nova tarefa"
+                          styleText={{ color: colors.text, fontSize: 16 }}
+                          colorIcon={colors.text}
+                          size={22}
+                          style={styles.addTaskButton}
+                        />
+                        {tasksByColumn[column.id].length >= 3 && (
+                          <AddContentButton
+                            noIcon
+                            onPress={() => {}}
+                            text="Ver mais tarefas em andamento"
+                            styleText={{ color: colors.text, fontSize: 16 }}
+                            colorIcon={colors.text}
+                            size={22}
+                            style={styles.seeMoreTaskButton}
+                          />
+                        )}
+                      </View>
+                    )}
                   </Accordion>
                 </View>
                 <View style={{ position: "relative" }}>
@@ -442,7 +524,7 @@ export default function ProjectDetail() {
                   setOpenModalAddColumn(true);
                 }}
                 text="Adicione uma nova coluna"
-                style={{ width: "80%", marginHorizontal: "auto" }}
+                style={{ width: "85%", marginHorizontal: "auto" }}
               />
             </View>
           </View>

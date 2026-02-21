@@ -6,5 +6,8 @@ export interface IAddContentButton {
   onPress: () => void;
   style?: StyleProp<ViewStyle>;
   styleText?: StyleProp<TextStyle>;
+  colorIcon?:string;
   size?:number;
+  typeIcon?:'add' | 'view';
+  noIcon?:boolean;
 }
