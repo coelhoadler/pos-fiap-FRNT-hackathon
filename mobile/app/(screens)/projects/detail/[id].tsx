@@ -37,6 +37,7 @@ import {
   updateColumnInProject,
 } from "@/app/services/projects";
 import {
+  deleteTask,
   deleteTasksByColumn,
   getLimitedTasksByColumn,
 } from "@/app/services/tasks";
@@ -93,6 +94,8 @@ export default function ProjectDetail() {
   const [editError, setEditError] = useState("");
   const [columnToDelete, setColumnToDelete] =
     useState<IProjectServiceColumn | null>(null);
+
+  const [taskToDelete, setTaskToDelete] = useState<ITaskService | null>(null);
 
   const projectColumns = useMemo(
     () => project?.columns || [],
@@ -155,7 +158,7 @@ export default function ProjectDetail() {
       if (isProjectDeleted) {
         router.replace("/(screens)/home/(tabs)/projects/projects");
       }
-    }, 1000);
+    }, 500);
   };
 
   const toggleOption = (option: string) => {
@@ -319,6 +322,26 @@ export default function ProjectDetail() {
     }
   };
 
+  const handleDeleteTask = async () => {
+    if (!taskToDelete) return;
+
+    const taskId = taskToDelete.id;
+    setTaskToDelete(null);
+    setTextLoading("Excluindo tarefa...");
+    setActionLoading(true);
+
+    try {
+      await deleteTask(id!, taskId);
+      setSuccessMessage("Tarefa excluída com sucesso!");
+      fetchProjectDetail();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Erro ao excluir a tarefa.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const dropdownItemsProjectSetting = [
     {
       id: "proj-edit",
@@ -459,7 +482,7 @@ export default function ProjectDetail() {
                             time={task.tempoExecucao}
                             date={task.dataFinalizar}
                             onPressView={() => {}}
-                            onPressDelete={() => {}}
+                            onPressDelete={() => setTaskToDelete(task)}
                             onPressEdit={() => {}}
                           />
                         ))
@@ -670,7 +693,7 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA - ATUALIZADO COM SUA MENSAGEM */}
+      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
@@ -679,6 +702,18 @@ export default function ProjectDetail() {
           onPressActionB={handleDeleteColumn}
           onPressActionA={() => setColumnToDelete(null)}
           onClose={() => setColumnToDelete(null)}
+        />
+      )}
+
+      {/* MODAL CONFIRMAR EXCLUSÃO TAREFA - NOVO */}
+      {taskToDelete && (
+        <Modal
+          styleContainer={{ top: 20 }}
+          contentType="withActions"
+          text={`Deseja realmente excluir a tarefa "${taskToDelete.nome}"?`}
+          onPressActionB={handleDeleteTask}
+          onPressActionA={() => setTaskToDelete(null)}
+          onClose={() => setTaskToDelete(null)}
         />
       )}
 
