@@ -396,6 +396,23 @@ export default function ProjectDetail() {
     });
   };
 
+  // --- NOVA FUNÇÃO: LEVAR PARA PÁGINA DE DETALHE DA TAREFA ---
+  const handleViewTask = (task: ITaskService, columnId: string) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/detail/[id]",
+      params: {
+        id: task.id,
+        nome: task.nome,
+        descricao: task.descricao,
+        dataFinalizar: task.dataFinalizar,
+        tempoExecucao: task.tempoExecucao,
+        author: task.author || "Usuário",
+        projectId: id,
+        columnId: columnId,
+      },
+    });
+  };
+
   const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
     {
       id: `edit-${column.id}`,
@@ -496,7 +513,7 @@ export default function ProjectDetail() {
                             author={task.author || "Usuário"}
                             time={task.tempoExecucao}
                             date={task.dataFinalizar}
-                            onPressView={() => {}}
+                            onPressView={() => handleViewTask(task, column.id)}
                             onPressDelete={() => setTaskToDelete(task)}
                             onPressEdit={() => {
                               handleEditTask(task, column.id);
@@ -579,7 +596,9 @@ export default function ProjectDetail() {
         )}
       </ScrollView>
 
-      {/* MODAL ADICIONAR COLUNAS */}
+      {/* MODAIS (Mantenha o restante do seu código de modais exatamente como está) */}
+      {/* ... (Omitido apenas para brevidade, mas deve permanecer no seu arquivo) ... */}
+
       {openModalAddColumn && (
         <Modal
           style={{ width: "100%" }}
@@ -658,7 +677,6 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL ALERTA DE DUPLICADOS */}
       {showDuplicateWarning && (
         <Modal
           onClose={() => setShowDuplicateWarning(false)}
@@ -669,7 +687,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL CONFIRMAÇÃO MÚLTIPLA */}
       {openModalConfirmAddMultiple && (
         <Modal
           contentType="withActions"
@@ -679,7 +696,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL EDITAR NOME DA COLUNA */}
       {columnToEdit && (
         <Modal
           onClose={() => setColumnToEdit(null)}
@@ -710,7 +726,6 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
@@ -722,7 +737,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO TAREFA - NOVO */}
       {taskToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
@@ -734,7 +748,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO PROJETO */}
       {openModalDeleteProject && (
         <Modal
           contentType={"withActions"}
@@ -746,7 +759,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAIS DE LOADING E FEEDBACK */}
       {actionLoading && (
         <Modal
           hasCloseButton={false}
