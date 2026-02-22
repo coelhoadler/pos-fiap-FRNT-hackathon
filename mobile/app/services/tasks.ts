@@ -10,6 +10,7 @@ import firestore, {
   serverTimestamp,
   updateDoc,
   where,
+  writeBatch,
 } from "@react-native-firebase/firestore";
 import { ITaskService } from "../interface/tasks";
 import { getTasksCollectionRef } from "./firestorePaths";
@@ -23,13 +24,11 @@ export async function createTask(
   const collectionRef = getTasksCollectionRef(projectId);
   const user = auth().currentUser;
 
-  // IMPORTANTE: Aqui pegamos o displayName do usuário logado
-  // Se o usuário não tiver nome definido no Firebase, usamos o email ou 'Anônimo'
   const authorName = user?.displayName || user?.email || "Usuário sem nome";
 
   await addDoc(collectionRef, {
     ...task,
-    author: authorName, // Sobrescrevemos o campo author com o nome legível
+    author: authorName,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
@@ -99,4 +98,21 @@ export async function deleteTask(
   const taskDocRef = doc(db, collectionRef.path, taskId);
   
   await deleteDoc(taskDocRef);
+}
+
+
+export async function deleteTasksByColumn(
+  projectId: string,
+  columnId: string
+): Promise<void> {
+  const collectionRef = getTasksCollectionRef(projectId);
+  const q = query(collectionRef, where("columnId", "==", columnId));
+  const snapshot = await getDocs(q);
+
+  const batch = writeBatch(db);
+  snapshot.docs.forEach((doc) => {
+    batch.delete(doc.ref);
+  });
+
+  await batch.commit();
 }

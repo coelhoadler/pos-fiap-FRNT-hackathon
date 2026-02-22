@@ -36,7 +36,10 @@ import {
   getProjectById,
   updateColumnInProject,
 } from "@/app/services/projects";
-import { getLimitedTasksByColumn } from "@/app/services/tasks";
+import {
+  deleteTasksByColumn,
+  getLimitedTasksByColumn,
+} from "@/app/services/tasks";
 import { genericStyle } from "@/app/styles/genericStyles";
 import {
   CheckSquare,
@@ -280,15 +283,19 @@ export default function ProjectDetail() {
 
   const handleDeleteColumn = async () => {
     if (!columnToDelete) return;
+    const colToDelete = columnToDelete;
     setColumnToDelete(null);
-    setTextLoading("Excluindo coluna...");
+    setTextLoading("Excluindo coluna e tarefas...");
     setActionLoading(true);
 
     try {
-      await deleteColumnFromProject(id!, columnToDelete);
-      setSuccessMessage("Coluna excluída com sucesso!");
+      await deleteTasksByColumn(id!, colToDelete.id);
+      await deleteColumnFromProject(id!, colToDelete);
+
+      setSuccessMessage("Coluna e tarefas excluídas com sucesso!");
       fetchProjectDetail();
     } catch (error) {
+      console.error(error);
       setErrorMessage("Erro ao excluir coluna.");
     } finally {
       setActionLoading(false);
@@ -663,12 +670,12 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
+      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA - ATUALIZADO COM SUA MENSAGEM */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
           contentType="withActions"
-          text={`Deseja excluir a coluna "${columnToDelete.name}"?`}
+          text={`Ao excluir a coluna "${columnToDelete.name}" você vai apagar todas as tarefas vinculadas a ela, deseja continuar?`}
           onPressActionB={handleDeleteColumn}
           onPressActionA={() => setColumnToDelete(null)}
           onClose={() => setColumnToDelete(null)}
