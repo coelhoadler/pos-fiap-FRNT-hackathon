@@ -18,7 +18,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       borderBottomWidth: 1,
       borderBottomColor: colors.colorWhite,
       width: "100%",
-      paddingBottom: 5,
+      paddingBottom: 8,
       flexDirection: "row",
       justifyContent: "space-between",
     },
@@ -28,6 +28,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     headerIconWrapper: {
       display: "flex",
       alignItems: "center",
+      flexDirection:'row',
+      gap:10
     },
     body: {
       paddingTop: 10

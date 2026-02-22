@@ -1,7 +1,14 @@
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { ISummaryCard } from "@/app/interface/tasks";
-import { Calendar, Eye, Timer, User } from "lucide-react-native";
+import {
+  Calendar,
+  Eye,
+  Pencil,
+  Timer,
+  Trash2,
+  User,
+} from "lucide-react-native";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { createStyles } from "./styles";
@@ -16,6 +23,8 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   author,
   date,
   time,
+  onPressDelete,
+  onPressEdit,
   ...props
 }) => {
   const colorSchemeRaw = useColorScheme();
@@ -29,6 +38,18 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
         <View style={styles.header}>
           <Text style={styles.title}>{title}</Text>
           <View style={styles.headerIconWrapper}>
+            <Pressable onPress={onPressDelete}>
+              <Trash2
+                size={sizeIcon}
+                color={colorIcon ? colorIcon : colors.colorWhite}
+              />
+            </Pressable>
+            <Pressable onPress={onPressEdit}>
+              <Pencil
+                size={sizeIcon}
+                color={colorIcon ? colorIcon : colors.colorWhite}
+              />
+            </Pressable>
             <Pressable onPress={onPressView}>
               <Eye
                 size={sizeIcon}

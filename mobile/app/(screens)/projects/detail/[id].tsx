@@ -114,7 +114,6 @@ export default function ProjectDetail() {
 
   const fetchProjectDetail = async () => {
     try {
-      setLoading(true);
       if (id) {
         const data = await getProjectById(id);
         setProject(data);
@@ -453,6 +452,8 @@ export default function ProjectDetail() {
                             time={task.tempoExecucao}
                             date={task.dataFinalizar}
                             onPressView={() => {}}
+                            onPressDelete={() => {}}
+                            onPressEdit={() => {}}
                           />
                         ))
                       ) : (

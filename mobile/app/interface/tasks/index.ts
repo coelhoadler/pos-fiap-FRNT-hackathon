@@ -24,6 +24,8 @@ export interface ISummaryCard {
   author:string;
   date:string;
   onPressView?: () => void;
+  onPressDelete?: () => void;
+  onPressEdit?: () => void;
 }
 
 export interface ITasksListNotFound {
