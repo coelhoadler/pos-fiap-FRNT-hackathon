@@ -381,6 +381,21 @@ export default function ProjectDetail() {
     });
   };
 
+  const handleEditTask = (task: ITaskService, columnId: string) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/editTask/[id]",
+      params: {
+        id: task.id,
+        nome: task.nome,
+        descricao: task.descricao,
+        dataFinalizar: task.dataFinalizar,
+        tempoExecucao: task.tempoExecucao,
+        projectId: id,
+        columnId: columnId,
+      },
+    });
+  };
+
   const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
     {
       id: `edit-${column.id}`,
@@ -483,7 +498,9 @@ export default function ProjectDetail() {
                             date={task.dataFinalizar}
                             onPressView={() => {}}
                             onPressDelete={() => setTaskToDelete(task)}
-                            onPressEdit={() => {}}
+                            onPressEdit={() => {
+                              handleEditTask(task, column.id);
+                            }}
                           />
                         ))
                       ) : (

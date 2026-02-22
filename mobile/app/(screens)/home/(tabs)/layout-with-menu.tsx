@@ -200,6 +200,7 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Editar Projeto",
           }}
         />
+
         <Tabs.Screen
           name="projects/detail/[id]"
           options={{
@@ -215,6 +216,15 @@ export const LayoutWithMenu: React.FC = () => {
             href: null,
             title: "Nova Tarefa",
             headerTitle: "Nova Tarefa",
+          }}
+        />
+
+        <Tabs.Screen
+          name="tasks/editTask/[id]"
+          options={{
+            href: null,
+            title: "Editar Tarefa",
+            headerTitle: "Editar Tarefa",
           }}
         />
       </Tabs>
