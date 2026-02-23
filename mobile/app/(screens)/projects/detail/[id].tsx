@@ -396,7 +396,17 @@ export default function ProjectDetail() {
     });
   };
 
-  // --- NOVA FUNÇÃO: LEVAR PARA PÁGINA DE DETALHE DA TAREFA ---
+  const handleViewAllTasks = (column: IProjectServiceColumn) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/column/[id]",
+      params: {
+        id: column.id,
+        columnName: column.name,
+        projectId: id,
+      },
+    });
+  };
+
   const handleViewTask = (task: ITaskService, columnId: string) => {
     router.push({
       pathname: "/(screens)/home/(tabs)/tasks/detail/[id]",
@@ -543,11 +553,11 @@ export default function ProjectDetail() {
                           size={22}
                           style={styles.addTaskButton}
                         />
-                        {tasksByColumn[column.id].length >= 3 && (
+                        {tasksByColumn[column.id].length >= 1 && (
                           <AddContentButton
                             noIcon
-                            onPress={() => {}}
-                            text="Ver mais tarefas em andamento"
+                            onPress={() => handleViewAllTasks(column)}
+                            text="Ver todas as tarefas"
                             styleText={{ color: colors.text, fontSize: 16 }}
                             colorIcon={colors.text}
                             size={22}

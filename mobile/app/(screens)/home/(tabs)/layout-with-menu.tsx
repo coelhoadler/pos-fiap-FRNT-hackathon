@@ -232,8 +232,16 @@ export const LayoutWithMenu: React.FC = () => {
           name="tasks/detail/[id]"
           options={{
             href: null,
-            title: "Detalhe Tarefa",
-            headerTitle: "Detalhe Tarefa",
+            title: "Detalhe da Tarefa",
+            headerTitle: "Detalhe da Tarefa",
+          }}
+        />
+        <Tabs.Screen
+          name="tasks/column/[id]"
+          options={{
+            href: null,
+            title: "Tarefas",
+            headerTitle: "Tarefas",
           }}
         />
       </Tabs>
