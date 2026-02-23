@@ -1,18 +1,34 @@
-import { BrowserRouter, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 // import IconBackground from './assets/background.png';
 // import { TextField, Button, Link, Stack, Box } from '@mui/material';
 import SideNav from './components/SideNav';
+import { useAuth } from './hooks';
+import Focus from './pages/Focus';
+import FocusSettings from './pages/FocusSettings';
 import HomePage from './pages/Home';
+import { Login as LoginPage } from './pages/Login';
 import NotFoundPage from './pages/NotFound';
 import PreferencesPage from './pages/Preferences';
 import ProductivityPage from './pages/Productivity';
 import { Register as RegisterPage } from './pages/Register';
 import TasksPage from './pages/Tasks';
-import { Login as LoginPage } from './pages/Login';
-import { useAuth } from './hooks';
 
 // Componente para proteger rotas que requerem autenticação
-const ProtectedRoute = ({ children, user, loading }: { children: React.ReactNode; user: any; loading: boolean }) => {
+const ProtectedRoute = ({
+  children,
+  user,
+  loading,
+}: {
+  children: React.ReactNode;
+  user: any;
+  loading: boolean;
+}) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-custom-sand">
@@ -31,7 +47,8 @@ const ProtectedRoute = ({ children, user, loading }: { children: React.ReactNode
 const AppContent = () => {
   const location = useLocation();
   const { user, loading } = useAuth();
-  const isAuthPage = location.pathname === '/' || location.pathname === '/register';
+  const isAuthPage =
+    location.pathname === '/' || location.pathname === '/register';
 
   // Mostrar loading enquanto verifica autenticação
   if (loading) {
@@ -54,38 +71,55 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route 
-            path="/home" 
+          <Route
+            path="/home"
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <HomePage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/tasks" 
+          <Route
+            path="/tasks"
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <TasksPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/productivity" 
+          <Route
+            path="/productivity"
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <ProductivityPage />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/preferences" 
+          <Route
+            path="/preferences"
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <PreferencesPage />
               </ProtectedRoute>
-            } 
+            }
           />
+          <Route
+            path="/focus"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <Focus />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/focus/settings"
+            element={
+              <ProtectedRoute user={user} loading={loading}>
+                <FocusSettings />
+              </ProtectedRoute>
+            }
+          />
+          // Rota catch-all para páginas não encontradas
           <Route path="/notfound" element={<NotFoundPage />} />
         </Routes>
       </main>
