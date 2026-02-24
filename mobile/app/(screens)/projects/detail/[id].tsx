@@ -553,7 +553,7 @@ export default function ProjectDetail() {
                           size={22}
                           style={styles.addTaskButton}
                         />
-                        {tasksByColumn[column.id].length > 3 && (
+                        {tasksByColumn[column.id].length >= 3 && (
                           <AddContentButton
                             noIcon
                             onPress={() => handleViewAllTasks(column)}
