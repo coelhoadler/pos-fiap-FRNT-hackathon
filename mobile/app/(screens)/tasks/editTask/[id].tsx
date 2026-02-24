@@ -63,13 +63,20 @@ export default function EditTask() {
 
   const loadInitialData = async () => {
     let currentColumnName = "";
+    // Usamos o columnId que veio no clique (params) inicialmente
+    let currentColumnId = params.columnId || "";
 
     if (params.projectId) {
       const data = await getProjectById(params.projectId);
       if (data?.columns) {
         setProjectColumns(data.columns);
-        const currentCol = data.columns.find((c) => c.id === params.columnId);
-        if (currentCol) currentColumnName = currentCol.name;
+
+        // Se a tarefa já existe, tentamos encontrar em qual coluna ela está REALMENTE
+        // Caso o params esteja desatualizado, a lista de colunas do projeto é a referência
+        const currentCol = data.columns.find((c) => c.id === currentColumnId);
+        if (currentCol) {
+          currentColumnName = currentCol.name;
+        }
       }
     }
 
@@ -88,11 +95,13 @@ export default function EditTask() {
       dataFinalizar: params.dataFinalizar || "",
       status: (params.status as TaskStatus) || "não iniciada",
       priority: (params.priority as TaskPriority) || "baixa",
-      columnId: params.columnId || "",
+      columnId: currentColumnId,
       columnName: currentColumnName,
       hours: h,
       minutes: m,
     });
+
+    setTempColumn({ id: currentColumnId, name: currentColumnName });
   };
 
   useFocusEffect(
@@ -100,7 +109,7 @@ export default function EditTask() {
       setSuccessMessage(false);
       setLoading(false);
       loadInitialData();
-    }, [params.id]),
+    }, [params.id, params.columnId]), // Adicionado columnId nas dependências
   );
 
   const handleDateChange = (text: string) => {
@@ -124,7 +133,7 @@ export default function EditTask() {
         dataFinalizar: formData.dataFinalizar,
         status: formData.status,
         priority: formData.priority,
-        columnId: formData.columnId,
+        columnId: formData.columnId, // Aqui enviamos a NOVA coluna selecionada
       });
       setSuccessMessage(true);
     } catch (error) {
