@@ -1,223 +1,466 @@
 import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
-import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
 import { Input } from "@/app/components/ui/input";
 import { Modal } from "@/app/components/ui/modal";
 import { TextArea } from "@/app/components/ui/textarea";
+import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
-import { updateTask } from "@/app/services/tasks"; // Importando o serviço de update
+import { IProjectServiceColumn } from "@/app/interface/project";
+import { TaskPriority, TaskStatus } from "@/app/interface/tasks";
+import { getProjectById } from "@/app/services/projects";
+import { updateTask } from "@/app/services/tasks";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
+import { useFocusEffect } from "@react-navigation/native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { CheckSquare, ChevronDown, Square } from "lucide-react-native";
+import React, { useCallback, useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { createStyles } from "./styles";
 
 export default function EditTask() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
   const styles = createStyles(colorScheme);
+  const colors = Colors[colorScheme];
   const router = useRouter();
 
-  // Recebendo os parâmetros da tarefa via rota
-  const {
-    id,
-    projectId,
-    columnId,
-    nome,
-    descricao,
-    tempoExecucao,
-    dataFinalizar,
-    status,
-  } = useLocalSearchParams<{
-    id: string;
-    projectId: string;
-    columnId: string;
-    nome: string;
-    descricao: string;
-    tempoExecucao: string;
-    dataFinalizar: string;
-    status: string;
-  }>();
+  const params = useLocalSearchParams<any>();
 
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [openModalPriority, setOpenModalPriority] = useState(false);
+  const [openModalColumn, setOpenModalColumn] = useState(false);
+  const [openModalTime, setOpenModalTime] = useState(false);
+  const [openModalStatus, setOpenModalStatus] = useState(false);
+
+  const [tempPriority, setTempPriority] = useState<TaskPriority>("baixa");
+  const [tempStatus, setTempStatus] = useState<TaskStatus>("não iniciada");
+  const [tempColumn, setTempColumn] = useState({ id: "", name: "" });
+  const [projectColumns, setProjectColumns] = useState<IProjectServiceColumn[]>(
+    [],
+  );
+  const hoursOptions = Array.from({ length: 24 }, (_, i) => i.toString());
+  const minutesOptions = ["00", "15", "30", "45"];
 
   const [formData, setFormData] = useState({
-    nome: nome || "",
-    descricao: descricao || "",
-    tempoExecucao: tempoExecucao || "",
-    dataFinalizar: dataFinalizar || "",
-    status: (status as any) || "não iniciada",
-  });
-
-  const [errors, setErrors] = useState({
     nome: "",
+    descricao: "",
+    dataFinalizar: "",
+    status: "não iniciada" as TaskStatus,
+    priority: "baixa" as TaskPriority,
+    columnId: "",
+    columnName: "",
+    hours: "0",
+    minutes: "00",
   });
 
-  // Atualiza o form se os params mudarem
-  useEffect(() => {
-    setFormData({
-      nome: nome || "",
-      descricao: descricao || "",
-      tempoExecucao: tempoExecucao || "",
-      dataFinalizar: dataFinalizar || "",
-      status: (status as any) || "não iniciada",
-    });
-  }, [nome, descricao, tempoExecucao, dataFinalizar, status]);
+  const statuses: TaskStatus[] = [
+    "não iniciada",
+    "em andamento",
+    "concluída",
+    "atrasada",
+  ];
 
-  // Verifica se houve alteração em relação aos dados originais
-  const hasChanges =
-    formData.nome !== (nome || "") ||
-    formData.descricao !== (descricao || "") ||
-    formData.tempoExecucao !== (tempoExecucao || "") ||
-    formData.dataFinalizar !== (dataFinalizar || "");
+  const loadInitialData = async () => {
+    let currentColumnName = "";
 
-  const handleValuesChange = (key: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-    if (key === "nome" && value.trim()) {
-      setErrors({ nome: "" });
+    if (params.projectId) {
+      const data = await getProjectById(params.projectId);
+      if (data?.columns) {
+        setProjectColumns(data.columns);
+        const currentCol = data.columns.find((c) => c.id === params.columnId);
+        if (currentCol) currentColumnName = currentCol.name;
+      }
     }
+
+    let h = "0";
+    let m = "00";
+    if (params.tempoExecucao) {
+      const hMatch = params.tempoExecucao.match(/(\d+)h/);
+      const mMatch = params.tempoExecucao.match(/(\d+)min/);
+      if (hMatch) h = hMatch[1];
+      if (mMatch) m = mMatch[1];
+    }
+
+    setFormData({
+      nome: params.nome || "",
+      descricao: params.descricao || "",
+      dataFinalizar: params.dataFinalizar || "",
+      status: (params.status as TaskStatus) || "não iniciada",
+      priority: (params.priority as TaskPriority) || "baixa",
+      columnId: params.columnId || "",
+      columnName: currentColumnName,
+      hours: h,
+      minutes: m,
+    });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      setSuccessMessage(false);
+      setLoading(false);
+      loadInitialData();
+    }, [params.id]),
+  );
+
+  const handleDateChange = (text: string) => {
+    const cleaned = text.replace(/\D/g, "");
+    let formatted = cleaned;
+    if (cleaned.length > 2)
+      formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
+    if (cleaned.length > 4)
+      formatted = `${formatted.slice(0, 5)}/${cleaned.slice(4, 8)}`;
+    setFormData({ ...formData, dataFinalizar: formatted });
   };
 
   const handleUpdate = async () => {
-    if (!formData.nome.trim()) {
-      setErrors({ nome: "O nome da tarefa é obrigatório." });
-      return;
-    }
-
     setLoading(true);
     try {
-      // Chama o serviço de atualização
-      await updateTask(projectId, id, {
+      const tempoTotal = `${formData.hours}h ${formData.minutes}min`;
+      await updateTask(params.projectId, params.id, {
         nome: formData.nome,
         descricao: formData.descricao,
-        tempoExecucao: formData.tempoExecucao,
+        tempoExecucao: tempoTotal,
         dataFinalizar: formData.dataFinalizar,
         status: formData.status,
-        columnId: columnId,
+        priority: formData.priority,
+        columnId: formData.columnId,
       });
-
       setSuccessMessage(true);
     } catch (error) {
-      console.error("Erro ao atualizar tarefa:", error);
-      setErrorMessage(true);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const onFinishFeedback = () => {
-    setSuccessMessage(false);
-    router.back(); // Volta para a tela de detalhes do projeto
-  };
-
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
       <Text style={styles.title}>Editar Tarefa</Text>
-
       <ScrollView
-        style={styles.formContainer}
         showsVerticalScrollIndicator={false}
+        style={styles.formContainer}
       >
-        <Text style={styles.subtitle}>
-          Altere as informações abaixo para atualizar sua tarefa.
-        </Text>
-
         <View style={styles.form}>
-          {/* Campo Nome */}
           <View>
             <Input
-              id="nomeTarefa"
-              text={
-                <View
-                  style={[
-                    genericFormStyles(colorScheme).wrapperRequiredIndication,
-                  ]}
-                >
-                  <Text
-                    style={[genericFormStyles(colorScheme).requiredIndication]}
-                  >
-                    *
-                  </Text>
-                  <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
-                    Nome da tarefa
-                  </Text>
-                </View>
-              }
+              text="Nome da tarefa"
               value={formData.nome}
-              onChangeText={(t) => handleValuesChange("nome", t)}
-              placeholder="Ex: Criar tela de login"
+              onChangeText={(t) => setFormData({ ...formData, nome: t })}
             />
-            {errors.nome ? <FormErrorMessage message={errors.nome} /> : null}
+          </View>
+          <View>
+            <TextArea
+              id="edit-desc"
+              text="Descrição"
+              value={formData.descricao}
+              onChangeText={(t) => setFormData({ ...formData, descricao: t })}
+            />
           </View>
 
-          {/* Campo Descrição */}
-          <TextArea
-            id="descricaoTarefa"
-            text="Descrição"
-            value={formData.descricao}
-            onChangeText={(t) => handleValuesChange("descricao", t)}
-            placeholder="Descreva o que precisa ser feito..."
-            numberOfLines={4}
-          />
+          <View style={styles.selectedItems}>
+            <TouchableOpacity
+              style={styles.selectedItem}
+              onPress={() => {
+                setTempStatus(formData.status);
+                setOpenModalStatus(true);
+              }}
+            >
+              <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                Status
+              </Text>
+              <View style={styles.selectedItemBody}>
+                <Text style={styles.selectedItemBodyText}>
+                  {formData.status}
+                </Text>
+                <ChevronDown size={20} color={colors.text} />
+              </View>
+            </TouchableOpacity>
 
-          {/* Campo Tempo */}
-          <Input
-            id="tempo"
-            text="Tempo estimado (ex: 2h, 30min)"
-            value={formData.tempoExecucao}
-            onChangeText={(t) => handleValuesChange("tempoExecucao", t)}
-            placeholder="Quanto tempo vai levar?"
-          />
+            <TouchableOpacity
+              style={styles.selectedItem}
+              onPress={() => {
+                setTempPriority(formData.priority);
+                setOpenModalPriority(true);
+              }}
+            >
+              <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                Prioridade
+              </Text>
+              <View style={styles.selectedItemBody}>
+                <Text style={styles.selectedItemBodyText}>
+                  {formData.priority}
+                </Text>
+                <ChevronDown size={20} color={colors.text} />
+              </View>
+            </TouchableOpacity>
 
-          {/* Campo Data */}
+            <TouchableOpacity
+              style={styles.selectedItem}
+              onPress={() => {
+                setTempColumn({
+                  id: formData.columnId,
+                  name: formData.columnName,
+                });
+                setOpenModalColumn(true);
+              }}
+            >
+              <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                Coluna Destino
+              </Text>
+              <View style={styles.selectedItemBody}>
+                <Text style={styles.selectedItemBodyText}>
+                  {formData.columnName || "Selecionar coluna"}
+                </Text>
+                <ChevronDown size={20} color={colors.text} />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.selectedItem}
+              onPress={() => setOpenModalTime(true)}
+            >
+              <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                Tempo Estimado
+              </Text>
+              <View style={styles.selectedItemBody}>
+                <Text
+                  style={styles.selectedItemBodyText}
+                >{`${formData.hours}h ${formData.minutes}min`}</Text>
+                <ChevronDown size={20} color={colors.text} />
+              </View>
+            </TouchableOpacity>
+          </View>
+
           <Input
-            id="data"
             text="Data para finalizar"
             value={formData.dataFinalizar}
-            onChangeText={(t) => handleValuesChange("dataFinalizar", t)}
-            placeholder="DD/MM/AAAA"
+            onChangeText={handleDateChange}
           />
-
-          {/* Botão Salvar */}
           <Button
             title="Salvar Alterações"
-            style={[
-              styles.button,
-              { marginTop: 20 },
-              (!hasChanges || loading) && { opacity: 0.6 },
-            ]}
             onPress={handleUpdate}
             loading={loading}
-            disabled={!hasChanges || loading}
+            style={styles.modalButton}
           />
         </View>
       </ScrollView>
 
-      {/* MODAIS DE FEEDBACK */}
+      {/* Modal Status */}
+      {openModalStatus && (
+        <Modal
+          style={{ width: "100%" }}
+          onClose={() => setOpenModalStatus(false)}
+          contentType="customModal"
+        >
+          <Text style={styles.titleModalOptions}>Alterar Status</Text>
+          {statuses.map((s) => (
+            <TouchableOpacity
+              key={s}
+              onPress={() => setTempStatus(s)}
+              style={[
+                styles.modalOptions,
+                {
+                  borderBottomColor:
+                    tempStatus === s ? colors.colorPrimary : colors.text,
+                },
+              ]}
+            >
+              <Text style={styles.modalOptionsText}>{s}</Text>
+              {tempStatus === s ? (
+                <CheckSquare size={20} color={colors.colorPrimary} />
+              ) : (
+                <Square size={20} color={colors.text} />
+              )}
+            </TouchableOpacity>
+          ))}
+          <Button
+            title="Confirmar"
+            onPress={() => {
+              setFormData({ ...formData, status: tempStatus });
+              setOpenModalStatus(false);
+            }}
+            style={styles.modalOptionsButton}
+          />
+        </Modal>
+      )}
+
+      {/* Modal Priority */}
+      {openModalPriority && (
+        <Modal
+          style={{ width: "100%" }}
+          onClose={() => setOpenModalPriority(false)}
+          contentType="customModal"
+        >
+          <Text style={styles.titleModalOptions}>Prioridade</Text>
+          {["baixa", "media", "alta", "urgente"].map((p) => (
+            <TouchableOpacity
+              key={p}
+              onPress={() => setTempPriority(p as any)}
+              style={[
+                styles.modalOptions,
+                {
+                  borderBottomColor:
+                    tempPriority === p ? colors.colorPrimary : colors.text,
+                },
+              ]}
+            >
+              <Text style={styles.modalOptionsText}>{p}</Text>
+              {tempPriority === p ? (
+                <CheckSquare size={20} color={colors.colorPrimary} />
+              ) : (
+                <Square size={20} color={colors.text} />
+              )}
+            </TouchableOpacity>
+          ))}
+          <Button
+            title="Confirmar"
+            onPress={() => {
+              setFormData({ ...formData, priority: tempPriority });
+              setOpenModalPriority(false);
+            }}
+            style={styles.modalOptionsButton}
+          />
+        </Modal>
+      )}
+
+      {/* Modal Column */}
+      {openModalColumn && (
+        <Modal
+          style={{ width: "100%" }}
+          onClose={() => setOpenModalColumn(false)}
+          contentType="customModal"
+        >
+          <Text style={styles.titleModalOptions}>Alterar Coluna</Text>
+          <ScrollView style={{ maxHeight: 300 }}>
+            {projectColumns.map((col) => (
+              <TouchableOpacity
+                key={col.id}
+                onPress={() => setTempColumn({ id: col.id, name: col.name })}
+                style={[
+                  styles.modalOptions,
+                  {
+                    borderBottomColor:
+                      tempColumn.id === col.id
+                        ? colors.colorPrimary
+                        : colors.text,
+                  },
+                ]}
+              >
+                <Text style={styles.modalOptionsText}>{col.name}</Text>
+                {tempColumn.id === col.id ? (
+                  <CheckSquare size={20} color={colors.colorPrimary} />
+                ) : (
+                  <Square size={20} color={colors.text} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          <Button
+            title="Confirmar"
+            onPress={() => {
+              setFormData({
+                ...formData,
+                columnId: tempColumn.id,
+                columnName: tempColumn.name,
+              });
+              setOpenModalColumn(false);
+            }}
+            style={styles.modalOptionsButton}
+          />
+        </Modal>
+      )}
+
+      {/* Modal Time */}
+      {openModalTime && (
+        <Modal
+          style={{ width: "100%" }}
+          onClose={() => setOpenModalTime(false)}
+          contentType="customModal"
+        >
+          <Text style={styles.titleModalOptions}>Tempo Estimado</Text>
+          <View style={{ flexDirection: "row", gap: 20 }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.modalOptionsSubtitle}>Horas</Text>
+              <ScrollView style={{ maxHeight: 200 }}>
+                {hoursOptions.map((h) => (
+                  <TouchableOpacity
+                    key={h}
+                    onPress={() => setFormData({ ...formData, hours: h })}
+                    style={[
+                      styles.modalOptionsWrapperInfos,
+                      {
+                        backgroundColor:
+                          formData.hours === h
+                            ? colors.colorPrimary
+                            : "transparent",
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.modalOptionsInfosText,
+                        {
+                          color: formData.hours === h ? "#fff" : colors.text,
+                        },
+                      ]}
+                    >
+                      {h}h
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.modalOptionsSubtitle}>Minutos</Text>
+              {minutesOptions.map((m) => (
+                <TouchableOpacity
+                  key={m}
+                  onPress={() => setFormData({ ...formData, minutes: m })}
+                  style={[
+                    styles.modalOptionsWrapperInfos,
+                    {
+                      backgroundColor:
+                        formData.minutes === m
+                          ? colors.colorPrimary
+                          : "transparent",
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.modalOptionsInfosText,
+                      {
+                        color: formData.minutes === m ? "#fff" : colors.text,
+                      },
+                    ]}
+                  >
+                    {m}min
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <Button
+            title="Confirmar"
+            onPress={() => setOpenModalTime(false)}
+            style={styles.modalOptionsButton}
+          />
+        </Modal>
+      )}
+
       {successMessage && (
         <Modal
+          style={{ width: "100%" }}
           contentType="feedbackMessage"
-          text="Tarefa atualizada com sucesso!"
-          onPress={onFinishFeedback}
-          hasCloseButton={false}
+          text="Tarefa atualizada!"
+          onPress={() => router.back()}
         />
       )}
-
-      {errorMessage && (
-        <Modal
-          contentType="feedbackMessage"
-          text="Não foi possível atualizar a tarefa."
-          onPress={() => setErrorMessage(false)}
-          onClose={() => setErrorMessage(false)}
-        />
-      )}
-
       {loading && (
         <Modal
+          style={{ width: "100%" }}
           hasCloseButton={false}
-          textLoading="Atualizando tarefa..."
           contentType="loading"
         />
       )}
