@@ -19,7 +19,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       fontSize: 24,
       fontWeight: "bold",
       textAlign: 'left',
-      width: '100%',
+      
       marginBottom: 14,
     },
     subtitle: {
@@ -27,7 +27,61 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       marginBottom: 6,
       color: colors.text,
     },
-    
+    wrapperDetail: {
+      gap: 24,
+      paddingVertical: 10
+    },
+    wrapperDescripionTitle: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      marginBottom: 8,
+    },
+    wrapperDescripionContent: {
+      backgroundColor: colors.background,
+      padding: 16,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.colorPrimary,
+    },
+
+    descriptionText: {
+      color: colors.text,
+      fontSize: 16,
+      lineHeight: 24,
+    },
+    othersInfosWrapper: {
+      gap: 16,
+      width: '100%'
+    },
+    otherInfosItems: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12
+    },
+    otherInfosItem: {
+
+    },
+    otherInfosicon: {
+      backgroundColor: colors.colorPrimary + "15",
+      padding: 8,
+      borderRadius: 6,
+    },
+    otherInfosLabel: {
+      color: colors.text + "90",
+      fontSize: 12,
+      marginBottom: 1
+    },
+    otherInfosTitle: {
+      color: colors.text,
+      fontSize: 14,
+      fontWeight: "600",
+    },
+    actionsWrapper:{
+      flexDirection:'row',
+      gap:10
+    }
+
 
   });
 }
