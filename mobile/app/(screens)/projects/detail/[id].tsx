@@ -511,7 +511,7 @@ export default function ProjectDetail() {
             {projectColumns.map((column) => (
               <View key={column.id} style={styles.wrapperColumn}>
                 <View style={{ flex: 1 }}>
-                  <Accordion title={column.name}>
+                  <Accordion initialMode={true} title={column.name}>
                     <View style={{ gap: 10 }}>
                       {tasksByColumn[column.id] &&
                       tasksByColumn[column.id].length > 0 ? (
@@ -553,7 +553,7 @@ export default function ProjectDetail() {
                           size={22}
                           style={styles.addTaskButton}
                         />
-                        {tasksByColumn[column.id].length >= 1 && (
+                        {tasksByColumn[column.id].length > 3 && (
                           <AddContentButton
                             noIcon
                             onPress={() => handleViewAllTasks(column)}
