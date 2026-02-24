@@ -63,16 +63,13 @@ export default function EditTask() {
 
   const loadInitialData = async () => {
     let currentColumnName = "";
-    // Usamos o columnId que veio no clique (params) inicialmente
+
     let currentColumnId = params.columnId || "";
 
     if (params.projectId) {
       const data = await getProjectById(params.projectId);
       if (data?.columns) {
         setProjectColumns(data.columns);
-
-        // Se a tarefa já existe, tentamos encontrar em qual coluna ela está REALMENTE
-        // Caso o params esteja desatualizado, a lista de colunas do projeto é a referência
         const currentCol = data.columns.find((c) => c.id === currentColumnId);
         if (currentCol) {
           currentColumnName = currentCol.name;
@@ -109,7 +106,7 @@ export default function EditTask() {
       setSuccessMessage(false);
       setLoading(false);
       loadInitialData();
-    }, [params.id, params.columnId]), // Adicionado columnId nas dependências
+    }, [params.id, params.columnId]),
   );
 
   const handleDateChange = (text: string) => {
@@ -133,7 +130,7 @@ export default function EditTask() {
         dataFinalizar: formData.dataFinalizar,
         status: formData.status,
         priority: formData.priority,
-        columnId: formData.columnId, // Aqui enviamos a NOVA coluna selecionada
+        columnId: formData.columnId,
       });
       setSuccessMessage(true);
     } catch (error) {
@@ -410,7 +407,10 @@ export default function EditTask() {
                       style={[
                         styles.modalOptionsInfosText,
                         {
-                          color: formData.hours === h ? "#fff" : colors.text,
+                          color:
+                            formData.hours === h
+                              ? colors.colorWhite
+                              : colors.text,
                         },
                       ]}
                     >
@@ -440,7 +440,10 @@ export default function EditTask() {
                     style={[
                       styles.modalOptionsInfosText,
                       {
-                        color: formData.minutes === m ? "#fff" : colors.text,
+                        color:
+                          formData.minutes === m
+                            ? colors.colorWhite
+                            : colors.text,
                       },
                     ]}
                   >
