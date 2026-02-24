@@ -36,7 +36,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
     <View style={[styles.container, style]}>
       <View style={styles.wrapper}>
         <View style={styles.header}>
-          <Text style={styles.title}>{title}</Text>
+          {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
             <Pressable onPress={onPressDelete}>
               <Trash2
@@ -72,29 +72,35 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
 
           <View style={{ marginTop: 15 }}>
             <View style={styles.wrapperInfos}>
-              <View style={styles.infosItem}>
-                <User
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-                <Text style={styles.textInfo}>{author}</Text>
-              </View>
+              {author && (
+                <View style={styles.infosItem}>
+                  <User
+                    size={sizeIcon}
+                    color={colorIcon ? colorIcon : colors.colorWhite}
+                  />
+                  <Text style={styles.textInfo}>{author}</Text>
+                </View>
+              )}
 
-              <View style={styles.infosItem}>
-                <Timer
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-                <Text style={styles.textInfo}>{time}</Text>
-              </View>
+              {time && (
+                <View style={styles.infosItem}>
+                  <Timer
+                    size={sizeIcon}
+                    color={colorIcon ? colorIcon : colors.colorWhite}
+                  />
+                  <Text style={styles.textInfo}>{time}</Text>
+                </View>
+              )}
 
-              <View style={styles.infosItem}>
-                <Calendar
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-                <Text style={styles.textInfo}>{date}</Text>
-              </View>
+              {date && (
+                <View style={styles.infosItem}>
+                  <Calendar
+                    size={sizeIcon}
+                    color={colorIcon ? colorIcon : colors.colorWhite}
+                  />
+                  <Text style={styles.textInfo}>{date}</Text>
+                </View>
+              )}
             </View>
           </View>
         </View>

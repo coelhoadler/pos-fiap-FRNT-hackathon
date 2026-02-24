@@ -7,8 +7,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   return StyleSheet.create({
     container: {
       width: "100%",
-      paddingHorizontal: 15,
-      paddingVertical: 15,
+      paddingHorizontal: 10,
+      paddingVertical: 10,
       backgroundColor: colors.colorPrimary,
       borderRadius: 5,
       
@@ -50,7 +50,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     textInfo: {
       color: colors.colorWhite,
-      fontSize: 13,
+      fontSize: 12,
     }
   });
 }
