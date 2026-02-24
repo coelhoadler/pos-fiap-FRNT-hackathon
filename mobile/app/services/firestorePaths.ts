@@ -28,6 +28,22 @@ export function getProjectsCollectionRef() {
     .collection("projects");
 }
 
+export function getTasksCollectionRef(projectId: string) {
+  const user = auth().currentUser;
+  
+  if (!user) {
+    throw new Error("Usuário não autenticado");
+  }
+
+  // SEMPRE usar o uid para o caminho do documento para manter a integridade
+  return firestore()
+    .collection("users")
+    .doc(user.uid)
+    .collection("projects")
+    .doc(projectId)
+    .collection("tasks");
+}
+
 export function getPomodoroHistoryCollectionRef() {
   const user = auth().currentUser;
 

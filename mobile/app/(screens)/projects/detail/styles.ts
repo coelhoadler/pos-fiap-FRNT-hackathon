@@ -8,8 +8,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   return StyleSheet.create({
     detailProject: {
       paddingVertical: 20,
-      position:'relative',
-      minHeight:'100%'
+      position: 'relative',
+      minHeight: '100%'
     },
     containerColumn: {
       minWidth: "100%",
@@ -86,8 +86,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     textModalColumnDescription: {
       fontSize: 16,
-      paddingHorizontal:3,
-      marginTop:5,
+      paddingHorizontal: 3,
+      marginTop: 5,
       color: colors.text
     },
     btnModalColumn: {
@@ -121,5 +121,18 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     textItemModalAddColumn: {
       color: colors.text,
     },
+    addTaskButton: {
+      width: "auto",
+      marginHorizontal: "auto",
+      backgroundColor: colors.colorSuccess,
+      borderRadius: 4,
+      justifyContent: "center",
+    },
+    seeMoreTaskButton: {
+      width: "auto",
+      marginHorizontal: "auto",
+      backgroundColor: colors.colorSuccess,
+      borderRadius: 4,
+    }
   });
 }

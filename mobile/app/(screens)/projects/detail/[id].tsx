@@ -12,6 +12,8 @@ import {
 
 import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { ModalLegendProjects } from "@/app/components/projects/modalLegend";
+import { SummaryCard } from "@/app/components/tasks/summaryCard";
+import { TasksNotFound } from "@/app/components/tasks/tasksNotFound";
 import { ThemedView } from "@/app/components/themed-view";
 import { Accordion } from "@/app/components/ui/accordion";
 import { AddContentButton } from "@/app/components/ui/addContentButton";
@@ -26,6 +28,7 @@ import {
   IProjectService,
   IProjectServiceColumn,
 } from "@/app/interface/project";
+import { ITaskService } from "@/app/interface/tasks";
 import {
   addColumnToProject,
   deleteColumnFromProject,
@@ -33,6 +36,11 @@ import {
   getProjectById,
   updateColumnInProject,
 } from "@/app/services/projects";
+import {
+  deleteTask,
+  deleteTasksByColumn,
+  getLimitedTasksByColumn,
+} from "@/app/services/tasks";
 import { genericStyle } from "@/app/styles/genericStyles";
 import {
   CheckSquare,
@@ -52,6 +60,9 @@ export default function ProjectDetail() {
   const colors = Colors[colorScheme];
 
   const [project, setProject] = useState<IProjectService | null>(null);
+  const [tasksByColumn, setTasksByColumn] = useState<{
+    [key: string]: ITaskService[];
+  }>({});
 
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -84,16 +95,38 @@ export default function ProjectDetail() {
   const [columnToDelete, setColumnToDelete] =
     useState<IProjectServiceColumn | null>(null);
 
+  const [taskToDelete, setTaskToDelete] = useState<ITaskService | null>(null);
+
   const projectColumns = useMemo(
     () => project?.columns || [],
     [project?.columns],
   );
+
+  const fetchTasksForColumns = async (columns: IProjectServiceColumn[]) => {
+    try {
+      const tasksMap: { [key: string]: ITaskService[] } = {};
+
+      const promises = columns.map(async (col) => {
+        const tasks = await getLimitedTasksByColumn(id!, col.id, 3);
+        tasksMap[col.id] = tasks;
+      });
+
+      await Promise.all(promises);
+      setTasksByColumn(tasksMap);
+    } catch (error) {
+      console.error("Erro ao buscar tarefas das colunas:", error);
+    }
+  };
 
   const fetchProjectDetail = async () => {
     try {
       if (id) {
         const data = await getProjectById(id);
         setProject(data);
+
+        if (data?.columns && data.columns.length > 0) {
+          await fetchTasksForColumns(data.columns);
+        }
       }
     } catch (error) {
       console.error("Erro ao buscar detalhes:", error);
@@ -106,16 +139,12 @@ export default function ProjectDetail() {
 
   useFocusEffect(
     useCallback(() => {
-      setLoading(true);
-      setProject(null);
-      setOpenModalLegend(false);
       fetchProjectDetail();
+      setOpenModalLegend(false);
 
       return () => {
         setActiveDropdownColumnId(null);
         setShowDropdownSetting(false);
-        setProject(null);
-        setLoading(true);
       };
     }, [id]),
   );
@@ -129,7 +158,7 @@ export default function ProjectDetail() {
       if (isProjectDeleted) {
         router.replace("/(screens)/home/(tabs)/projects/projects");
       }
-    }, 1000);
+    }, 500);
   };
 
   const toggleOption = (option: string) => {
@@ -257,15 +286,19 @@ export default function ProjectDetail() {
 
   const handleDeleteColumn = async () => {
     if (!columnToDelete) return;
+    const colToDelete = columnToDelete;
     setColumnToDelete(null);
-    setTextLoading("Excluindo coluna...");
+    setTextLoading("Excluindo coluna e tarefas...");
     setActionLoading(true);
 
     try {
-      await deleteColumnFromProject(id!, columnToDelete);
-      setSuccessMessage("Coluna excluída com sucesso!");
+      await deleteTasksByColumn(id!, colToDelete.id);
+      await deleteColumnFromProject(id!, colToDelete);
+
+      setSuccessMessage("Coluna e tarefas excluídas com sucesso!");
       fetchProjectDetail();
     } catch (error) {
+      console.error(error);
       setErrorMessage("Erro ao excluir coluna.");
     } finally {
       setActionLoading(false);
@@ -284,6 +317,26 @@ export default function ProjectDetail() {
     } catch (error) {
       console.error(error);
       setErrorMessage("Erro ao excluir projeto.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!taskToDelete) return;
+
+    const taskId = taskToDelete.id;
+    setTaskToDelete(null);
+    setTextLoading("Excluindo tarefa...");
+    setActionLoading(true);
+
+    try {
+      await deleteTask(id!, taskId);
+      setSuccessMessage("Tarefa excluída com sucesso!");
+      fetchProjectDetail();
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Erro ao excluir a tarefa.");
     } finally {
       setActionLoading(false);
     }
@@ -316,6 +369,59 @@ export default function ProjectDetail() {
       icon: <Trash2 size={20} color={colors.colorPrimary} />,
     },
   ];
+
+  const navigationToNewTask = (column: IProjectServiceColumn) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/addTask",
+      params: {
+        projectId: id,
+        columnId: column.id,
+        columnName: column.name,
+      },
+    });
+  };
+
+  const handleEditTask = (task: ITaskService, columnId: string) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/editTask/[id]",
+      params: {
+        id: task.id,
+        nome: task.nome,
+        descricao: task.descricao,
+        dataFinalizar: task.dataFinalizar,
+        tempoExecucao: task.tempoExecucao,
+        projectId: id,
+        columnId: columnId,
+      },
+    });
+  };
+
+  const handleViewAllTasks = (column: IProjectServiceColumn) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/column/[id]",
+      params: {
+        id: column.id,
+        columnName: column.name,
+        projectId: id,
+      },
+    });
+  };
+
+  const handleViewTask = (task: ITaskService, columnId: string) => {
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/detail/[id]",
+      params: {
+        id: task.id,
+        nome: task.nome,
+        descricao: task.descricao,
+        dataFinalizar: task.dataFinalizar,
+        tempoExecucao: task.tempoExecucao,
+        author: task.author || "Usuário",
+        projectId: id,
+        columnId: columnId,
+      },
+    });
+  };
 
   const getDropdownColumnsSetting = (column: IProjectServiceColumn) => [
     {
@@ -405,10 +511,61 @@ export default function ProjectDetail() {
             {projectColumns.map((column) => (
               <View key={column.id} style={styles.wrapperColumn}>
                 <View style={{ flex: 1 }}>
-                  <Accordion title={column.name}>
-                    <Text style={{ color: colors.text }}>
-                      Conteúdo da coluna...
-                    </Text>
+                  <Accordion initialMode={true} title={column.name}>
+                    <View style={{ gap: 10 }}>
+                      {tasksByColumn[column.id] &&
+                      tasksByColumn[column.id].length > 0 ? (
+                        tasksByColumn[column.id].map((task) => (
+                          <SummaryCard
+                            key={task.id}
+                            title={task.nome}
+                            description={task.descricao}
+                            author={task.author || "Usuário"}
+                            time={task.tempoExecucao}
+                            date={task.dataFinalizar}
+                            onPressView={() => handleViewTask(task, column.id)}
+                            onPressDelete={() => setTaskToDelete(task)}
+                            onPressEdit={() => {
+                              handleEditTask(task, column.id);
+                            }}
+                          />
+                        ))
+                      ) : (
+                        <>
+                          <TasksNotFound message="Nenhuma tarefa encontrada" />
+                        </>
+                      )}
+                    </View>
+
+                    {tasksByColumn[column.id] && (
+                      <View
+                        style={{
+                          marginVertical: 15,
+                          display: "flex",
+                          gap: 15,
+                        }}
+                      >
+                        <AddContentButton
+                          onPress={() => navigationToNewTask(column)}
+                          text="Nova tarefa"
+                          styleText={{ color: colors.text, fontSize: 16 }}
+                          colorIcon={colors.text}
+                          size={22}
+                          style={styles.addTaskButton}
+                        />
+                        {tasksByColumn[column.id].length >= 3 && (
+                          <AddContentButton
+                            noIcon
+                            onPress={() => handleViewAllTasks(column)}
+                            text="Ver todas as tarefas"
+                            styleText={{ color: colors.text, fontSize: 16 }}
+                            colorIcon={colors.text}
+                            size={22}
+                            style={styles.seeMoreTaskButton}
+                          />
+                        )}
+                      </View>
+                    )}
                   </Accordion>
                 </View>
                 <View style={{ position: "relative" }}>
@@ -442,14 +599,16 @@ export default function ProjectDetail() {
                   setOpenModalAddColumn(true);
                 }}
                 text="Adicione uma nova coluna"
-                style={{ width: "80%", marginHorizontal: "auto" }}
+                style={{ width: "85%", marginHorizontal: "auto" }}
               />
             </View>
           </View>
         )}
       </ScrollView>
 
-      {/* MODAL ADICIONAR COLUNAS */}
+      {/* MODAIS (Mantenha o restante do seu código de modais exatamente como está) */}
+      {/* ... (Omitido apenas para brevidade, mas deve permanecer no seu arquivo) ... */}
+
       {openModalAddColumn && (
         <Modal
           style={{ width: "100%" }}
@@ -528,7 +687,6 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL ALERTA DE DUPLICADOS */}
       {showDuplicateWarning && (
         <Modal
           onClose={() => setShowDuplicateWarning(false)}
@@ -539,7 +697,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL CONFIRMAÇÃO MÚLTIPLA */}
       {openModalConfirmAddMultiple && (
         <Modal
           contentType="withActions"
@@ -549,7 +706,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAL EDITAR NOME DA COLUNA */}
       {columnToEdit && (
         <Modal
           onClose={() => setColumnToEdit(null)}
@@ -580,19 +736,28 @@ export default function ProjectDetail() {
         </Modal>
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO COLUNA */}
       {columnToDelete && (
         <Modal
           styleContainer={{ top: 20 }}
           contentType="withActions"
-          text={`Deseja excluir a coluna "${columnToDelete.name}"?`}
+          text={`Ao excluir a coluna "${columnToDelete.name}" você vai apagar todas as tarefas vinculadas a ela, deseja continuar?`}
           onPressActionB={handleDeleteColumn}
           onPressActionA={() => setColumnToDelete(null)}
           onClose={() => setColumnToDelete(null)}
         />
       )}
 
-      {/* MODAL CONFIRMAR EXCLUSÃO PROJETO */}
+      {taskToDelete && (
+        <Modal
+          styleContainer={{ top: 20 }}
+          contentType="withActions"
+          text={`Deseja realmente excluir a tarefa "${taskToDelete.nome}"?`}
+          onPressActionB={handleDeleteTask}
+          onPressActionA={() => setTaskToDelete(null)}
+          onClose={() => setTaskToDelete(null)}
+        />
+      )}
+
       {openModalDeleteProject && (
         <Modal
           contentType={"withActions"}
@@ -604,7 +769,6 @@ export default function ProjectDetail() {
         />
       )}
 
-      {/* MODAIS DE LOADING E FEEDBACK */}
       {actionLoading && (
         <Modal
           hasCloseButton={false}

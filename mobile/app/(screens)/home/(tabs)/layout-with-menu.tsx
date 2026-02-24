@@ -200,12 +200,48 @@ export const LayoutWithMenu: React.FC = () => {
             headerTitle: "Editar Projeto",
           }}
         />
+
         <Tabs.Screen
           name="projects/detail/[id]"
           options={{
             href: null,
             title: "Detalhe do Projeto",
             headerTitle: "Detalhe do Projeto",
+          }}
+        />
+
+        <Tabs.Screen
+          name="tasks/addTask"
+          options={{
+            href: null,
+            title: "Nova Tarefa",
+            headerTitle: "Nova Tarefa",
+          }}
+        />
+
+        <Tabs.Screen
+          name="tasks/editTask/[id]"
+          options={{
+            href: null,
+            title: "Editar Tarefa",
+            headerTitle: "Editar Tarefa",
+          }}
+        />
+
+        <Tabs.Screen
+          name="tasks/detail/[id]"
+          options={{
+            href: null,
+            title: "Detalhe da Tarefa",
+            headerTitle: "Detalhe da Tarefa",
+          }}
+        />
+        <Tabs.Screen
+          name="tasks/column/[id]"
+          options={{
+            href: null,
+            title: "Tarefas",
+            headerTitle: "Tarefas",
           }}
         />
       </Tabs>

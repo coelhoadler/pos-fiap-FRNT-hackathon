@@ -16,7 +16,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    padding: 12,
     minHeight: 50,
   },
   title: {
@@ -24,7 +24,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     fontWeight: "600",
   },
   content: {
-    padding: 16,
+    padding: 12,
   },
   });
 }

@@ -6,9 +6,6 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   const { width, height } = Dimensions.get('window');
 
   return StyleSheet.create({
-    editProject: {
-      
-    },
     container: {
       paddingVertical: 20,
     },
@@ -30,17 +27,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       marginBottom: 6,
       color: colors.text,
     },
-    form: {
-      marginVertical: 16,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 16
-    },
-    button: {
-      margin: 'auto',
-      marginTop: 10
-    },
     
-    
+
   });
 }

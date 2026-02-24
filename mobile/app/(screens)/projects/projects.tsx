@@ -191,7 +191,7 @@ export default function Projects() {
             setOpenModalDelete(false);
             setProjectToDelete(null);
           }}
-          text={`Deseja excluir o projeto: "${projectToDelete?.name}"?`}
+          text={`Ao excluir o projeto "${projectToDelete?.name}", todas as tarefas serão apagadas. Deseja continuar?`}
           onPressActionB={handleDelete}
           onPressActionA={() => {
             setOpenModalDelete(false);
