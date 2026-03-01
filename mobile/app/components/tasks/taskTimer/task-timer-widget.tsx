@@ -56,7 +56,7 @@ export function TaskTimerWidget() {
           {/* Info da tarefa */}
           <View style={styles.taskInfo}>
             <Text style={styles.taskName} numberOfLines={1} ellipsizeMode="tail">
-              {activeTask.nome}
+              Tarefa: {activeTask.nome}
             </Text>
             <Text style={[styles.timer, isFinished && styles.timerFinished]}>
               {isFinished ? "Concluído!" : formatTime(timeLeftSeconds)}

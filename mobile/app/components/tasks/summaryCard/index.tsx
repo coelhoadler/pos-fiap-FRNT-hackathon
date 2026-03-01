@@ -13,6 +13,7 @@ import {
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { createStyles } from "./styles";
+import { useTaskTimer } from "../taskTimer/task-timer-context";
 
 export const SummaryCard: React.FC<ISummaryCard> = ({
   style,
@@ -33,6 +34,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
   const colors = Colors[colorScheme];
   const styles = createStyles(colorScheme);
+  const { isRunning } = useTaskTimer();
 
   return (
     <View style={[styles.container, style]}>
@@ -40,7 +42,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
         <View style={styles.header}>
           {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
-            {onPressPlay && (
+            {onPressPlay && !isRunning && (
               <Pressable onPress={onPressPlay}>
                 <Play
                   size={sizeIcon}
