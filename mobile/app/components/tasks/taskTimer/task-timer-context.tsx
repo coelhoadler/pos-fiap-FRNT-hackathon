@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
 
 export interface ActiveTask {
-  id: string;
-  nome: string;
-  tempoExecucao: string; // ex: "2h 30min"
+  id: string | undefined;
+  nome: string | undefined;
+  tempoExecucao: string | undefined; // ex: "2h 30min"
 }
 
 interface TaskTimerContextData {
@@ -63,7 +63,7 @@ export function TaskTimerProvider({ children }: { children: React.ReactNode }) {
 
   const startTimer = useCallback((task: ActiveTask) => {
     clearTimer();
-    const seconds = parseTempoExecucao(task.tempoExecucao);
+    const seconds = parseTempoExecucao(task.tempoExecucao || "0h 0min");
     setActiveTask(task);
     setTotalSeconds(seconds);
     setTimeLeftSeconds(seconds);

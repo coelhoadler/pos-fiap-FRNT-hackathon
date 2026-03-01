@@ -30,6 +30,7 @@ import {
   View,
 } from "react-native";
 import { createStyles } from "./styles";
+import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 
 export default function TaskDetail() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -45,6 +46,7 @@ export default function TaskDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
+  const { startTimer } = useTaskTimer();
 
   const fetchTaskData = async () => {
     try {
@@ -162,7 +164,11 @@ export default function TaskDetail() {
         <Text style={styles.title}>{task?.nome || "Tarefa"}</Text>
 
         <View style={styles.actionsWrapper}>
-          <Pressable onPress={() => {}}>
+          <Pressable onPress={() => startTimer({
+            id: task?.id,
+            nome: task?.nome,
+            tempoExecucao: task?.tempoExecucao,
+          })}>
             <Play size={22} color={colors.colorPrimary} />
           </Pressable>
           <Pressable onPress={() => setShowDeleteModal(true)}>
