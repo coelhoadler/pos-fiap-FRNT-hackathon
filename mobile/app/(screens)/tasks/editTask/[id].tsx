@@ -1,3 +1,5 @@
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendTasks } from "@/app/components/tasks/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
 import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
@@ -13,10 +15,11 @@ import { updateTask } from "@/app/services/tasks";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
 import { useFocusEffect } from "@react-navigation/native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import { CheckSquare, ChevronDown, Square } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { editTaskLegendContent } from "../constants";
 import { createStyles } from "./styles";
 
 export default function EditTask() {
@@ -33,6 +36,7 @@ export default function EditTask() {
   const [openModalColumn, setOpenModalColumn] = useState(false);
   const [openModalTime, setOpenModalTime] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const [tempPriority, setTempPriority] = useState<TaskPriority>("baixa");
   const [tempStatus, setTempStatus] = useState<TaskStatus>("não iniciada");
@@ -55,7 +59,11 @@ export default function EditTask() {
     minutes: "00",
   });
 
-  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "", columnId: "" });
+  const [errors, setErrors] = useState({
+    nome: "",
+    dataFinalizar: "",
+    columnId: "",
+  });
 
   const statuses: TaskStatus[] = [
     "não iniciada",
@@ -109,6 +117,7 @@ export default function EditTask() {
       setSuccessMessage(false);
       setLoading(false);
       loadInitialData();
+      setOpenModalLegend(false);
     }, [params.id, params.columnId]),
   );
 
@@ -198,6 +207,17 @@ export default function EditTask() {
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
+      <Tabs.Screen
+        options={{
+          headerTitle: "Editar Tarefa",
+          headerRight: () => (
+            <ActionsButtonsProjects
+              onlyInformationButton
+              openModal={() => setOpenModalLegend(true)}
+            />
+          ),
+        }}
+      />
       <Text style={styles.subtitle}>
         Preencha os campos abaixo para editar a tarefa.
       </Text>
@@ -275,8 +295,16 @@ export default function EditTask() {
                   setErrors({ ...errors, columnId: "" });
                 }}
               >
-                <View style={genericFormStyles(colorScheme).wrapperRequiredIndication}>
-                  <Text style={genericFormStyles(colorScheme).requiredIndication}>*</Text>
+                <View
+                  style={
+                    genericFormStyles(colorScheme).wrapperRequiredIndication
+                  }
+                >
+                  <Text
+                    style={genericFormStyles(colorScheme).requiredIndication}
+                  >
+                    *
+                  </Text>
                   <Text style={genericFormStyles(colorScheme).defaultLabel}>
                     Coluna Destino
                   </Text>
@@ -288,7 +316,9 @@ export default function EditTask() {
                   <ChevronDown size={20} color={colors.text} />
                 </View>
               </TouchableOpacity>
-              {errors.columnId ? <FormErrorMessage message={errors.columnId} /> : null}
+              {errors.columnId ? (
+                <FormErrorMessage message={errors.columnId} />
+              ) : null}
             </View>
           </View>
 
@@ -314,7 +344,14 @@ export default function EditTask() {
           />
         </View>
       </ScrollView>
-
+      {openModalLegend && (
+        <ModalLegendTasks
+          legendContentItems={editTaskLegendContent}
+          subtitleContentItem="Explicando um pouco sobre a página de edição de tarefa."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
+      )}
       {/* Modal Status */}
       {openModalStatus && (
         <Modal

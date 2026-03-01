@@ -32,6 +32,10 @@ export interface IModalLegendProjects extends IModalLegend {
     legendContentItems?: ILegendContentItem[];
     subtitleContentItem?:string;
 }
+export interface IModalLegendTasks extends IModalLegend {
+    legendContentItems?: ILegendContentItem[];
+    subtitleContentItem?:string;
+}
 
 export interface ILegendContent{
     style?: StyleProp<ViewStyle>;
