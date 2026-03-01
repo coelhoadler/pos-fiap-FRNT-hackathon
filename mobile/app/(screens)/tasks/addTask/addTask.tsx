@@ -1,3 +1,5 @@
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendTasks } from "@/app/components/tasks/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
 import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
@@ -14,10 +16,11 @@ import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
 import auth from "@react-native-firebase/auth";
 import { useFocusEffect } from "@react-navigation/native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import { CheckSquare, ChevronDown, Square } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { addTaskLegendContent } from "../constants";
 import { createStyles } from "./styles";
 
 export default function AddTask() {
@@ -34,6 +37,7 @@ export default function AddTask() {
   const [openModalColumn, setOpenModalColumn] = useState(false);
   const [openModalTime, setOpenModalTime] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const [tempPriority, setTempPriority] = useState<TaskPriority>("baixa");
   const [tempStatus, setTempStatus] = useState<TaskStatus>("não iniciada");
@@ -61,7 +65,11 @@ export default function AddTask() {
   };
 
   const [form, setForm] = useState(initialState);
-  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "", columnId: "" });
+  const [errors, setErrors] = useState({
+    nome: "",
+    dataFinalizar: "",
+    columnId: "",
+  });
 
   const priorities: TaskPriority[] = ["baixa", "media", "alta", "urgente"];
   const statuses: TaskStatus[] = [
@@ -92,6 +100,7 @@ export default function AddTask() {
       setErrorMessage(false);
       setLoading(false);
       fetchProjectData();
+      setOpenModalLegend(false);
     }, [params.columnId, params.columnName]),
   );
 
@@ -185,6 +194,17 @@ export default function AddTask() {
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
+      <Tabs.Screen
+        options={{
+          headerTitle: "Nova Tarefa",
+          headerRight: () => (
+            <ActionsButtonsProjects
+              onlyInformationButton
+              openModal={() => setOpenModalLegend(true)}
+            />
+          ),
+        }}
+      />
       <Text style={styles.title}>Criar Tarefa</Text>
       <Text style={styles.subtitle}>
         Preencha os campos abaixo para criar uma nova tarefa.
@@ -275,8 +295,16 @@ export default function AddTask() {
                   setErrors({ ...errors, columnId: "" });
                 }}
               >
-                <View style={genericFormStyles(colorScheme).wrapperRequiredIndication}>
-                  <Text style={genericFormStyles(colorScheme).requiredIndication}>*</Text>
+                <View
+                  style={
+                    genericFormStyles(colorScheme).wrapperRequiredIndication
+                  }
+                >
+                  <Text
+                    style={genericFormStyles(colorScheme).requiredIndication}
+                  >
+                    *
+                  </Text>
                   <Text style={genericFormStyles(colorScheme).defaultLabel}>
                     Coluna Destino
                   </Text>
@@ -288,7 +316,9 @@ export default function AddTask() {
                   <ChevronDown size={20} color={colors.text} />
                 </View>
               </TouchableOpacity>
-              {errors.columnId ? <FormErrorMessage message={errors.columnId} /> : null}
+              {errors.columnId ? (
+                <FormErrorMessage message={errors.columnId} />
+              ) : null}
             </View>
           </View>
 
@@ -313,6 +343,15 @@ export default function AddTask() {
           />
         </View>
       </ScrollView>
+
+      {openModalLegend && (
+        <ModalLegendTasks
+          legendContentItems={addTaskLegendContent}
+          subtitleContentItem="Explicando um pouco sobre a página de criação de tarefa."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
+      )}
 
       {/* Modal Status */}
       {openModalStatus && (

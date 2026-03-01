@@ -32,6 +32,10 @@ export interface IModalLegendProjects extends IModalLegend {
     legendContentItems?: ILegendContentItem[];
     subtitleContentItem?:string;
 }
+export interface IModalLegendTasks extends IModalLegend {
+    legendContentItems?: ILegendContentItem[];
+    subtitleContentItem?:string;
+}
 
 export interface ILegendContent{
     style?: StyleProp<ViewStyle>;
@@ -39,7 +43,7 @@ export interface ILegendContent{
     legendItems?: ILegendContentItem[];
 }
 export interface ILegendContentItem{
-    description:string;
+    description:string | React.ReactElement;
     icon?: React.ReactElement;
     styleLegendIcon?: StyleProp<ViewStyle>;
 }

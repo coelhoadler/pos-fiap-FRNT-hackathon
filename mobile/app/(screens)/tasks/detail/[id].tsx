@@ -1,3 +1,5 @@
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendTasks } from "@/app/components/tasks/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
 import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
@@ -29,6 +31,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { legendContentItems } from "../constants";
 import { createStyles } from "./styles";
 
 export default function TaskDetail() {
@@ -45,6 +48,7 @@ export default function TaskDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const fetchTaskData = async () => {
     try {
@@ -73,6 +77,7 @@ export default function TaskDetail() {
   useFocusEffect(
     useCallback(() => {
       fetchTaskData();
+      setOpenModalLegend(false);
     }, [params.id, params.projectId]),
   );
 
@@ -147,6 +152,12 @@ export default function TaskDetail() {
             >
               <ArrowLeft color={colors.text} size={24} />
             </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <ActionsButtonsProjects
+              onlyInformationButton
+              openModal={() => setOpenModalLegend(true)}
+            />
           ),
         }}
       />
@@ -225,6 +236,14 @@ export default function TaskDetail() {
         </View>
       </ScrollView>
 
+      {openModalLegend && (
+        <ModalLegendTasks
+          legendContentItems={legendContentItems}
+          subtitleContentItem="Explicando um pouco sobre a página de edição de tarefa."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
+      )}
       {showDeleteModal && (
         <Modal
           styleContainer={{ top: 20 }}

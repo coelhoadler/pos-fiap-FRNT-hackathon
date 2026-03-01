@@ -2,9 +2,9 @@ import React from "react";
 
 import { LegendContent } from "@/app/components/ui/legend/legendContent";
 import { ModalLegend } from "@/app/components/ui/legend/modalLegend";
-import { IModalLegendProjects } from "@/app/interface/modal";
+import { IModalLegendTasks } from "@/app/interface/modal";
 import { ScrollView } from "react-native";
-export const ModalLegendProjects: React.FC<IModalLegendProjects> = ({
+export const ModalLegendTasks: React.FC<IModalLegendTasks> = ({
   onClose,
   open,
   legendContentItems,
