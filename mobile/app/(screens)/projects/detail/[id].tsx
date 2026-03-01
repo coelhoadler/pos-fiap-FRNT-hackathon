@@ -801,7 +801,7 @@ export default function ProjectDetail() {
         <ModalLegendProjects
           style={{ flex: 1 }}
           legendContentItems={detailProjectLegendContent}
-          subtitleContentItem="Explicando um pouco sobre a página do projeto."
+          subtitleContentItem="Explicando um pouco sobre a página de detalhe do projeto."
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />

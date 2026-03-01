@@ -104,6 +104,7 @@ export const Modal: React.FC<IModal> = ({
               </Text>
             )}
             {contentType === "customModal" && children}
+
             {contentType !== "legend" && contentType !== "customModal" && (
               <View
                 style={[

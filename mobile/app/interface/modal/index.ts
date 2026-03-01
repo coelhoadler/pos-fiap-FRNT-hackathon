@@ -39,7 +39,7 @@ export interface ILegendContent{
     legendItems?: ILegendContentItem[];
 }
 export interface ILegendContentItem{
-    description:string;
+    description:string | React.ReactElement;
     icon?: React.ReactElement;
     styleLegendIcon?: StyleProp<ViewStyle>;
 }
