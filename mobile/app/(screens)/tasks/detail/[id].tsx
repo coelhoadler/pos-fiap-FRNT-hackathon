@@ -46,7 +46,7 @@ export default function TaskDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
-  const { startTimer, isRunning } = useTaskTimer();
+  const { startTimer, resumeTimer, isRunning, timeLeftSeconds } = useTaskTimer();
 
   const fetchTaskData = async () => {
     try {
@@ -165,11 +165,11 @@ export default function TaskDetail() {
 
         <View style={styles.actionsWrapper}>
           {!isRunning && (
-            <Pressable onPress={() => startTimer({
+            <Pressable onPress={() => (timeLeftSeconds === 0 ? startTimer({
               id: task?.id,
               nome: task?.nome,
               tempoExecucao: "0h 1min",
-            })}>
+            }) : resumeTimer())}>
               <Play size={22} color={colors.colorPrimary} />
             </Pressable>
           )}
