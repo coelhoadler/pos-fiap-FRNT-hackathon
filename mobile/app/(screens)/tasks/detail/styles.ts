@@ -57,7 +57,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     otherInfosItems: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 12
+      gap: 12,
     },
     otherInfosItem: {
 
@@ -79,7 +79,8 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
     },
     actionsWrapper:{
       flexDirection:'row',
-      gap:10
+      gap:10,
+      backgroundColor:'transparent',
     }
 
 

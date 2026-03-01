@@ -4,6 +4,7 @@ import firestore, {
   deleteDoc,
   doc,
   limit as firestoreLimit,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -32,6 +33,25 @@ export async function createTask(
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+}
+
+
+export async function getTaskById(
+  projectId: string,
+  taskId: string
+): Promise<ITaskService | null> {
+  const collectionRef = getTasksCollectionRef(projectId);
+  const taskDocRef = doc(db, collectionRef.path, taskId);
+  const snapshot = await getDoc(taskDocRef);
+
+  if (snapshot.exists()) {
+    return {
+      id: snapshot.id,
+      ...(snapshot.data() as Omit<ITaskService, "id">),
+    } as ITaskService;
+  }
+
+  return null;
 }
 
 export async function getTasksByColumn(
@@ -99,7 +119,6 @@ export async function deleteTask(
   
   await deleteDoc(taskDocRef);
 }
-
 
 export async function deleteTasksByColumn(
   projectId: string,

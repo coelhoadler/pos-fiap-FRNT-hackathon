@@ -521,13 +521,13 @@ export default function ProjectDetail() {
                             title={task.nome}
                             description={task.descricao}
                             author={task.author || "Usuário"}
-                            time={task.tempoExecucao}
                             date={task.dataFinalizar}
                             onPressView={() => handleViewTask(task, column.id)}
                             onPressDelete={() => setTaskToDelete(task)}
                             onPressEdit={() => {
                               handleEditTask(task, column.id);
                             }}
+                            onPressPomodoro={() => {}}
                           />
                         ))
                       ) : (

@@ -61,7 +61,7 @@ export default function AddTask() {
   };
 
   const [form, setForm] = useState(initialState);
-  const [errors, setErrors] = useState({ nome: "" });
+  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "", columnId: "" });
 
   const priorities: TaskPriority[] = ["baixa", "media", "alta", "urgente"];
   const statuses: TaskStatus[] = [
@@ -87,7 +87,7 @@ export default function AddTask() {
         columnId: params.columnId || "",
         columnName: params.columnName || "",
       });
-      setErrors({ nome: "" });
+      setErrors({ nome: "", dataFinalizar: "", columnId: "" });
       setSuccessMessage(false);
       setErrorMessage(false);
       setLoading(false);
@@ -103,11 +103,57 @@ export default function AddTask() {
     if (cleaned.length > 4)
       formatted = `${formatted.slice(0, 5)}/${cleaned.slice(4, 8)}`;
     setForm({ ...form, dataFinalizar: formatted });
+    setErrors({ ...errors, dataFinalizar: "" });
   };
 
   const handleSave = async () => {
+    let currentErrors = { nome: "", dataFinalizar: "", columnId: "" };
+    let hasError = false;
+
     if (!form.nome.trim()) {
-      setErrors({ nome: "O nome da tarefa é obrigatório" });
+      currentErrors.nome = "O nome da tarefa é obrigatório";
+      hasError = true;
+    }
+
+    if (!form.columnId) {
+      currentErrors.columnId = "A coluna destino é obrigatória";
+      hasError = true;
+    }
+
+    if (form.dataFinalizar.length > 0) {
+      if (form.dataFinalizar.length < 10) {
+        currentErrors.dataFinalizar = "Formato inválido (DD/MM/AAAA)";
+        hasError = true;
+      } else {
+        const [day, month, year] = form.dataFinalizar.split("/").map(Number);
+        const inputDate = new Date(year, month - 1, day);
+
+        const isValidDate =
+          inputDate.getFullYear() === year &&
+          inputDate.getMonth() === month - 1 &&
+          inputDate.getDate() === day;
+        const errorDateText = "Insira uma data válida";
+
+        if (!isValidDate) {
+          currentErrors.dataFinalizar = errorDateText;
+          hasError = true;
+        } else if (year > 2100) {
+          currentErrors.dataFinalizar = errorDateText;
+          hasError = true;
+        } else {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          if (inputDate < today) {
+            currentErrors.dataFinalizar = errorDateText;
+            hasError = true;
+          }
+        }
+      }
+    }
+
+    if (hasError) {
+      setErrors(currentErrors);
       return;
     }
 
@@ -140,6 +186,9 @@ export default function AddTask() {
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
       <Text style={styles.title}>Criar Tarefa</Text>
+      <Text style={styles.subtitle}>
+        Preencha os campos abaixo para criar uma nova tarefa.
+      </Text>
 
       <ScrollView
         style={styles.formContainer}
@@ -167,7 +216,7 @@ export default function AddTask() {
               value={form.nome}
               onChangeText={(t) => {
                 setForm({ ...form, nome: t });
-                setErrors({ nome: "" });
+                setErrors({ ...errors, nome: "" });
               }}
               placeholder="Ex: Criar tela de login"
             />
@@ -217,48 +266,45 @@ export default function AddTask() {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => {
-                setTempColumn({ id: form.columnId, name: form.columnName });
-                setOpenModalColumn(true);
-              }}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Coluna Destino
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text style={styles.selectedItemBodyText}>
-                  {form.columnName || "Selecionar coluna"}
-                </Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => setOpenModalTime(true)}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Tempo Estimado
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text
-                  style={styles.selectedItemBodyText}
-                >{`${form.hours}h ${form.minutes}min`}</Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                style={styles.selectedItem}
+                onPress={() => {
+                  setTempColumn({ id: form.columnId, name: form.columnName });
+                  setOpenModalColumn(true);
+                  setErrors({ ...errors, columnId: "" });
+                }}
+              >
+                <View style={genericFormStyles(colorScheme).wrapperRequiredIndication}>
+                  <Text style={genericFormStyles(colorScheme).requiredIndication}>*</Text>
+                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                    Coluna Destino
+                  </Text>
+                </View>
+                <View style={styles.selectedItemBody}>
+                  <Text style={styles.selectedItemBodyText}>
+                    {form.columnName || "Selecionar coluna"}
+                  </Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {errors.columnId ? <FormErrorMessage message={errors.columnId} /> : null}
+            </View>
           </View>
 
-          <Input
-            text="Data para finalizar"
-            value={form.dataFinalizar}
-            onChangeText={handleDateChange}
-            placeholder="DD/MM/AAAA"
-            keyboardType="numeric"
-            maxLength={10}
-          />
+          <View>
+            <Input
+              text="Data para finalizar"
+              value={form.dataFinalizar}
+              onChangeText={handleDateChange}
+              placeholder="DD/MM/AAAA"
+              keyboardType="numeric"
+              maxLength={10}
+            />
+            {errors.dataFinalizar ? (
+              <FormErrorMessage message={errors.dataFinalizar} />
+            ) : null}
+          </View>
 
           <Button
             title="Criar Tarefa"
@@ -401,7 +447,6 @@ export default function AddTask() {
           contentType="customModal"
         >
           <Text style={styles.titleModalOptions}>Tempo Estimado</Text>
-
           <View style={{ flexDirection: "row", gap: 20 }}>
             <View style={{ flex: 1 }}>
               <Text style={styles.modalOptionsSubtitle}>Horas</Text>
