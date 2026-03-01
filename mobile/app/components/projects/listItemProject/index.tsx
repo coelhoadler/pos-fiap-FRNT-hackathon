@@ -15,6 +15,7 @@ export const ListItemProject: React.FC<IListItemProject> = ({
   onPressView,
   dropdownActions,
   openDropdownActions,
+  summaryMode,
 }) => {
   const colorSchemeRaw = useColorScheme();
   const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
@@ -31,18 +32,22 @@ export const ListItemProject: React.FC<IListItemProject> = ({
             icon={<Eye size={22} color={colors.colorWhite} />}
           />
         </View>
-        <View style={styles.actionItem}>
-          <IconButton
-            onPress={onPressEdit}
-            icon={<Pencil size={20} color={colors.colorWhite} />}
-          />
-        </View>
-        <View style={styles.actionItem}>
-          <IconButton
-            onPress={onPressDelete}
-            icon={<Trash size={20} color={colors.colorWhite} />}
-          />
-        </View>
+        {!summaryMode && (
+          <>
+            <View style={styles.actionItem}>
+              <IconButton
+                onPress={onPressEdit}
+                icon={<Pencil size={20} color={colors.colorWhite} />}
+              />
+            </View>
+            <View style={styles.actionItem}>
+              <IconButton
+                onPress={onPressDelete}
+                icon={<Trash size={20} color={colors.colorWhite} />}
+              />
+            </View>
+          </>
+        )}
         <View style={[styles.actionItem, { position: "relative" }]}>
           <IconButton
             onPress={onPressMoreOptions}

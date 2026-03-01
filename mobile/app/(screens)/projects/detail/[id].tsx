@@ -29,6 +29,8 @@ import {
   IProjectServiceColumn,
 } from "@/app/interface/project";
 import { ITaskService } from "@/app/interface/tasks";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
+import { getPreferences } from "@/app/services/preferences";
 import {
   addColumnToProject,
   deleteColumnFromProject,
@@ -137,14 +139,26 @@ export default function ProjectDetail() {
     }
   };
 
+  const [summaryModeEnabled, setSummaryModeEnabled] = useState(false);
+
+  const loadPreferences = () => {
+    getPreferences().then((prefs) => {
+      setSummaryModeEnabled(!!prefs?.summaryMode);
+    });
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchProjectDetail();
       setOpenModalLegend(false);
+      loadPreferences();
+
+      const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadPreferences);
 
       return () => {
         setActiveDropdownColumnId(null);
         setShowDropdownSetting(false);
+        unsubscribe();
       };
     }, [id]),
   );
@@ -517,6 +531,11 @@ export default function ProjectDetail() {
                       tasksByColumn[column.id].length > 0 ? (
                         tasksByColumn[column.id].map((task) => (
                           <SummaryCard
+                            styleHeader={
+                              summaryModeEnabled
+                                ? styles.noBorderBottomCardTask
+                                : {}
+                            }
                             key={task.id}
                             title={task.nome}
                             description={task.descricao}
@@ -528,6 +547,7 @@ export default function ProjectDetail() {
                               handleEditTask(task, column.id);
                             }}
                             onPressPomodoro={() => {}}
+                            summaryMode={summaryModeEnabled}
                           />
                         ))
                       ) : (

@@ -9,6 +9,7 @@ export interface IListItemProject {
   onPressDelete: () => void;
   onPressView: () => void;
   openDropdownActions?: boolean;
+  summaryMode?: boolean;
 }
 
 export interface IProjectListNotFound {
