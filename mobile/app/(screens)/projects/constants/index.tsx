@@ -6,32 +6,32 @@ import {
   EllipsisVertical,
   Eye,
   Pencil,
-  Play,
-  Settings,
-  Trash,
+  Trash
 } from "lucide-react-native";
 
-export const dropdownItemsProjects: IDropdownItem[] = [
-  {
-    id: "1",
-    name: "Iniciar tarefa",
-    onPress: () => {
-      console.log("Clicado iniciar tarefa");
-    },
-    icon: <Play size={16} color={baseColors.colorPrimary} />,
-  },
+export const getDropdownItemsProjects = (
+  onNewTask: () => void,
+): IDropdownItem[] => [
+  // {
+  //   id: "1",
+  //   name: "Iniciar tarefa",
+  //   onPress: () => {
+  //     console.log("Clicado iniciar tarefa");
+  //   },
+  //   icon: <Play size={16} color={baseColors.colorPrimary} />,
+  // },
   {
     id: "2",
     name: "Nova tarefa",
-    onPress: () => {},
+    onPress: onNewTask,
     icon: <CirclePlus size={17} color={baseColors.colorPrimary} />,
   },
-  {
-    id: "3",
-    name: "Configurações",
-    onPress: () => {},
-    icon: <Settings size={16} color={baseColors.colorPrimary} />,
-  },
+  // {
+  //   id: "3",
+  //   name: "Configurações",
+  //   onPress: () => {},
+  //   icon: <Settings size={16} color={baseColors.colorPrimary} />,
+  // },
 ];
 
 export const legendContentItems: ILegendContentItem[] = [

@@ -9,7 +9,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { router, Tabs } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { dropdownItemsProjects, legendContentItems } from "./constants";
+import { getDropdownItemsProjects, legendContentItems } from "./constants";
 import { createStyles } from "./styles";
 
 import { ProjectsNotFound } from "@/app/components/projects/projectsNotFound";
@@ -69,6 +69,16 @@ export default function Projects() {
     setProjectToDelete(project);
     setOpenModalDelete(true);
   };
+  const handleNewTask = (project: IProjectService) => {
+    setActiveDropdownId(null);
+    router.push({
+      pathname: "/(screens)/home/(tabs)/tasks/addTask",
+      params: {
+        projectId: project.id!,
+      },
+    });
+  };
+
   const handleEditProject = (project: IProjectService) => {
     setActiveDropdownId(null);
     router.push({
@@ -160,7 +170,9 @@ export default function Projects() {
                         onClose={() =>
                           isDropDownOpened && setActiveDropdownId(null)
                         }
-                        dropdownItems={dropdownItemsProjects}
+                        dropdownItems={getDropdownItemsProjects(() =>
+                          handleNewTask(item)
+                        )}
                       />
                     }
                     onPressEdit={() => handleEditProject(item)}
