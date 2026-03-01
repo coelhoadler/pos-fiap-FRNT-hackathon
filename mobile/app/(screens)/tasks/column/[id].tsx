@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 
 import { SummaryCard } from "@/app/components/tasks/summaryCard";
+import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 import { TasksNotFound } from "@/app/components/tasks/tasksNotFound";
 import { ThemedView } from "@/app/components/themed-view";
 import { Modal } from "@/app/components/ui/modal";
@@ -31,6 +32,7 @@ export default function ColumnTaskDetail() {
   const [actionLoading, setActionLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { startTimer } = useTaskTimer();
 
   const fetchTasks = async () => {
     try {
@@ -129,6 +131,11 @@ export default function ColumnTaskDetail() {
                 onPressView={() => handleViewTask(task)}
                 onPressDelete={() => setTaskToDelete(task)}
                 onPressEdit={() => handleEditTask(task)}
+                onPressPlay={() => startTimer({
+                  id: task.id,
+                  nome: task.nome,
+                  tempoExecucao: task.tempoExecucao,
+                })}
               />
             ))}
           </View>
@@ -138,7 +145,7 @@ export default function ColumnTaskDetail() {
       {taskToDelete && (
         <Modal
           contentType="withActions"
-          text={`Deseja realmente excluir a tarefa "${taskToDelete.nome}"?`}
+          text={`Deseja realmente excluir a tarefara "${taskToDelete.nome}"?`}
           onPressActionB={handleDeleteTask}
           onPressActionA={() => setTaskToDelete(null)}
           onClose={() => setTaskToDelete(null)}

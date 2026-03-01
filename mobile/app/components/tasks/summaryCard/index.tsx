@@ -5,6 +5,7 @@ import {
   Calendar,
   Eye,
   Pencil,
+  Play,
   Timer,
   Trash2,
   User,
@@ -25,6 +26,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   time,
   onPressDelete,
   onPressEdit,
+  onPressPlay,
   ...props
 }) => {
   const colorSchemeRaw = useColorScheme();
@@ -38,6 +40,15 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
         <View style={styles.header}>
           {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
+            {onPressPlay && (
+              <Pressable onPress={onPressPlay}>
+                <Play
+                  size={sizeIcon}
+                  color="#4CAF50"
+                  fill="#4CAF50"
+                />
+              </Pressable>
+            )}
             <Pressable onPress={onPressDelete}>
               <Trash2
                 size={sizeIcon}

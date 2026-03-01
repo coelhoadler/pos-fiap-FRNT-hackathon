@@ -52,6 +52,7 @@ import {
 } from "lucide-react-native";
 import { columnOptions, detailProjectLegendContent } from "./constants";
 import { createStyles } from "./styles";
+import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 
 export default function ProjectDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -101,6 +102,8 @@ export default function ProjectDetail() {
     () => project?.columns || [],
     [project?.columns],
   );
+
+  const { startTimer } = useTaskTimer();
 
   const fetchTasksForColumns = async (columns: IProjectServiceColumn[]) => {
     try {
@@ -514,7 +517,7 @@ export default function ProjectDetail() {
                   <Accordion initialMode={true} title={column.name}>
                     <View style={{ gap: 10 }}>
                       {tasksByColumn[column.id] &&
-                      tasksByColumn[column.id].length > 0 ? (
+                        tasksByColumn[column.id].length > 0 ? (
                         tasksByColumn[column.id].map((task) => (
                           <SummaryCard
                             key={task.id}
@@ -528,6 +531,11 @@ export default function ProjectDetail() {
                             onPressEdit={() => {
                               handleEditTask(task, column.id);
                             }}
+                            onPressPlay={() => startTimer({
+                              id: task.id,
+                              nome: task.nome,
+                              tempoExecucao: task.tempoExecucao,
+                            })}
                           />
                         ))
                       ) : (

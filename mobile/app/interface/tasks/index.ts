@@ -29,6 +29,7 @@ export interface ISummaryCard {
   onPressView?: () => void;
   onPressDelete?: () => void;
   onPressEdit?: () => void;
+  onPressPlay?: () => void;
 }
 
 export interface ITasksListNotFound {
