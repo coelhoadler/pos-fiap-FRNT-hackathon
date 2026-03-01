@@ -55,7 +55,7 @@ export default function EditTask() {
     minutes: "00",
   });
 
-  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "" });
+  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "", columnId: "" });
 
   const statuses: TaskStatus[] = [
     "não iniciada",
@@ -101,7 +101,7 @@ export default function EditTask() {
     });
 
     setTempColumn({ id: currentColumnId, name: currentColumnName });
-    setErrors({ nome: "", dataFinalizar: "" });
+    setErrors({ nome: "", dataFinalizar: "", columnId: "" });
   };
 
   useFocusEffect(
@@ -124,11 +124,16 @@ export default function EditTask() {
   };
 
   const handleUpdate = async () => {
-    let currentErrors = { nome: "", dataFinalizar: "" };
+    let currentErrors = { nome: "", dataFinalizar: "", columnId: "" };
     let hasError = false;
 
     if (!formData.nome.trim()) {
       currentErrors.nome = "O nome da tarefa é obrigatório";
+      hasError = true;
+    }
+
+    if (!formData.columnId) {
+      currentErrors.columnId = "A coluna destino é obrigatória";
       hasError = true;
     }
 
@@ -258,26 +263,33 @@ export default function EditTask() {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => {
-                setTempColumn({
-                  id: formData.columnId,
-                  name: formData.columnName,
-                });
-                setOpenModalColumn(true);
-              }}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Coluna Destino
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text style={styles.selectedItemBodyText}>
-                  {formData.columnName || "Selecionar coluna"}
-                </Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                style={styles.selectedItem}
+                onPress={() => {
+                  setTempColumn({
+                    id: formData.columnId,
+                    name: formData.columnName,
+                  });
+                  setOpenModalColumn(true);
+                  setErrors({ ...errors, columnId: "" });
+                }}
+              >
+                <View style={genericFormStyles(colorScheme).wrapperRequiredIndication}>
+                  <Text style={genericFormStyles(colorScheme).requiredIndication}>*</Text>
+                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                    Coluna Destino
+                  </Text>
+                </View>
+                <View style={styles.selectedItemBody}>
+                  <Text style={styles.selectedItemBodyText}>
+                    {formData.columnName || "Selecionar coluna"}
+                  </Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {errors.columnId ? <FormErrorMessage message={errors.columnId} /> : null}
+            </View>
           </View>
 
           <View>

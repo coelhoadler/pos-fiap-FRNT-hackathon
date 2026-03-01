@@ -61,7 +61,7 @@ export default function AddTask() {
   };
 
   const [form, setForm] = useState(initialState);
-  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "" });
+  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "", columnId: "" });
 
   const priorities: TaskPriority[] = ["baixa", "media", "alta", "urgente"];
   const statuses: TaskStatus[] = [
@@ -87,7 +87,7 @@ export default function AddTask() {
         columnId: params.columnId || "",
         columnName: params.columnName || "",
       });
-      setErrors({ nome: "", dataFinalizar: "" });
+      setErrors({ nome: "", dataFinalizar: "", columnId: "" });
       setSuccessMessage(false);
       setErrorMessage(false);
       setLoading(false);
@@ -107,11 +107,16 @@ export default function AddTask() {
   };
 
   const handleSave = async () => {
-    let currentErrors = { nome: "", dataFinalizar: "" };
+    let currentErrors = { nome: "", dataFinalizar: "", columnId: "" };
     let hasError = false;
 
     if (!form.nome.trim()) {
       currentErrors.nome = "O nome da tarefa é obrigatório";
+      hasError = true;
+    }
+
+    if (!form.columnId) {
+      currentErrors.columnId = "A coluna destino é obrigatória";
       hasError = true;
     }
 
@@ -261,23 +266,30 @@ export default function AddTask() {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => {
-                setTempColumn({ id: form.columnId, name: form.columnName });
-                setOpenModalColumn(true);
-              }}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Coluna Destino
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text style={styles.selectedItemBodyText}>
-                  {form.columnName || "Selecionar coluna"}
-                </Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                style={styles.selectedItem}
+                onPress={() => {
+                  setTempColumn({ id: form.columnId, name: form.columnName });
+                  setOpenModalColumn(true);
+                  setErrors({ ...errors, columnId: "" });
+                }}
+              >
+                <View style={genericFormStyles(colorScheme).wrapperRequiredIndication}>
+                  <Text style={genericFormStyles(colorScheme).requiredIndication}>*</Text>
+                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                    Coluna Destino
+                  </Text>
+                </View>
+                <View style={styles.selectedItemBody}>
+                  <Text style={styles.selectedItemBodyText}>
+                    {form.columnName || "Selecionar coluna"}
+                  </Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {errors.columnId ? <FormErrorMessage message={errors.columnId} /> : null}
+            </View>
           </View>
 
           <View>
