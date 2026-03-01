@@ -14,6 +14,7 @@ import {
   Clock,
   Columns,
   Pencil,
+  Play,
   Trash2,
   User,
 } from "lucide-react-native";
@@ -124,6 +125,9 @@ export default function TaskDetail() {
 
         {/* SEÇÃO: AÇÕES */}
         <View style={styles.actionsWrapper}>
+          <Pressable onPress={() => {}}>
+            <Play size={22} color={colors.colorPrimary} />
+          </Pressable>
           <Pressable onPress={() => setShowDeleteModal(true)}>
             <Trash2 size={22} color={colors.colorPrimary} />
           </Pressable>
@@ -161,17 +165,21 @@ export default function TaskDetail() {
           {/* SEÇÃO: INFORMAÇÕES TÉCNICAS */}
           <View style={styles.othersInfosWrapper}>
             {otherInfos.map((item, index) => (
-              <View key={index} style={styles.otherInfosItems}>
-                <View style={styles.otherInfosicon}>
-                  <item.icon size={20} color={colors.colorPrimary} />
-                </View>
-                <View style={{ width: "100%" }}>
-                  <Text style={styles.otherInfosLabel}>{item.label}</Text>
-                  <Text style={styles.otherInfosTitle}>
-                    {item.value || "Não definido"}
-                  </Text>
-                </View>
-              </View>
+              <>
+                {item.value && (
+                  <View key={index} style={styles.otherInfosItems}>
+                    <View style={styles.otherInfosicon}>
+                      <item.icon size={20} color={colors.colorPrimary} />
+                    </View>
+                    <View style={{ width: "100%" }}>
+                      <Text style={styles.otherInfosLabel}>{item.label}</Text>
+                      <Text style={styles.otherInfosTitle}>
+                        {item.value || "Não definido"}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </>
             ))}
           </View>
         </View>

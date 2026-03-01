@@ -5,6 +5,7 @@ import {
   Calendar,
   Eye,
   Pencil,
+  Play,
   Timer,
   Trash2,
   User,
@@ -25,6 +26,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   time,
   onPressDelete,
   onPressEdit,
+  onPressPomodoro,
   ...props
 }) => {
   const colorSchemeRaw = useColorScheme();
@@ -38,24 +40,38 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
         <View style={styles.header}>
           {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
-            <Pressable onPress={onPressDelete}>
-              <Trash2
-                size={sizeIcon}
-                color={colorIcon ? colorIcon : colors.colorWhite}
-              />
-            </Pressable>
-            <Pressable onPress={onPressEdit}>
-              <Pencil
-                size={sizeIcon}
-                color={colorIcon ? colorIcon : colors.colorWhite}
-              />
-            </Pressable>
-            <Pressable onPress={onPressView}>
-              <Eye
-                size={sizeIcon}
-                color={colorIcon ? colorIcon : colors.colorWhite}
-              />
-            </Pressable>
+            {onPressPomodoro && (
+              <Pressable onPress={onPressPomodoro}>
+                <Play
+                  size={sizeIcon}
+                  color={colorIcon ? colorIcon : colors.colorWhite}
+                />
+              </Pressable>
+            )}
+            {onPressDelete && (
+              <Pressable onPress={onPressDelete}>
+                <Trash2
+                  size={sizeIcon}
+                  color={colorIcon ? colorIcon : colors.colorWhite}
+                />
+              </Pressable>
+            )}
+            {onPressEdit && (
+              <Pressable onPress={onPressEdit}>
+                <Pencil
+                  size={sizeIcon}
+                  color={colorIcon ? colorIcon : colors.colorWhite}
+                />
+              </Pressable>
+            )}
+            {onPressView && (
+              <Pressable onPress={onPressView}>
+                <Eye
+                  size={sizeIcon}
+                  color={colorIcon ? colorIcon : colors.colorWhite}
+                />
+              </Pressable>
+            )}
           </View>
         </View>
 

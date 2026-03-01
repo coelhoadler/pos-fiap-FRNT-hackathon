@@ -140,6 +140,9 @@ export default function AddTask() {
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
       <Text style={styles.title}>Criar Tarefa</Text>
+      <Text style={styles.subtitle}>
+        Preencha os campos abaixo para criar uma nova tarefa.
+      </Text>
 
       <ScrollView
         style={styles.formContainer}
@@ -235,7 +238,7 @@ export default function AddTask() {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.selectedItem}
               onPress={() => setOpenModalTime(true)}
             >
@@ -248,7 +251,7 @@ export default function AddTask() {
                 >{`${form.hours}h ${form.minutes}min`}</Text>
                 <ChevronDown size={20} color={colors.text} />
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <Input

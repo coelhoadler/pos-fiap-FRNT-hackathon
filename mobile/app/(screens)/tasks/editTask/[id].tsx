@@ -142,7 +142,10 @@ export default function EditTask() {
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
-      <Text style={styles.title}>Editar Tarefa</Text>
+      {/* <Text style={styles.title}>Editar Tarefa</Text> */}
+      <Text style={styles.subtitle}>
+        Preencha os campos abaixo para editar a tarefa.
+      </Text>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.formContainer}
@@ -222,7 +225,7 @@ export default function EditTask() {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.selectedItem}
               onPress={() => setOpenModalTime(true)}
             >
@@ -235,7 +238,7 @@ export default function EditTask() {
                 >{`${formData.hours}h ${formData.minutes}min`}</Text>
                 <ChevronDown size={20} color={colors.text} />
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           <Input
