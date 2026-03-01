@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useRef, useCallback, useEffect } from "react";
+import { playDoneSound } from "@/app/services/soundService";
 
 export interface ActiveTask {
   id: string | undefined;
@@ -96,6 +97,7 @@ export function TaskTimerProvider({ children }: { children: React.ReactNode }) {
           if (prev <= 1) {
             clearTimer();
             setIsRunning(false);
+            playDoneSound();
             return 0;
           }
           return prev - 1;
