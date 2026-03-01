@@ -2,24 +2,27 @@ import { ThemedView } from "@/app/components/themed-view";
 import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
-import { deleteTask } from "@/app/services/tasks";
+import { ITaskService } from "@/app/interface/tasks";
+import { getProjectById } from "@/app/services/projects";
+import { deleteTask, getTaskById } from "@/app/services/tasks";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
+import { useFocusEffect } from "@react-navigation/native";
 import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import {
   Activity,
   AlertCircle,
   ArrowLeft,
   Calendar,
-  Clock,
   Columns,
   Pencil,
   Play,
   Trash2,
   User,
 } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
+  ActivityIndicator,
   Pressable,
   ScrollView,
   Text,
@@ -34,53 +37,75 @@ export default function TaskDetail() {
   const colors = Colors[colorScheme];
   const router = useRouter();
 
+  const params = useLocalSearchParams<{ id: string; projectId: string }>();
+
+  const [task, setTask] = useState<ITaskService | null>(null);
+  const [columnName, setColumnName] = useState<string>("");
+  const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
 
-  const params = useLocalSearchParams<{
-    id: string;
-    projectId: string;
-    nome: string;
-    descricao: string;
-    dataFinalizar: string;
-    tempoExecucao: string;
-    author: string;
-    status: string;
-    priority: string;
-    columnId: string;
-    columnName: string;
-  }>();
+  const fetchTaskData = async () => {
+    try {
+      setLoading(true);
+      if (params.projectId && params.id) {
+        const taskData = await getTaskById(params.projectId, params.id);
+        setTask(taskData);
+
+        if (taskData?.columnId) {
+          const projectData = await getProjectById(params.projectId);
+          const currentColumn = projectData?.columns?.find(
+            (col: any) => col.id === taskData.columnId,
+          );
+          if (currentColumn) {
+            setColumnName(currentColumn.name);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao carregar dados do detalhe:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTaskData();
+    }, [params.id, params.projectId]),
+  );
 
   const otherInfos = [
-    { label: "Status", value: params.status, icon: Activity },
+    { label: "Status", value: task?.status, icon: Activity },
     {
       label: "Prioridade",
-      value: params.priority,
+      value: task?.priority,
       icon: AlertCircle,
     },
     {
       label: "Coluna atual",
-      value: params.columnName,
+      value: columnName,
       icon: Columns,
     },
     {
       label: "Prazo de entrega",
-      value: params.dataFinalizar,
+      value: task?.dataFinalizar,
       icon: Calendar,
     },
-    {
-      label: "Tempo estimado",
-      value: params.tempoExecucao,
-      icon: Clock,
-    },
-    { label: "Responsável", value: params.author, icon: User },
+
+    { label: "Responsável", value: task?.author, icon: User },
   ];
 
   const handleEdit = () => {
     router.push({
       pathname: "/(screens)/home/(tabs)/tasks/editTask/[id]",
-      params: { ...params },
+      params: {
+        id: params.id,
+        projectId: params.projectId,
+        ...task,
+        columnName: columnName,
+      },
     });
   };
 
@@ -96,6 +121,19 @@ export default function TaskDetail() {
       setIsDeleting(false);
     }
   };
+
+  if (loading && !task) {
+    return (
+      <ThemedView
+        style={[
+          genericStyle(colorScheme).container,
+          { justifyContent: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color={colors.colorPrimary} />
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
@@ -121,9 +159,8 @@ export default function TaskDetail() {
           alignItems: "center",
         }}
       >
-        <Text style={styles.title}>{params.nome || "Tarefa"}</Text>
+        <Text style={styles.title}>{task?.nome || "Tarefa"}</Text>
 
-        {/* SEÇÃO: AÇÕES */}
         <View style={styles.actionsWrapper}>
           <Pressable onPress={() => {}}>
             <Play size={22} color={colors.colorPrimary} />
@@ -155,49 +192,50 @@ export default function TaskDetail() {
             </View>
             <View style={styles.wrapperDescripionContent}>
               <Text style={styles.descriptionText}>
-                {params.descricao || "Nenhuma descrição fornecida."}
+                {task?.descricao || "Nenhuma descrição fornecida."}
               </Text>
             </View>
           </View>
 
-          <View style={{ height: 1, backgroundColor: colors.colorPrimary }} />
+          <View
+            style={{
+              height: 1,
+              backgroundColor: colors.colorPrimary,
+              marginVertical: 15,
+            }}
+          />
 
-          {/* SEÇÃO: INFORMAÇÕES TÉCNICAS */}
           <View style={styles.othersInfosWrapper}>
             {otherInfos.map((item, index) => (
-              <>
-                {item.value && (
-                  <View key={index} style={styles.otherInfosItems}>
+              <React.Fragment key={index}>
+                {item.value ? (
+                  <View style={styles.otherInfosItems}>
                     <View style={styles.otherInfosicon}>
                       <item.icon size={20} color={colors.colorPrimary} />
                     </View>
                     <View style={{ width: "100%" }}>
                       <Text style={styles.otherInfosLabel}>{item.label}</Text>
-                      <Text style={styles.otherInfosTitle}>
-                        {item.value || "Não definido"}
-                      </Text>
+                      <Text style={styles.otherInfosTitle}>{item.value}</Text>
                     </View>
                   </View>
-                )}
-              </>
+                ) : null}
+              </React.Fragment>
             ))}
           </View>
         </View>
       </ScrollView>
 
-      {/* Modal de Confirmação de Exclusão */}
       {showDeleteModal && (
         <Modal
           styleContainer={{ top: 20 }}
           contentType="withActions"
-          text={`Deseja realmente excluir a tarefa "${params.nome}"?`}
+          text={`Deseja realmente excluir a tarefa "${task?.nome}"?`}
           onPressActionB={confirmDelete}
           onPressActionA={() => setShowDeleteModal(false)}
           onClose={() => setShowDeleteModal(false)}
         />
       )}
 
-      {/* Modal de Sucesso */}
       {successDelete && (
         <Modal
           style={{ width: "100%" }}
@@ -210,7 +248,6 @@ export default function TaskDetail() {
         />
       )}
 
-      {/* Modal de Loading */}
       {isDeleting && (
         <Modal
           style={{ width: "100%" }}
