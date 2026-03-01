@@ -8,7 +8,7 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
   return StyleSheet.create({
     container: {
       paddingVertical: 20,
-      paddingBottom: 60
+      paddingBottom: 100
     },
     formContainer: {
       width: '100%',
