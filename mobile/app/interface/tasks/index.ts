@@ -23,13 +23,14 @@ export interface ISummaryCard {
   description: string;
   colorIcon?: string;
   sizeIcon?: number;
-  time: string;
+  time?: string;
   author: string;
   date: string;
   onPressView?: () => void;
   onPressDelete?: () => void;
   onPressEdit?: () => void;
   onPressPlay?: () => void;
+  onPressPomodoro?: () => void;
 }
 
 export interface ITasksListNotFound {
