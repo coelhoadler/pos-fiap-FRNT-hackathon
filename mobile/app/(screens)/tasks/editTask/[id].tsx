@@ -1,5 +1,6 @@
 import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
+import { FormErrorMessage } from "@/app/components/ui/errorMessages/forms";
 import { Input } from "@/app/components/ui/input";
 import { Modal } from "@/app/components/ui/modal";
 import { TextArea } from "@/app/components/ui/textarea";
@@ -54,6 +55,8 @@ export default function EditTask() {
     minutes: "00",
   });
 
+  const [errors, setErrors] = useState({ nome: "", dataFinalizar: "" });
+
   const statuses: TaskStatus[] = [
     "não iniciada",
     "em andamento",
@@ -63,7 +66,6 @@ export default function EditTask() {
 
   const loadInitialData = async () => {
     let currentColumnName = "";
-
     let currentColumnId = params.columnId || "";
 
     if (params.projectId) {
@@ -99,6 +101,7 @@ export default function EditTask() {
     });
 
     setTempColumn({ id: currentColumnId, name: currentColumnName });
+    setErrors({ nome: "", dataFinalizar: "" });
   };
 
   useFocusEffect(
@@ -117,9 +120,57 @@ export default function EditTask() {
     if (cleaned.length > 4)
       formatted = `${formatted.slice(0, 5)}/${cleaned.slice(4, 8)}`;
     setFormData({ ...formData, dataFinalizar: formatted });
+    setErrors({ ...errors, dataFinalizar: "" });
   };
 
   const handleUpdate = async () => {
+    let currentErrors = { nome: "", dataFinalizar: "" };
+    let hasError = false;
+
+    if (!formData.nome.trim()) {
+      currentErrors.nome = "O nome da tarefa é obrigatório";
+      hasError = true;
+    }
+
+    if (formData.dataFinalizar.length > 0) {
+      if (formData.dataFinalizar.length < 10) {
+        currentErrors.dataFinalizar = "Formato inválido (DD/MM/AAAA)";
+        hasError = true;
+      } else {
+        const [day, month, year] = formData.dataFinalizar
+          .split("/")
+          .map(Number);
+        const inputDate = new Date(year, month - 1, day);
+
+        const isValidDate =
+          inputDate.getFullYear() === year &&
+          inputDate.getMonth() === month - 1 &&
+          inputDate.getDate() === day;
+        const errorDateText = "Insira uma data válida";
+
+        if (!isValidDate) {
+          currentErrors.dataFinalizar = errorDateText;
+          hasError = true;
+        } else if (year > 2100) {
+          currentErrors.dataFinalizar = errorDateText;
+          hasError = true;
+        } else {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          if (inputDate < today) {
+            currentErrors.dataFinalizar = errorDateText;
+            hasError = true;
+          }
+        }
+      }
+    }
+
+    if (hasError) {
+      setErrors(currentErrors);
+      return;
+    }
+
     setLoading(true);
     try {
       const tempoTotal = `${formData.hours}h ${formData.minutes}min`;
@@ -142,7 +193,6 @@ export default function EditTask() {
 
   return (
     <ThemedView style={[genericStyle(colorScheme).container, styles.container]}>
-      {/* <Text style={styles.title}>Editar Tarefa</Text> */}
       <Text style={styles.subtitle}>
         Preencha os campos abaixo para editar a tarefa.
       </Text>
@@ -155,8 +205,12 @@ export default function EditTask() {
             <Input
               text="Nome da tarefa"
               value={formData.nome}
-              onChangeText={(t) => setFormData({ ...formData, nome: t })}
+              onChangeText={(t) => {
+                setFormData({ ...formData, nome: t });
+                setErrors({ ...errors, nome: "" });
+              }}
             />
+            {errors.nome ? <FormErrorMessage message={errors.nome} /> : null}
           </View>
           <View>
             <TextArea
@@ -224,28 +278,22 @@ export default function EditTask() {
                 <ChevronDown size={20} color={colors.text} />
               </View>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => setOpenModalTime(true)}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Tempo Estimado
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text
-                  style={styles.selectedItemBodyText}
-                >{`${formData.hours}h ${formData.minutes}min`}</Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity> */}
           </View>
 
-          <Input
-            text="Data para finalizar"
-            value={formData.dataFinalizar}
-            onChangeText={handleDateChange}
-          />
+          <View>
+            <Input
+              text="Data para finalizar"
+              value={formData.dataFinalizar}
+              onChangeText={handleDateChange}
+              placeholder="DD/MM/AAAA"
+              keyboardType="numeric"
+              maxLength={10}
+            />
+            {errors.dataFinalizar ? (
+              <FormErrorMessage message={errors.dataFinalizar} />
+            ) : null}
+          </View>
+
           <Button
             title="Salvar Alterações"
             onPress={handleUpdate}
