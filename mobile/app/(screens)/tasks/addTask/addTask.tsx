@@ -56,6 +56,7 @@ export default function AddTask() {
     nome: "",
     descricao: "",
     dataFinalizar: "",
+    tempoExecucao: "0h 00min",
     status: "não iniciada" as TaskStatus,
     priority: "baixa" as TaskPriority,
     columnId: params.columnId || "",
@@ -69,6 +70,7 @@ export default function AddTask() {
     nome: "",
     dataFinalizar: "",
     columnId: "",
+    tempoExecucao: "",
   });
 
   const priorities: TaskPriority[] = ["baixa", "media", "alta", "urgente"];
@@ -95,7 +97,12 @@ export default function AddTask() {
         columnId: params.columnId || "",
         columnName: params.columnName || "",
       });
-      setErrors({ nome: "", dataFinalizar: "", columnId: "" });
+      setErrors({
+        nome: "",
+        dataFinalizar: "",
+        columnId: "",
+        tempoExecucao: "",
+      });
       setSuccessMessage(false);
       setErrorMessage(false);
       setLoading(false);
@@ -116,7 +123,12 @@ export default function AddTask() {
   };
 
   const handleSave = async () => {
-    let currentErrors = { nome: "", dataFinalizar: "", columnId: "" };
+    let currentErrors = {
+      nome: "",
+      dataFinalizar: "",
+      columnId: "",
+      tempoExecucao: "",
+    };
     let hasError = false;
 
     if (!form.nome.trim()) {
@@ -130,6 +142,14 @@ export default function AddTask() {
     }
     if (!form.dataFinalizar.trim()) {
       currentErrors.dataFinalizar = "A data finalizar é obrigatória";
+      hasError = true;
+    }
+    if (!form.hours.trim() || !form.minutes.trim()) {
+      currentErrors.tempoExecucao = "O tempo estimado é obrigatório";
+      hasError = true;
+    }
+    if (form.hours === "0" && form.minutes === "00") {
+      currentErrors.tempoExecucao = "O tempo estimado é obrigatório";
       hasError = true;
     }
 
@@ -324,11 +344,71 @@ export default function AddTask() {
                 <FormErrorMessage message={errors.columnId} />
               ) : null}
             </View>
+
+            <View>
+              <TouchableOpacity
+                style={[
+                  styles.selectedItem,
+                  {
+                    paddingHorizontal: 0,
+                    width: "100%",
+                  },
+                ]}
+                onPress={() => setOpenModalTime(true)}
+              >
+                <View
+                  style={
+                    genericFormStyles(colorScheme).wrapperRequiredIndication
+                  }
+                >
+                  <Text
+                    style={genericFormStyles(colorScheme).requiredIndication}
+                  >
+                    *
+                  </Text>
+
+                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                    Tempo Estimado
+                  </Text>
+                </View>
+                <View style={[styles.selectedItemBody, { marginTop: 7 }]}>
+                  <Text
+                    style={styles.selectedItemBodyText}
+                  >{`${form.hours}h ${form.minutes}min`}</Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {errors.tempoExecucao ? (
+                <FormErrorMessage
+                  style={{
+                    paddingVertical: 3,
+                    justifyContent: "flex-start",
+                    paddingHorizontal: 3,
+                  }}
+                  message={errors.tempoExecucao}
+                />
+              ) : null}
+            </View>
           </View>
 
           <View>
             <Input
-              text="Data para finalizar"
+              text={
+                <View
+                  style={[
+                    genericFormStyles(colorScheme).wrapperRequiredIndication,
+                  ]}
+                >
+                  <Text
+                    style={[genericFormStyles(colorScheme).requiredIndication]}
+                  >
+                    *
+                  </Text>
+                  <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
+                    Data para finalizar
+                  </Text>
+                </View>
+              }
               value={form.dataFinalizar}
               onChangeText={handleDateChange}
               placeholder="DD/MM/AAAA"

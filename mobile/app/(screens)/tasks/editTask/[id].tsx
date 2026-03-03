@@ -51,6 +51,7 @@ export default function EditTask() {
     nome: "",
     descricao: "",
     dataFinalizar: "",
+    tempoExecucao: "",
     status: "não iniciada" as TaskStatus,
     priority: "baixa" as TaskPriority,
     columnId: "",
@@ -62,6 +63,7 @@ export default function EditTask() {
   const [errors, setErrors] = useState({
     nome: "",
     dataFinalizar: "",
+    tempoExecucao: "",
     columnId: "",
   });
 
@@ -104,12 +106,13 @@ export default function EditTask() {
       priority: (params.priority as TaskPriority) || "baixa",
       columnId: currentColumnId,
       columnName: currentColumnName,
+      tempoExecucao: params.tempoExecucao || "",
       hours: h,
       minutes: m,
     });
 
     setTempColumn({ id: currentColumnId, name: currentColumnName });
-    setErrors({ nome: "", dataFinalizar: "", columnId: "" });
+    setErrors({ nome: "", dataFinalizar: "", columnId: "", tempoExecucao: "" });
   };
 
   useFocusEffect(
@@ -133,7 +136,12 @@ export default function EditTask() {
   };
 
   const handleUpdate = async () => {
-    let currentErrors = { nome: "", dataFinalizar: "", columnId: "" };
+    let currentErrors = {
+      nome: "",
+      dataFinalizar: "",
+      columnId: "",
+      tempoExecucao: "",
+    };
     let hasError = false;
 
     if (!formData.nome.trim()) {
@@ -148,6 +156,15 @@ export default function EditTask() {
 
     if (!formData.dataFinalizar.trim()) {
       currentErrors.dataFinalizar = "A data finalizar é obrigatória";
+      hasError = true;
+    }
+
+    if (!formData.hours.trim() || !formData.minutes.trim()) {
+      currentErrors.tempoExecucao = "O tempo estimado é obrigatório";
+      hasError = true;
+    }
+    if (formData.hours === "0" && formData.minutes === "00") {
+      currentErrors.tempoExecucao = "O tempo estimado é obrigatório";
       hasError = true;
     }
 
@@ -325,11 +342,70 @@ export default function EditTask() {
                 <FormErrorMessage message={errors.columnId} />
               ) : null}
             </View>
+
+            <View>
+              <TouchableOpacity
+                style={[
+                  styles.selectedItem,
+                  {
+                    paddingHorizontal: 0,
+                    width: "100%",
+                  },
+                ]}
+                onPress={() => setOpenModalTime(true)}
+              >
+                <View
+                  style={
+                    genericFormStyles(colorScheme).wrapperRequiredIndication
+                  }
+                >
+                  <Text
+                    style={genericFormStyles(colorScheme).requiredIndication}
+                  >
+                    *
+                  </Text>
+                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                    Tempo Estimado
+                  </Text>
+                </View>
+                <View style={styles.selectedItemBody}>
+                  <Text
+                    style={styles.selectedItemBodyText}
+                  >{`${formData.hours}h ${formData.minutes}min`}</Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+              {errors.tempoExecucao ? (
+                <FormErrorMessage
+                  style={{
+                    paddingVertical: 3,
+                    justifyContent: "flex-start",
+                    paddingHorizontal: 3,
+                  }}
+                  message={errors.tempoExecucao}
+                />
+              ) : null}
+            </View>
           </View>
 
           <View>
             <Input
-              text="Data para finalizar"
+              text={
+                <View
+                  style={[
+                    genericFormStyles(colorScheme).wrapperRequiredIndication,
+                  ]}
+                >
+                  <Text
+                    style={[genericFormStyles(colorScheme).requiredIndication]}
+                  >
+                    *
+                  </Text>
+                  <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
+                    Data para finalizar
+                  </Text>
+                </View>
+              }
               value={formData.dataFinalizar}
               onChangeText={handleDateChange}
               placeholder="DD/MM/AAAA"
