@@ -1,6 +1,7 @@
 import { baseColors } from "@/app/constants/theme";
 import { ILegendContentItem } from "@/app/interface/modal";
 import {
+  Calendar,
   CirclePlus,
   EllipsisVertical,
   Eye,
@@ -46,6 +47,10 @@ export const detailProjectLegendContent: ILegendContentItem[] = [
     description: "Excluir projeto, colunas e tarefas",
     icon: <Trash size={20} color={baseColors.text} />,
     styleLegendIcon: { marginTop: 5 },
+  },
+  {
+    description: "Data para finalização da tarefa.",
+    icon: <Calendar size={20} color={baseColors.text} />,
   },
   {
     icon: <CirclePlus size={20} color={baseColors.text} />,
