@@ -7,7 +7,7 @@ import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { genericStyle } from "@/app/styles/genericStyles";
 import { useFocusEffect } from "@react-navigation/native";
 import { router, Tabs } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { getDropdownItemsProjects, legendContentItems } from "./constants";
 import { createStyles } from "./styles";
@@ -16,6 +16,8 @@ import { ProjectsNotFound } from "@/app/components/projects/projectsNotFound";
 import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
 import { IProjectService } from "@/app/interface/project";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
+import { getPreferences } from "@/app/services/preferences";
 import { deleteProject, getProjects } from "@/app/services/projects";
 
 export default function Projects() {
@@ -32,6 +34,22 @@ export default function Projects() {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [projectToDelete, setProjectToDelete] =
     useState<IProjectService | null>(null);
+
+  const [summaryModeEnabled, setSummaryModeEnabled] = useState(false);
+
+  const loadPreferences = () => {
+    getPreferences().then((prefs) => {
+      setSummaryModeEnabled(!!prefs?.summaryMode);
+    });
+  };
+
+  useEffect(() => {
+    loadPreferences();
+    const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadPreferences);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const navigationToNewProject = () => {
     router.navigate("/(screens)/home/(tabs)/projects/addProject");
@@ -164,6 +182,7 @@ export default function Projects() {
                     id={item.id!}
                     nameProject={item.name}
                     openDropdownActions={isDropDownOpened}
+                    summaryMode={summaryModeEnabled}
                     onPressMoreOptions={() => handleToggleDropdown(item.id!)}
                     dropdownActions={
                       <DropdownContent
@@ -188,7 +207,16 @@ export default function Projects() {
 
       {openModalLegend && (
         <ModalLegendProjects
-          legendContentItems={legendContentItems}
+          legendContentItems={
+            summaryModeEnabled
+              ? legendContentItems.filter(
+                  (item) =>
+                    typeof item.description === "string" &&
+                    !item.description.includes("Excluir") &&
+                    !item.description.includes("Editar")
+                )
+              : legendContentItems
+          }
           open={openModalLegend}
           onClose={() => setOpenModalLegend(false)}
         />

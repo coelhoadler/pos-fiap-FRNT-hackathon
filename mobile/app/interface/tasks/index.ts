@@ -19,6 +19,7 @@ export interface ITaskService {
 
 export interface ISummaryCard {
   style?: StyleProp<ViewStyle>;
+  styleHeader?: StyleProp<ViewStyle>;
   title: string;
   description: string;
   colorIcon?: string;
@@ -31,6 +32,7 @@ export interface ISummaryCard {
   onPressEdit?: () => void;
   onPressPlay?: () => void;
   onPressPomodoro?: () => void;
+  summaryMode?: boolean;
 }
 
 export interface ITasksListNotFound {

@@ -1,8 +1,13 @@
+import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
+import { ModalLegendTasks } from "@/app/components/tasks/modalLegend";
 import { ThemedView } from "@/app/components/themed-view";
+import { Button } from "@/app/components/ui/button";
 import { Modal } from "@/app/components/ui/modal";
 import { Colors } from "@/app/constants/theme";
 import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { ITaskService } from "@/app/interface/tasks";
+import { eventBus, PREFERENCES_UPDATED } from "@/app/services/eventBus";
+import { getPreferences } from "@/app/services/preferences";
 import { getProjectById } from "@/app/services/projects";
 import { deleteTask, getTaskById } from "@/app/services/tasks";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
@@ -29,6 +34,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { legendContentItems } from "../constants";
 import { createStyles } from "./styles";
 import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 
@@ -47,6 +53,7 @@ export default function TaskDetail() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
   const { startTimer, resumeTimer, isRunning, timeLeftSeconds } = useTaskTimer();
+  const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const fetchTaskData = async () => {
     try {
@@ -72,9 +79,26 @@ export default function TaskDetail() {
     }
   };
 
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
+  const [summaryModeEnabled, setSummaryModeEnabled] = useState(false);
+
+  const loadPreferences = () => {
+    getPreferences().then((prefs) => {
+      setSummaryModeEnabled(!!prefs?.summaryMode);
+    });
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchTaskData();
+      setOpenModalLegend(false);
+      loadPreferences();
+
+      const unsubscribe = eventBus.on(PREFERENCES_UPDATED, loadPreferences);
+      return () => {
+        unsubscribe();
+        setShowMoreInfo(false);
+      };
     }, [params.id, params.projectId]),
   );
 
@@ -150,6 +174,12 @@ export default function TaskDetail() {
               <ArrowLeft color={colors.text} size={24} />
             </TouchableOpacity>
           ),
+          headerRight: () => (
+            <ActionsButtonsProjects
+              onlyInformationButton
+              openModal={() => setOpenModalLegend(true)}
+            />
+          ),
         }}
       />
 
@@ -213,26 +243,52 @@ export default function TaskDetail() {
             }}
           />
 
-          <View style={styles.othersInfosWrapper}>
-            {otherInfos.map((item, index) => (
-              <React.Fragment key={index}>
-                {item.value ? (
-                  <View style={styles.otherInfosItems}>
-                    <View style={styles.otherInfosicon}>
-                      <item.icon size={20} color={colors.colorPrimary} />
+          {summaryModeEnabled && !showMoreInfo ? (
+            <Button
+              title="Visualizar mais informações"
+              onPress={() => setShowMoreInfo(true)}
+              variant="outline"
+              style={{ marginTop: 10 }}
+            />
+          ) : (
+            <View style={styles.othersInfosWrapper}>
+              {otherInfos.map((item, index) => (
+                <React.Fragment key={index}>
+                  {item.value ? (
+                    <View style={styles.otherInfosItems}>
+                      <View style={styles.otherInfosicon}>
+                        <item.icon size={20} color={colors.colorPrimary} />
+                      </View>
+                      <View style={{ width: "100%" }}>
+                        <Text style={styles.otherInfosLabel}>{item.label}</Text>
+                        <Text style={styles.otherInfosTitle}>{item.value}</Text>
+                      </View>
                     </View>
-                    <View style={{ width: "100%" }}>
-                      <Text style={styles.otherInfosLabel}>{item.label}</Text>
-                      <Text style={styles.otherInfosTitle}>{item.value}</Text>
-                    </View>
-                  </View>
-                ) : null}
-              </React.Fragment>
-            ))}
-          </View>
+                  ) : null}
+                </React.Fragment>
+              ))}
+
+              {summaryModeEnabled && (
+                <Button
+                  title="Ocultar informações"
+                  onPress={() => setShowMoreInfo(false)}
+                  variant="outline"
+                  style={{ marginTop: 20 }}
+                />
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
 
+      {openModalLegend && (
+        <ModalLegendTasks
+          legendContentItems={legendContentItems}
+          subtitleContentItem="Explicando um pouco sobre a página de edição de tarefa."
+          open={openModalLegend}
+          onClose={() => setOpenModalLegend(false)}
+        />
+      )}
       {showDeleteModal && (
         <Modal
           styleContainer={{ top: 20 }}

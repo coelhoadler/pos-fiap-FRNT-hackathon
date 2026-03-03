@@ -10,8 +10,13 @@ import { useColorScheme } from "@/app/hooks/use-color-scheme";
 import { updateProject } from "@/app/services/projects";
 import { genericFormStyles } from "@/app/styles/genericFormStyles";
 import { genericStyle } from "@/app/styles/genericStyles";
-import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import {
+  Tabs,
+  useFocusEffect,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import { editProjectLegendContent } from "../constants";
@@ -49,6 +54,17 @@ export default function EditProject() {
   const [errors, setErrors] = useState({
     nomeProjeto: "",
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setOpenModalLegend(false);
+        setErrorMessage(false);
+        setSuccessMessage(false);
+        setLoadingToProjectsList(false);
+      };
+    }, []),
+  );
 
   const hasChanges =
     formData.nomeProjeto !== (name || "") ||

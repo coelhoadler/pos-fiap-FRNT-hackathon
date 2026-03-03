@@ -6,7 +6,7 @@ import {
   EllipsisVertical,
   Eye,
   Pencil,
-  Trash
+  Trash,
 } from "lucide-react-native";
 
 export const getDropdownItemsProjects = (
@@ -53,6 +53,10 @@ export const legendContentItems: ILegendContentItem[] = [
     description: "Visualizar mais opções de configuração do projeto.",
     icon: <EllipsisVertical size={24} color={baseColors.text} />,
     styleLegendIcon: { marginTop: 3 },
+  },
+  {
+    description: "Adicionar novo projeto",
+    icon: <CirclePlus size={20} color={baseColors.text} />,
   },
 ];
 
