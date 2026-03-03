@@ -146,6 +146,11 @@ export default function EditTask() {
       hasError = true;
     }
 
+    if (!formData.dataFinalizar.trim()) {
+      currentErrors.dataFinalizar = "A data finalizar é obrigatória";
+      hasError = true;
+    }
+
     if (formData.dataFinalizar.length > 0) {
       if (formData.dataFinalizar.length < 10) {
         currentErrors.dataFinalizar = "Formato inválido (DD/MM/AAAA)";

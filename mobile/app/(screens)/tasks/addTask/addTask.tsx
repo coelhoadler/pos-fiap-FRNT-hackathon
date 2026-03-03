@@ -128,6 +128,10 @@ export default function AddTask() {
       currentErrors.columnId = "A coluna destino é obrigatória";
       hasError = true;
     }
+    if (!form.dataFinalizar.trim()) {
+      currentErrors.dataFinalizar = "A data finalizar é obrigatória";
+      hasError = true;
+    }
 
     if (form.dataFinalizar.length > 0) {
       if (form.dataFinalizar.length < 10) {
