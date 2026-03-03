@@ -104,7 +104,6 @@ export const LayoutWithMenu: React.FC = () => {
         <Tabs.Screen
           name="preferences"
           options={{
-            headerLeft: () => null,
             title: "Preferências",
             tabBarIcon: ({ color }) => (
               <IconSymbol size={28} name="gearshape.fill" color={color} />
