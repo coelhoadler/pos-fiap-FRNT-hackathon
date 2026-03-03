@@ -8,13 +8,9 @@ export const preferencesConstantsItems: TPreferencesItems[] = [
   },
   {
     id: "summaryMode",
-    title: "Modo resumo",
-    description: "Descrição modo resumo",
-  },
-  {
-    id: "simpleMode",
     title: "Modo simplificado",
-    description: "Descrição modo simplificado",
+    description: "Exibe apenas os dados essenciais do projeto",
   },
+
 
 ];
