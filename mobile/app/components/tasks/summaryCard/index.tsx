@@ -13,6 +13,7 @@ import {
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { createStyles } from "./styles";
+import { useTaskTimer } from "../taskTimer/task-timer-context";
 
 export const SummaryCard: React.FC<ISummaryCard> = ({
   style,
@@ -26,7 +27,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   time,
   onPressDelete,
   onPressEdit,
-  onPressPomodoro,
+  onPressPlay,
   summaryMode,
   styleHeader,
   ...props
@@ -35,6 +36,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   const colorScheme: "light" | "dark" = colorSchemeRaw ?? "dark";
   const colors = Colors[colorScheme];
   const styles = createStyles(colorScheme);
+  const { isRunning } = useTaskTimer();
 
   return (
     <View style={[styles.container, style]}>
@@ -42,38 +44,33 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
         <View style={[styles.header, styleHeader]}>
           {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
-            {onPressPomodoro && (
-              <Pressable onPress={onPressPomodoro}>
+            {onPressPlay && !isRunning && (
+              <Pressable onPress={onPressPlay}>
                 <Play
                   size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
+                  color="#4CAF50"
+                  fill="#4CAF50"
                 />
               </Pressable>
             )}
-            {onPressDelete && (
-              <Pressable onPress={onPressDelete}>
-                <Trash2
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-              </Pressable>
-            )}
-            {onPressEdit && (
-              <Pressable onPress={onPressEdit}>
-                <Pencil
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-              </Pressable>
-            )}
-            {onPressView && (
-              <Pressable onPress={onPressView}>
-                <Eye
-                  size={sizeIcon}
-                  color={colorIcon ? colorIcon : colors.colorWhite}
-                />
-              </Pressable>
-            )}
+            <Pressable onPress={onPressDelete}>
+              <Trash2
+                size={sizeIcon}
+                color={colorIcon ? colorIcon : colors.colorWhite}
+              />
+            </Pressable>
+            <Pressable onPress={onPressEdit}>
+              <Pencil
+                size={sizeIcon}
+                color={colorIcon ? colorIcon : colors.colorWhite}
+              />
+            </Pressable>
+            <Pressable onPress={onPressView}>
+              <Eye
+                size={sizeIcon}
+                color={colorIcon ? colorIcon : colors.colorWhite}
+              />
+            </Pressable>
           </View>
         </View>
 

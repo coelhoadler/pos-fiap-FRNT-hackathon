@@ -30,6 +30,7 @@ export interface ISummaryCard {
   onPressView?: () => void;
   onPressDelete?: () => void;
   onPressEdit?: () => void;
+  onPressPlay?: () => void;
   onPressPomodoro?: () => void;
   summaryMode?: boolean;
 }

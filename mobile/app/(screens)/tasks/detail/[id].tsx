@@ -36,6 +36,7 @@ import {
 } from "react-native";
 import { legendContentItems } from "../constants";
 import { createStyles } from "./styles";
+import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 
 export default function TaskDetail() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -51,6 +52,7 @@ export default function TaskDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
+  const { startTimer, resumeTimer, isRunning, timeLeftSeconds } = useTaskTimer();
   const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const fetchTaskData = async () => {
@@ -192,9 +194,15 @@ export default function TaskDetail() {
         <Text style={styles.title}>{task?.nome || "Tarefa"}</Text>
 
         <View style={styles.actionsWrapper}>
-          <Pressable onPress={() => {}}>
-            <Play size={22} color={colors.colorPrimary} />
-          </Pressable>
+          {!isRunning && (
+            <Pressable onPress={() => (timeLeftSeconds === 0 ? startTimer({
+              id: task?.id,
+              nome: task?.nome,
+              tempoExecucao: "0h 1min",
+            }) : resumeTimer())}>
+              <Play size={22} color={colors.colorPrimary} />
+            </Pressable>
+          )}
           <Pressable onPress={() => setShowDeleteModal(true)}>
             <Trash2 size={22} color={colors.colorPrimary} />
           </Pressable>

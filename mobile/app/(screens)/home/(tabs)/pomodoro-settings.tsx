@@ -1,13 +1,12 @@
 import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
-import { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View, Alert, ActivityIndicator, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { ToggleItem } from "@/app/components/ui/toggleItem/toggleItem";
-import { TabsRoutes } from "./tabsRouters";
-import { savePomodoroSettings, getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { IPomodoroSettings } from "@/app/interface/pomodoro";
+import { getPomodoroSettings, savePomodoroSettings } from "@/app/services/pomodoroSettings";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function PomodoroSettings() {
@@ -140,6 +139,21 @@ export default function PomodoroSettings() {
                         <ThemedText style={styles.toggleLabel}>ativado</ThemedText>
                     </View>
                 </View>
+                <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={handleSave}
+                    disabled={isSaving || isLoading}
+                    activeOpacity={0.6}
+                >
+                    {isSaving ? (
+                        <ActivityIndicator color="#4A90E2" size={30} />
+                    ) : (
+                        <>
+                            <ThemedText style={styles.saveButtonText}>Salvar</ThemedText>
+                        </>
+                    )}
+                </TouchableOpacity>
+
                 <Toast />
             </ScrollView>
             <ThemedText style={styles.resetWarning}>** ao salvar o seu Pomodoro será resetado.</ThemedText>
@@ -231,7 +245,10 @@ const styles = StyleSheet.create({
     saveButton: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 6,
+        justifyContent: "center",
+        width: "100%",
+        paddingVertical: 14,
+        marginTop: 20,
     },
     saveButtonText: {
         color: "#4A90E2",

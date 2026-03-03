@@ -2,12 +2,18 @@ import { ThemedText } from "@/app/components/themed-text";
 import { ThemedView } from "@/app/components/themed-view";
 import { useState, useEffect, useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View, Text, ActivityIndicator } from "react-native";
-import { Audio } from "expo-av";
 import { useRouter, useFocusEffect } from "expo-router";
 import { getPomodoroSettings } from "@/app/services/pomodoroSettings";
 import { savePomodoroHistory } from "@/app/services/pomodoroHistory";
 import { TabsRoutes } from "./tabsRouters";
 import { IPomodoroSettings, IPomodoroHistory } from "@/app/interface/pomodoro";
+import {
+    setupAudioMode,
+    playDoneSound,
+    playBackgroundMusic,
+    pauseBackgroundMusic,
+    stopBackgroundMusic,
+} from "@/app/services/soundService";
 import Toast from "react-native-toast-message";
 
 const TOTAL_CYCLES = 5;
@@ -17,7 +23,6 @@ export default function TabTwoScreen() {
     const [isRunning, setIsRunning] = useState(false);
     const [timeLeft, setTimeLeft] = useState<number | undefined>(undefined);
     const [completedCycles, setCompletedCycles] = useState(0);
-    const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [soundToFinish, setSoundToFinish] = useState<boolean>(false);
     const [pomodoroTimer, setPomodoroTimer] = useState<number>(0);
@@ -62,24 +67,10 @@ export default function TabTwoScreen() {
 
     // Configurar o modo de áudio ao montar o componente
     useEffect(() => {
-        async function setupAudio() {
-            try {
-                await Audio.setAudioModeAsync({
-                    playsInSilentModeIOS: true,
-                    shouldDuckAndroid: true,
-                });
-            } catch (error) {
-                console.error("Erro ao configurar áudio:", error);
-            }
-        }
+        setupAudioMode();
 
-        setupAudio();
-
-        // Cleanup ao desmontar
         return () => {
-            if (sound) {
-                sound.unloadAsync();
-            }
+            stopBackgroundMusic();
         };
     }, []);
 
@@ -91,7 +82,9 @@ export default function TabTwoScreen() {
                 setTimeLeft((prev) => prev! - 1);
             }, 1000);
         } else if (timeLeft === 0 && completedCycles < TOTAL_CYCLES) {
-            playDoneSound();
+            if (soundToFinish) {
+                playDoneSound();
+            }
 
             // Salvar histórico de conclusão
             const saveCompletionHistory = async () => {
@@ -114,7 +107,7 @@ export default function TabTwoScreen() {
             setCompletedCycles((prev) => prev + 1);
             setTimeLeft(pomodoroTimer * 60);
             setIsRunning(false);
-            sound?.stopAsync();
+            stopBackgroundMusic();
         }
 
         return () => {
@@ -151,56 +144,11 @@ export default function TabTwoScreen() {
         if (newIsRunning) {
             // Iniciar a música
             if (musicEnabled) {
-                await playSound();
+                await playBackgroundMusic();
             }
         } else {
             // Pausar a música
-            await pauseSound();
-        }
-    };
-
-    const playSound = async () => {
-        try {
-            // Se já existe um som, apenas retomar
-            if (sound) {
-                await sound.playAsync();
-            } else {
-                // Criar e tocar um novo som
-                // Você pode usar uma URL de música ou um arquivo local
-                const { sound: newSound } = await Audio.Sound.createAsync(
-                    require("../../../../assets/audios/pomodoro.m4a"),
-                    { shouldPlay: true, isLooping: true, volume: 0.3 }
-                );
-
-                setSound(newSound);
-            }
-        } catch (error) {
-            console.error("Erro ao tocar música:", error);
-        }
-    };
-
-    const playDoneSound = async () => {
-        try {
-            if (!soundToFinish) return;
-
-            const { sound: newSound } = await Audio.Sound.createAsync(
-                require("../../../../assets/audios/pomodoro_done.mp3"),
-                { shouldPlay: true, volume: 0.3 }
-            );
-
-            newSound.playAsync();
-        } catch (error) {
-            console.error("Erro ao tocar música:", error);
-        }
-    };
-
-    const pauseSound = async () => {
-        try {
-            if (sound) {
-                await sound.pauseAsync();
-            }
-        } catch (error) {
-            console.error("Erro ao pausar música:", error);
+            await pauseBackgroundMusic();
         }
     };
 
@@ -210,11 +158,7 @@ export default function TabTwoScreen() {
         setCompletedCycles(0);
 
         // Parar e limpar a música
-        if (sound) {
-            await sound.stopAsync();
-            await sound.unloadAsync();
-            setSound(null);
-        }
+        await stopBackgroundMusic();
 
         try {
             const historyEntry: IPomodoroHistory = {
