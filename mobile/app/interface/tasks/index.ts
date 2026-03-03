@@ -1,7 +1,7 @@
 import { StyleProp, ViewStyle } from "react-native";
 
 export type TaskPriority = "baixa" | "media" | "alta" | "urgente";
-export  type TaskStatus = "não iniciada" | "em andamento" | "concluída" | "atrasada";
+export type TaskStatus = "não iniciada" | "em andamento" | "concluída" | "atrasada";
 export interface ITaskService {
   id: string;
   nome: string;
@@ -9,7 +9,7 @@ export interface ITaskService {
   tempoExecucao: string;
   dataFinalizar: string;
   status: TaskStatus;
-  priority: TaskPriority; 
+  priority: TaskPriority;
   columnId: string;
   projectId: string;
   author: string;
@@ -19,6 +19,7 @@ export interface ITaskService {
 
 export interface ISummaryCard {
   style?: StyleProp<ViewStyle>;
+  styleHeader?: StyleProp<ViewStyle>;
   title: string;
   description: string;
   colorIcon?: string;
@@ -30,6 +31,7 @@ export interface ISummaryCard {
   onPressDelete?: () => void;
   onPressEdit?: () => void;
   onPressPomodoro?: () => void;
+  summaryMode?: boolean;
 }
 
 export interface ITasksListNotFound {

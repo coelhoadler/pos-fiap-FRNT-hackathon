@@ -27,6 +27,8 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   onPressDelete,
   onPressEdit,
   onPressPomodoro,
+  summaryMode,
+  styleHeader,
   ...props
 }) => {
   const colorSchemeRaw = useColorScheme();
@@ -37,7 +39,7 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
   return (
     <View style={[styles.container, style]}>
       <View style={styles.wrapper}>
-        <View style={styles.header}>
+        <View style={[styles.header, styleHeader]}>
           {title && <Text style={styles.title}>{title}</Text>}
           <View style={styles.headerIconWrapper}>
             {onPressPomodoro && (
@@ -75,51 +77,53 @@ export const SummaryCard: React.FC<ISummaryCard> = ({
           </View>
         </View>
 
-        <View style={styles.body}>
-          {description && (
-            <Text
-              ellipsizeMode="tail"
-              numberOfLines={3}
-              style={styles.description}
-            >
-              {description}
-            </Text>
-          )}
+        {!summaryMode && (
+          <View style={styles.body}>
+            {description && (
+              <Text
+                ellipsizeMode="tail"
+                numberOfLines={3}
+                style={styles.description}
+              >
+                {description}
+              </Text>
+            )}
 
-          <View style={{ marginTop: 15 }}>
-            <View style={styles.wrapperInfos}>
-              {author && (
-                <View style={styles.infosItem}>
-                  <User
-                    size={sizeIcon}
-                    color={colorIcon ? colorIcon : colors.colorWhite}
-                  />
-                  <Text style={styles.textInfo}>{author}</Text>
-                </View>
-              )}
+            <View style={{ marginTop: 15 }}>
+              <View style={styles.wrapperInfos}>
+                {author && (
+                  <View style={styles.infosItem}>
+                    <User
+                      size={sizeIcon}
+                      color={colorIcon ? colorIcon : colors.colorWhite}
+                    />
+                    <Text style={styles.textInfo}>{author}</Text>
+                  </View>
+                )}
 
-              {time && (
-                <View style={styles.infosItem}>
-                  <Timer
-                    size={sizeIcon}
-                    color={colorIcon ? colorIcon : colors.colorWhite}
-                  />
-                  <Text style={styles.textInfo}>{time}</Text>
-                </View>
-              )}
+                {time && (
+                  <View style={styles.infosItem}>
+                    <Timer
+                      size={sizeIcon}
+                      color={colorIcon ? colorIcon : colors.colorWhite}
+                    />
+                    <Text style={styles.textInfo}>{time}</Text>
+                  </View>
+                )}
 
-              {date && (
-                <View style={styles.infosItem}>
-                  <Calendar
-                    size={sizeIcon}
-                    color={colorIcon ? colorIcon : colors.colorWhite}
-                  />
-                  <Text style={styles.textInfo}>{date}</Text>
-                </View>
-              )}
+                {date && (
+                  <View style={styles.infosItem}>
+                    <Calendar
+                      size={sizeIcon}
+                      color={colorIcon ? colorIcon : colors.colorWhite}
+                    />
+                    <Text style={styles.textInfo}>{date}</Text>
+                  </View>
+                )}
+              </View>
             </View>
           </View>
-        </View>
+        )}
       </View>
     </View>
   );

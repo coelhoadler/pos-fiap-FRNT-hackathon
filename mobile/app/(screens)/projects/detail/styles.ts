@@ -34,6 +34,10 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       alignItems: "flex-start",
       gap: 10,
     },
+    noBorderBottomCardTask:{
+      borderBottomColor: "transparent",
+      paddingBottom: 0,
+    },
     title: {
       color: colors.colorPrimary,
       fontSize: 24,
