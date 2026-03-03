@@ -1,5 +1,6 @@
 import { ActionsButtonsProjects } from "@/app/components/projects/actionsButton";
 import { ModalLegendTasks } from "@/app/components/tasks/modalLegend";
+import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 import { ThemedView } from "@/app/components/themed-view";
 import { Button } from "@/app/components/ui/button";
 import { Modal } from "@/app/components/ui/modal";
@@ -19,6 +20,7 @@ import {
   AlertCircle,
   ArrowLeft,
   Calendar,
+  Clock,
   Columns,
   Pencil,
   Play,
@@ -36,7 +38,6 @@ import {
 } from "react-native";
 import { legendContentItems } from "../constants";
 import { createStyles } from "./styles";
-import { useTaskTimer } from "@/app/components/tasks/taskTimer/task-timer-context";
 
 export default function TaskDetail() {
   const colorScheme = useColorScheme() === "light" ? "light" : "dark";
@@ -52,7 +53,8 @@ export default function TaskDetail() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [successDelete, setSuccessDelete] = useState(false);
-  const { startTimer, resumeTimer, isRunning, timeLeftSeconds } = useTaskTimer();
+  const { startTimer, resumeTimer, isRunning, timeLeftSeconds } =
+    useTaskTimer();
   const [openModalLegend, setOpenModalLegend] = useState(false);
 
   const fetchTaskData = async () => {
@@ -113,6 +115,11 @@ export default function TaskDetail() {
       label: "Coluna atual",
       value: columnName,
       icon: Columns,
+    },
+    {
+      label: "Tempo estimado",
+      value: task?.tempoExecucao,
+      icon: Clock,
     },
     {
       label: "Prazo de entrega",
@@ -195,11 +202,17 @@ export default function TaskDetail() {
 
         <View style={styles.actionsWrapper}>
           {!isRunning && (
-            <Pressable onPress={() => (timeLeftSeconds === 0 ? startTimer({
-              id: task?.id,
-              nome: task?.nome,
-              tempoExecucao: "0h 1min",
-            }) : resumeTimer())}>
+            <Pressable
+              onPress={() =>
+                timeLeftSeconds === 0
+                  ? startTimer({
+                      id: task?.id,
+                      nome: task?.nome,
+                      tempoExecucao: "0h 1min",
+                    })
+                  : resumeTimer()
+              }
+            >
               <Play size={22} color={colors.colorPrimary} />
             </Pressable>
           )}
