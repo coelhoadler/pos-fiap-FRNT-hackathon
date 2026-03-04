@@ -1,7 +1,8 @@
-import { StyleSheet } from "react-native";
 import { ThemedView } from "@/app/components/themed-view";
 import { getAuth } from "@/app/services/firebaseAuth";
 import { router } from "expo-router";
+import { StyleSheet } from "react-native";
+import HomePage from "../home-page";
 
 export default function HomeScreen() {
   getAuth().onAuthStateChanged((user) => {
@@ -11,7 +12,9 @@ export default function HomeScreen() {
   });
 
   return (
-    <ThemedView style={{ flex: 1 }}></ThemedView>
+    <ThemedView style={{ flex: 1 }}>
+      <HomePage />
+    </ThemedView>
   );
 }
 
