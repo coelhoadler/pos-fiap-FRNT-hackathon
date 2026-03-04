@@ -7,6 +7,7 @@ import {
   Settings,
   Target,
   LogOut,
+  FolderKanban,
 } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -25,6 +26,11 @@ const navItems: NavItem[] = [
     label: 'Productivity',
     icon: <Target size={20} />,
     path: '/productivity',
+  },
+  {
+    label: 'Projetos',
+    icon: <FolderKanban size={20} />,
+    path: '/projects',
   },
   {
     label: 'Focus',
@@ -47,7 +53,6 @@ const SideNav = () => {
       setOpen(false);
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
-      // Mesmo com erro, redirecionar para login
       navigate('/');
       setOpen(false);
     }
@@ -55,10 +60,8 @@ const SideNav = () => {
 
   return (
     <aside className="flex h-screen fixed left-0 top-0 z-50">
-      {/* SIDENAV FIXO (10%) */}
       <div className="w-[2vw] min-w-[64px] bg-stone-100 text-cyan-700 flex flex-col items-center py-4 justify-between">
         <div className="flex flex-col gap-6 items-center">
-          {/* TOGGLE */}
           <button
             onClick={open ? handleClose : handleOpen}
             className="p-2 hover:bg-stone-100 rounded"
@@ -66,7 +69,6 @@ const SideNav = () => {
             {open ? <ChevronLeft /> : <ChevronRight />}
           </button>
 
-          {/* ÍCONES */}
           {navItems.map((item) => (
             <button
               key={item.path}
@@ -80,7 +82,6 @@ const SideNav = () => {
           ))}
         </div>
 
-        {/* PREFERÊNCIAS (BOTTOM) */}
         <button
           onClick={() => {
             handleOpen();
@@ -91,11 +92,9 @@ const SideNav = () => {
         </button>
       </div>
 
-      {/* EXTENSÃO (20%) */}
       {open && (
         <div className="w-[20vw] min-w-[240px] bg-stone-100 border-cyan-700 border-l-1 text-cyan-700 flex flex-col justify-between py-6 px-4">
           <div>
-            {/* LOGO */}
             <div className="flex items-center gap-2 mb-6">
               <div className="w-8 h-8 rounded flex items-center justify-center font-bold">
                 <img src={mindeaseLogo} alt="mindease logo" />
@@ -105,7 +104,6 @@ const SideNav = () => {
               </span>
             </div>
 
-            {/* ITENS */}
             <nav className="flex flex-col gap-5">
               {navItems.map((item) => (
                 <NavLink
@@ -125,7 +123,6 @@ const SideNav = () => {
             </nav>
           </div>
 
-          {/* PREFERÊNCIAS E LOGOUT */}
           <div className="flex flex-col gap-2">
             <NavLink
               to="/preferences"

@@ -1,0 +1,1 @@
+export type TaskStatus = 'em-andamento' | 'pendentes' | 'concluidas';
