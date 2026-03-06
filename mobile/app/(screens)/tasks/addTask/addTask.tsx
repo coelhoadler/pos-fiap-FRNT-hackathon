@@ -17,9 +17,10 @@ import { genericStyle } from "@/app/styles/genericStyles";
 import auth from "@react-native-firebase/auth";
 import { useFocusEffect } from "@react-navigation/native";
 import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
-import { CheckSquare, ChevronDown, Square } from "lucide-react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { CheckSquare, ChevronDown, Calendar, Square } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { addTaskLegendContent } from "../constants";
 import { createStyles } from "./styles";
 
@@ -38,6 +39,7 @@ export default function AddTask() {
   const [openModalTime, setOpenModalTime] = useState(false);
   const [openModalStatus, setOpenModalStatus] = useState(false);
   const [openModalLegend, setOpenModalLegend] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [tempPriority, setTempPriority] = useState<TaskPriority>("baixa");
   const [tempStatus, setTempStatus] = useState<TaskStatus>("não iniciada");
@@ -120,6 +122,26 @@ export default function AddTask() {
       formatted = `${formatted.slice(0, 5)}/${cleaned.slice(4, 8)}`;
     setForm({ ...form, dataFinalizar: formatted });
     setErrors({ ...errors, dataFinalizar: "" });
+  };
+
+  const handleDatePickerChange = (_event: any, selectedDate?: Date) => {
+    setShowDatePicker(Platform.OS === "ios");
+    if (selectedDate) {
+      const day = String(selectedDate.getDate()).padStart(2, "0");
+      const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+      const year = selectedDate.getFullYear();
+      setForm({ ...form, dataFinalizar: `${day}/${month}/${year}` });
+      setErrors({ ...errors, dataFinalizar: "" });
+    }
+  };
+
+  const getDatePickerValue = () => {
+    if (form.dataFinalizar.length === 10) {
+      const [day, month, year] = form.dataFinalizar.split("/").map(Number);
+      const date = new Date(year, month - 1, day);
+      if (!isNaN(date.getTime())) return date;
+    }
+    return new Date();
   };
 
   const handleSave = async () => {
@@ -392,29 +414,53 @@ export default function AddTask() {
           </View>
 
           <View>
-            <Input
-              text={
-                <View
-                  style={[
-                    genericFormStyles(colorScheme).wrapperRequiredIndication,
-                  ]}
-                >
-                  <Text
-                    style={[genericFormStyles(colorScheme).requiredIndication]}
-                  >
-                    *
-                  </Text>
-                  <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
-                    Data para finalizar
-                  </Text>
-                </View>
-              }
-              value={form.dataFinalizar}
-              onChangeText={handleDateChange}
-              placeholder="DD/MM/AAAA"
-              keyboardType="numeric"
-              maxLength={10}
-            />
+            <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
+              <View style={{ flex: 1 }}>
+                <Input
+                  text={
+                    <View
+                      style={[
+                        genericFormStyles(colorScheme).wrapperRequiredIndication,
+                      ]}
+                    >
+                      <Text
+                        style={[genericFormStyles(colorScheme).requiredIndication]}
+                      >
+                        *
+                      </Text>
+                      <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
+                        Data para finalizar
+                      </Text>
+                    </View>
+                  }
+                  value={form.dataFinalizar}
+                  onChangeText={handleDateChange}
+                  placeholder="DD/MM/AAAA"
+                  keyboardType="numeric"
+                  maxLength={10}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                style={{
+                  padding: 12,
+                  borderRadius: 8,
+                  backgroundColor: colors.colorPrimary,
+                  marginBottom: 2,
+                }}
+              >
+                <Calendar size={22} color={colors.colorWhite} />
+              </TouchableOpacity>
+            </View>
+            {showDatePicker && (
+              <DateTimePicker
+                value={getDatePickerValue()}
+                mode="date"
+                display={Platform.OS === "ios" ? "inline" : "calendar"}
+                minimumDate={new Date()}
+                onChange={handleDatePickerChange}
+              />
+            )}
             {errors.dataFinalizar ? (
               <FormErrorMessage message={errors.dataFinalizar} />
             ) : null}
