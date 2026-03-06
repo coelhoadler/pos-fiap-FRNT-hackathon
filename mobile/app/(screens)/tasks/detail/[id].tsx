@@ -199,17 +199,17 @@ export default function TaskDetail() {
         }}
       >
         <Text style={styles.title}>{task?.nome || "Tarefa"}</Text>
-
+        <Text style={styles.title}>{task?.tempoExecucao || "0h 0min"}</Text>
         <View style={styles.actionsWrapper}>
           {!isRunning && (
             <Pressable
               onPress={() =>
                 timeLeftSeconds === 0
                   ? startTimer({
-                      id: task?.id,
-                      nome: task?.nome,
-                      tempoExecucao: "0h 1min",
-                    })
+                    id: task?.id,
+                    nome: task?.nome,
+                    tempoExecucao: task?.tempoExecucao,
+                  })
                   : resumeTimer()
               }
             >

@@ -90,15 +90,15 @@ export function createStyles(colorScheme: "light" | "dark" = "dark") {
       borderRadius: 5,
       width: "92%",
     },
-    modalOptionsInfosText:{
-      fontSize:16,
-     color: colors.text
+    modalOptionsInfosText: {
+      fontSize: 16,
+      color: colors.text
     },
-    modalButton:{
-      width:'70%',
-      marginHorizontal:'auto', 
+    modalButton: {
+      width: '70%',
+      marginHorizontal: 'auto',
       marginTop: 20,
-      marginBottom: 10,
+      marginBottom: 50,
     }
 
   });
