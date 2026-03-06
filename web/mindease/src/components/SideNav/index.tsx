@@ -6,7 +6,7 @@ import {
   Home,
   LogOut,
   Settings,
-  Target,
+  FolderKanban,
 } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -22,9 +22,9 @@ const navItems: NavItem[] = [
     path: '/tasks',
   },
   {
-    label: 'Produtividade',
-    icon: <Target size={20} />,
-    path: '/productivity',
+    label: 'Projetos',
+    icon: <FolderKanban size={20} />,
+    path: '/projects',
   },
   {
     label: 'Foco',
@@ -47,7 +47,6 @@ const SideNav = () => {
       setOpen(false);
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
-      // Mesmo com erro, redirecionar para login
       navigate('/');
       setOpen(false);
     }

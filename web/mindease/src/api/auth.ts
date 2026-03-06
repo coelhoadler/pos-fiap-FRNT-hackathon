@@ -2,12 +2,12 @@ import {
   createUserWithEmailAndPassword, 
   updateProfile,
   signInWithEmailAndPassword,
-  signOut
+  signOut,  
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 import { auth } from "./firebase";
+import type { ILoginData, ILoginResponse, IRegisterData, IRegisterResponse } from "./interfaces";
 
-// Chaves para sessionStorage
 const SESSION_STORAGE_KEYS = {
   USER: 'mindease_user',
   USER_EMAIL: 'mindease_user_email',
@@ -15,9 +15,7 @@ const SESSION_STORAGE_KEYS = {
   USER_UID: 'mindease_user_uid'
 };
 
-/**
- * Salva dados do usuário no sessionStorage
- */
+
 export const saveUserToSession = (user: any) => {
   try {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.USER, JSON.stringify(user));
@@ -29,9 +27,6 @@ export const saveUserToSession = (user: any) => {
   }
 };
 
-/**
- * Recupera dados do usuário do sessionStorage
- */
 export const getUserFromSession = () => {
   try {
     const userStr = sessionStorage.getItem(SESSION_STORAGE_KEYS.USER);
@@ -45,9 +40,6 @@ export const getUserFromSession = () => {
   }
 };
 
-/**
- * Remove dados do usuário do sessionStorage
- */
 export const clearUserFromSession = () => {
   try {
     sessionStorage.removeItem(SESSION_STORAGE_KEYS.USER);
@@ -59,32 +51,19 @@ export const clearUserFromSession = () => {
   }
 };
 
-/**
- * Verifica se o usuário está autenticado (verifica Firebase auth primeiro, depois sessionStorage)
- */
 export const isUserAuthenticated = (): boolean => {
-  // Priorizar o estado atual do Firebase
   const currentUser = auth.currentUser;
   if (currentUser) {
     return true;
   }
-  // Fallback para sessionStorage
   return getUserFromSession() !== null;
 };
 
-/**
- * Obtém o usuário atual do Firebase Authentication
- * @returns Usuário atual ou null se não autenticado
- */
 export const getCurrentUser = (): User | null => {
   return auth.currentUser;
 };
 
-/**
- * Obtém informações do usuário (prioriza Firebase, depois sessionStorage)
- */
 export const getUserInfo = () => {
-  // Priorizar usuário do Firebase
   const currentUser = auth.currentUser;
   if (currentUser) {
     return {
@@ -96,7 +75,6 @@ export const getUserInfo = () => {
     };
   }
   
-  // Fallback para sessionStorage
   const sessionUser = getUserFromSession();
   if (sessionUser) {
     return {
@@ -111,38 +89,10 @@ export const getUserInfo = () => {
   return null;
 };
 
-export interface RegisterData {
-  nome: string;
-  email: string;
-  senha: string;
-  confirmarSenha: string;
-}
 
-export interface RegisterResponse {
-  success: boolean;
-  user?: any;
-  error?: string;
-}
 
-export interface LoginData {
-  email: string;
-  senha: string;
-}
-
-export interface LoginResponse {
-  success: boolean;
-  user?: any;
-  error?: string;
-}
-
-/**
- * Registra um novo usuário no Firebase Authentication
- * @param data Dados do formulário de registro
- * @returns Promise com o resultado do registro
- */
-export const registerUser = async (data: RegisterData): Promise<RegisterResponse> => {
+export const registerUser = async (data: IRegisterData): Promise<IRegisterResponse> => {
   try {
-    // Validação: verificar se as senhas coincidem
     if (data.senha !== data.confirmarSenha) {
       return {
         success: false,
@@ -150,7 +100,6 @@ export const registerUser = async (data: RegisterData): Promise<RegisterResponse
       };
     }
 
-    // Validação: verificar se a senha tem pelo menos 6 caracteres
     if (data.senha.length < 6) {
       return {
         success: false,
@@ -158,19 +107,16 @@ export const registerUser = async (data: RegisterData): Promise<RegisterResponse
       };
     }
 
-    // Criar usuário com email e senha
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       data.email,
       data.senha
     );
 
-    // Atualizar o perfil do usuário com o nome
     await updateProfile(userCredential.user, {
       displayName: data.nome
     });
 
-    // Salvar dados do usuário no sessionStorage como backup
     saveUserToSession(userCredential.user);
 
     return {
@@ -180,7 +126,6 @@ export const registerUser = async (data: RegisterData): Promise<RegisterResponse
   } catch (error: any) {
     let errorMessage = "Erro ao criar conta. Tente novamente.";
 
-    // Mensagens de erro
     if (error?.code) {
       switch (error.code) {
         case "auth/email-already-in-use":
@@ -209,14 +154,8 @@ export const registerUser = async (data: RegisterData): Promise<RegisterResponse
   }
 };
 
-/**
- * Autentica um usuário no Firebase Authentication
- * @param data Dados do formulário de login (email e senha)
- * @returns Promise com o resultado do login
- */
-export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
+export const loginUser = async (data: ILoginData): Promise<ILoginResponse> => {
   try {
-    // Validação básica
     if (!data.email.trim()) {
       return {
         success: false,
@@ -231,14 +170,12 @@ export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
       };
     }
 
-    // Autenticar usuário com email e senha
     const userCredential = await signInWithEmailAndPassword(
       auth,
       data.email,
       data.senha
     );
 
-    // Salvar dados do usuário no sessionStorage como backup
     saveUserToSession(userCredential.user);
 
     return {
@@ -248,7 +185,6 @@ export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
   } catch (error: any) {
     let errorMessage = "Erro ao fazer login. Tente novamente.";
 
-    // Mensagens de erro específicas
     if (error?.code) {
       switch (error.code) {
         case "auth/user-not-found":
@@ -283,9 +219,6 @@ export const loginUser = async (data: LoginData): Promise<LoginResponse> => {
   }
 };
 
-/**
- * Faz logout do usuário
- */
 export const logoutUser = async (): Promise<void> => {
   try {
     await signOut(auth);

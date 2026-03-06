@@ -5,8 +5,6 @@ import {
   Routes,
   useLocation,
 } from 'react-router-dom';
-// import IconBackground from './assets/background.png';
-// import { TextField, Button, Link, Stack, Box } from '@mui/material';
 import SideNav from './components/SideNav';
 import { useAuth } from './hooks';
 import Focus from './pages/Focus';
@@ -15,9 +13,9 @@ import HomePage from './pages/Home';
 import { Login as LoginPage } from './pages/Login';
 import NotFoundPage from './pages/NotFound';
 import PreferencesPage from './pages/Preferences';
-import ProductivityPage from './pages/Productivity';
 import { Register as RegisterPage } from './pages/Register';
 import TasksPage from './pages/Tasks';
+import ProjectsPage from './pages/Projects';
 
 // Componente para proteger rotas que requerem autenticação
 const ProtectedRoute = ({
@@ -50,7 +48,6 @@ const AppContent = () => {
   const isAuthPage =
     location.pathname === '/' || location.pathname === '/register';
 
-  // Mostrar loading enquanto verifica autenticação
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-custom-sand">
@@ -59,7 +56,6 @@ const AppContent = () => {
     );
   }
 
-  // Se usuário está autenticado e tenta acessar login/register, redirecionar para home
   if (user && isAuthPage) {
     return <Navigate to="/home" replace />;
   }
@@ -88,10 +84,10 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/productivity"
+            path="/projects"
             element={
               <ProtectedRoute user={user} loading={loading}>
-                <ProductivityPage />
+                <ProjectsPage />
               </ProtectedRoute>
             }
           />
