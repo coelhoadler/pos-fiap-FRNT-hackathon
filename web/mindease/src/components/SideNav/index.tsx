@@ -2,7 +2,6 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleCheckBig,
-  Focus,
   Home,
   LogOut,
   Settings,
@@ -25,11 +24,6 @@ const navItems: NavItem[] = [
     label: 'Projetos',
     icon: <FolderKanban size={20} />,
     path: '/projects',
-  },
-  {
-    label: 'Foco',
-    icon: <Focus size={20} />,
-    path: '/focus',
   },
 ];
 

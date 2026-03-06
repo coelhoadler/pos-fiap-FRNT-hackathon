@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import SideNav from './components/SideNav';
 import { useAuth } from './hooks';
-import Focus from './pages/Focus';
-import FocusSettings from './pages/FocusSettings';
 import HomePage from './pages/Home';
 import { Login as LoginPage } from './pages/Login';
 import NotFoundPage from './pages/NotFound';
@@ -96,22 +94,6 @@ const AppContent = () => {
             element={
               <ProtectedRoute user={user} loading={loading}>
                 <PreferencesPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/focus"
-            element={
-              <ProtectedRoute user={user} loading={loading}>
-                <Focus />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/focus/settings"
-            element={
-              <ProtectedRoute user={user} loading={loading}>
-                <FocusSettings />
               </ProtectedRoute>
             }
           />
