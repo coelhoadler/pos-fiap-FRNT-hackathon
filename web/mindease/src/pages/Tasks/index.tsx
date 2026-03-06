@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { 
-  Box, 
-  Typography, 
-  IconButton, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  TextField, 
-  Button, 
-  Menu, 
-  MenuItem, 
-  Alert, 
-  CircularProgress, 
+import {
+  Box,
+  Typography,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  Menu,
+  MenuItem,
+  Alert,
+  CircularProgress,
   Snackbar,
   Select,
   FormControl,
-  InputLabel
+  InputLabel,
 } from '@mui/material';
 import {
   PencilIcon,
@@ -26,27 +26,30 @@ import {
   CalendarIcon,
   ClockIcon,
   PlusIcon,
+  PlayIcon,
   InfoIcon,
   TrashIcon,
-  MoreVerticalIcon
+  MoreVerticalIcon,
 } from '../../components/Icon';
-import { 
-  getProjects, 
-  createTask, 
-  getTasks, 
-  updateTask, 
-  deleteTask, 
+import {
+  getProjects,
+  createTask,
+  getTasks,
+  updateTask,
+  deleteTask,
   onTasksSnapshot,
   type ITask,
-  type TaskStatus 
+  type TaskStatus,
 } from '../../api';
 import type { TaskColumn } from './interfaces';
+import PomodoroWidget from '../../components/PomodoroWidget';
 
-const STATUS_COLUMNS: { id: TaskStatus; title: string; headerColor: string }[] = [
-  { id: 'pendentes', title: 'Pendentes', headerColor: '#A3BACF' },
-  { id: 'em-andamento', title: 'Em andamento', headerColor: '#4A6572' },
-  { id: 'concluidas', title: 'Concluídas', headerColor: '#E0EADD' },
-];
+const STATUS_COLUMNS: { id: TaskStatus; title: string; headerColor: string }[] =
+  [
+    { id: 'pendentes', title: 'Pendentes', headerColor: '#A3BACF' },
+    { id: 'em-andamento', title: 'Em andamento', headerColor: '#4A6572' },
+    { id: 'concluidas', title: 'Concluídas', headerColor: '#E0EADD' },
+  ];
 
 const TasksPage = () => {
   const [searchParams] = useSearchParams();
@@ -55,14 +58,17 @@ const TasksPage = () => {
   const [columns, setColumns] = useState<TaskColumn[]>([]);
   const [projectName, setProjectName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
+  // Pomodoro  Timer Checker
+  const [pomodoroTime, setPomodoroTime] = useState<number | null>(null);
+
   // Dialogs
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openLegendDialog, setOpenLegendDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
-  
+
   // Form states
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
@@ -70,11 +76,11 @@ const TasksPage = () => {
   const [taskDuration, setTaskDuration] = useState('30 min');
   const [taskStatus, setTaskStatus] = useState<TaskStatus>('pendentes');
   const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
-  
+
   // Menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  
+
   // Messages
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -88,7 +94,7 @@ const TasksPage = () => {
         try {
           const response = await getProjects();
           if (response.success && response.projects) {
-            const project = response.projects.find(p => p.id === projectId);
+            const project = response.projects.find((p) => p.id === projectId);
             if (project) {
               setProjectName(project.name);
             }
@@ -106,14 +112,14 @@ const TasksPage = () => {
 
   // Organizar tarefas em colunas por status
   useEffect(() => {
-    const organizedColumns: TaskColumn[] = STATUS_COLUMNS.map(statusCol => ({
+    const organizedColumns: TaskColumn[] = STATUS_COLUMNS.map((statusCol) => ({
       id: statusCol.id,
       title: statusCol.title,
       headerColor: statusCol.headerColor,
       expanded: true,
       tasks: tasks
-        .filter(task => task.status === statusCol.id)
-        .map(task => ({
+        .filter((task) => task.status === statusCol.id)
+        .map((task) => ({
           id: task.id,
           title: task.title,
           description: task.description,
@@ -129,7 +135,7 @@ const TasksPage = () => {
   // Load tasks from Firebase with real-time updates
   useEffect(() => {
     setLoading(true);
-    
+
     const loadInitialTasks = async () => {
       try {
         const response = await getTasks(projectId || undefined);
@@ -149,9 +155,21 @@ const TasksPage = () => {
 
     const unsubscribe = onTasksSnapshot(
       (tasksList) => {
-        console.log('Tarefas atualizadas via listener:', tasksList.length, 'tarefas');
+        console.log(
+          'Tarefas atualizadas via listener:',
+          tasksList.length,
+          'tarefas'
+        );
         console.log('ProjectId filtrado:', projectId);
-        console.log('Tarefas recebidas:', tasksList.map(t => ({ id: t.id, title: t.title, projectId: t.projectId, status: t.status })));
+        console.log(
+          'Tarefas recebidas:',
+          tasksList.map((t) => ({
+            id: t.id,
+            title: t.title,
+            projectId: t.projectId,
+            status: t.status,
+          }))
+        );
         setTasks(tasksList);
         setLoading(false);
       },
@@ -171,8 +189,8 @@ const TasksPage = () => {
   }, [projectId]);
 
   const toggleColumn = (columnId: string) => {
-    setColumns(prev => 
-      prev.map(col => 
+    setColumns((prev) =>
+      prev.map((col) =>
         col.id === columnId ? { ...col, expanded: !col.expanded } : col
       )
     );
@@ -214,11 +232,11 @@ const TasksPage = () => {
       setError('');
       setSuccessMessage('Tarefa criada com sucesso!');
       setSnackbarOpen(true);
-      
+
       // Forçar refresh das tarefas após criar (múltiplas tentativas)
       const refreshTasks = async (attempts = 3) => {
         for (let i = 0; i < attempts; i++) {
-          await new Promise(resolve => setTimeout(resolve, 500 * (i + 1)));
+          await new Promise((resolve) => setTimeout(resolve, 500 * (i + 1)));
           try {
             console.log(`Tentativa ${i + 1} de refresh das tarefas...`);
             const refreshResponse = await getTasks(projectId);
@@ -228,11 +246,14 @@ const TasksPage = () => {
               break;
             }
           } catch (err) {
-            console.error(`Erro ao atualizar tarefas (tentativa ${i + 1}):`, err);
+            console.error(
+              `Erro ao atualizar tarefas (tentativa ${i + 1}):`,
+              err
+            );
           }
         }
       };
-      
+
       refreshTasks();
     } else {
       setError(response.error || 'Erro ao criar tarefa');
@@ -242,7 +263,7 @@ const TasksPage = () => {
   };
 
   const handleEditTask = (taskId: string) => {
-    const task = tasks.find(t => t.id === taskId);
+    const task = tasks.find((t) => t.id === taskId);
     if (task) {
       setEditingTaskId(taskId);
       setTaskTitle(task.title);
@@ -320,7 +341,10 @@ const TasksPage = () => {
     setActionLoading(false);
   };
 
-  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>, taskId: string) => {
+  const handleOpenMenu = (
+    event: React.MouseEvent<HTMLElement>,
+    taskId: string
+  ) => {
     setAnchorEl(event.currentTarget);
     setSelectedTaskId(taskId);
   };
@@ -358,631 +382,685 @@ const TasksPage = () => {
   };
 
   return (
-    <Box className="w-full p-8 bg-custom-sand min-h-screen">
-      {/* Header */}
-      <Box className="flex items-center justify-between mb-8">
-        <Box>
-          <Typography 
-            variant="h4" 
-            sx={{ color: '#4A6572', fontWeight: 700 }}
-          >
-            Tarefas
-          </Typography>
-          {projectName && (
-            <Typography 
-              variant="subtitle1" 
-              sx={{ color: '#A3BACF', fontWeight: 500, mt: 0.5 }}
-            >
-              Projeto: {projectName}
+    <>
+      <Box className="w-full p-8 bg-custom-sand min-h-screen">
+        {/* Header */}
+        <Box className="flex items-center justify-between mb-8">
+          <Box>
+            <Typography variant="h4" sx={{ color: '#4A6572', fontWeight: 700 }}>
+              Tarefas
             </Typography>
-          )}
-        </Box>
-        <Box className="flex gap-2">
-          {projectId && (
-            <IconButton 
-              onClick={() => setOpenCreateDialog(true)}
-              sx={{ 
+            {projectName && (
+              <Typography
+                variant="subtitle1"
+                sx={{ color: '#A3BACF', fontWeight: 500, mt: 0.5 }}
+              >
+                Projeto: {projectName}
+              </Typography>
+            )}
+          </Box>
+          <Box className="flex gap-2">
+            {projectId && (
+              <IconButton
+                onClick={() => setOpenCreateDialog(true)}
+                sx={{
+                  color: '#4A6572',
+                  backgroundColor: '#E0EADD',
+                  '&:hover': { backgroundColor: '#A3BACF' },
+                }}
+              >
+                <PlusIcon size={20} />
+              </IconButton>
+            )}
+            <IconButton
+              onClick={() => setOpenLegendDialog(true)}
+              sx={{
                 color: '#4A6572',
                 backgroundColor: '#E0EADD',
-                '&:hover': { backgroundColor: '#A3BACF' }
+                '&:hover': { backgroundColor: '#A3BACF' },
               }}
             >
-              <PlusIcon size={20} />
+              <InfoIcon size={20} />
             </IconButton>
-          )}
-          <IconButton 
-            onClick={() => setOpenLegendDialog(true)}
-            sx={{ 
-              color: '#4A6572',
-              backgroundColor: '#E0EADD',
-              '&:hover': { backgroundColor: '#A3BACF' }
-            }}
-          >
-            <InfoIcon size={20} />
-          </IconButton>
+          </Box>
         </Box>
-      </Box>
 
-      {/* Error Alert */}
-      {error && (
-        <Alert severity="error" onClose={() => setError('')} sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" onClose={() => setError('')} sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
-      {/* Loading */}
-      {loading ? (
-        <Box className="flex justify-center items-center p-8">
-          <CircularProgress sx={{ color: '#4A6572' }} />
-        </Box>
-      ) : (
-        <>
-          {/* Kanban Columns */}
-          <Box className="flex gap-6 overflow-x-auto">
-            {columns.map((column) => (
-              <Box key={column.id} className="flex-1 min-w-[300px]">
-                {/* Column Header */}
-                <Box 
-                  className="flex items-center justify-between p-4 rounded-t-lg"
-                  sx={{ backgroundColor: column.headerColor }}
-                >
-                  <Typography 
-                    sx={{ 
-                      color: '#FFFFFF', 
-                      fontWeight: 700,
-                      fontSize: '1rem'
-                    }}
+        {/* Loading */}
+        {loading ? (
+          <Box className="flex justify-center items-center p-8">
+            <CircularProgress sx={{ color: '#4A6572' }} />
+          </Box>
+        ) : (
+          <>
+            {/* Kanban Columns */}
+            <Box className="flex gap-6 overflow-x-auto">
+              {columns.map((column) => (
+                <Box key={column.id} className="flex-1 min-w-[300px]">
+                  {/* Column Header */}
+                  <Box
+                    className="flex items-center justify-between p-4 rounded-t-lg"
+                    sx={{ backgroundColor: column.headerColor }}
                   >
-                    {column.title} ({column.tasks.length})
-                  </Typography>
-                  <IconButton 
-                    size="small" 
-                    sx={{ color: '#FFFFFF' }}
-                    onClick={() => toggleColumn(column.id)}
-                  >
-                    {column.expanded ? (
-                      <ChevronUpIcon size={20} />
-                    ) : (
-                      <ChevronDownIcon size={20} />
-                    )}
-                  </IconButton>
-                </Box>
+                    <Typography
+                      sx={{
+                        color: '#FFFFFF',
+                        fontWeight: 700,
+                        fontSize: '1rem',
+                      }}
+                    >
+                      {column.title} ({column.tasks.length})
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      sx={{ color: '#FFFFFF' }}
+                      onClick={() => toggleColumn(column.id)}
+                    >
+                      {column.expanded ? (
+                        <ChevronUpIcon size={20} />
+                      ) : (
+                        <ChevronDownIcon size={20} />
+                      )}
+                    </IconButton>
+                  </Box>
 
-                {/* Tasks */}
-                {column.expanded && (
-                  <Box className="bg-custom-cream rounded-b-lg p-4 space-y-4">
-                    {column.tasks.length === 0 ? (
-                      <Typography sx={{ color: '#A3BACF', textAlign: 'center', py: 2 }}>
-                        Nenhuma tarefa
-                      </Typography>
-                    ) : (
-                      column.tasks.map((task) => (
-                        <Box
-                          key={task.id}
-                          className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                  {/* Tasks */}
+                  {column.expanded && (
+                    <Box className="bg-custom-cream rounded-b-lg p-4 space-y-4">
+                      {column.tasks.length === 0 ? (
+                        <Typography
+                          sx={{ color: '#A3BACF', textAlign: 'center', py: 2 }}
                         >
-                          {/* Task Header */}
-                          <Box className="flex items-start justify-between mb-2">
-                            <Typography 
-                              sx={{ 
-                                color: '#4A6572', 
-                                fontWeight: 600,
-                                fontSize: '1rem'
+                          Nenhuma tarefa
+                        </Typography>
+                      ) : (
+                        column.tasks.map((task) => (
+                          <Box
+                            key={task.id}
+                            className="bg-white rounded-lg p-4 shadow-sm border border-gray-200"
+                          >
+                            {/* Task Header */}
+                            <Box className="flex items-start justify-between mb-2">
+                              <Typography
+                                sx={{
+                                  color: '#4A6572',
+                                  fontWeight: 600,
+                                  fontSize: '1rem',
+                                }}
+                              >
+                                {task.title}
+                              </Typography>
+                              <IconButton
+                                size="small"
+                                sx={{ color: '#4A6572' }}
+                                onClick={(e) => handleOpenMenu(e, task.id)}
+                              >
+                                <MoreVerticalIcon size={16} />
+                              </IconButton>
+                            </Box>
+
+                            {/* Description */}
+                            <Typography
+                              sx={{
+                                color: '#4A6572',
+                                fontSize: '0.875rem',
+                                mb: 2,
                               }}
                             >
-                              {task.title}
+                              {task.description || 'Sem descrição'}
                             </Typography>
-                            <IconButton 
-                              size="small" 
-                              sx={{ color: '#4A6572' }}
-                              onClick={(e) => handleOpenMenu(e, task.id)}
-                            >
-                              <MoreVerticalIcon size={16} />
-                            </IconButton>
-                          </Box>
 
-                          {/* Description */}
-                          <Typography 
-                            sx={{ 
-                              color: '#4A6572', 
-                              fontSize: '0.875rem',
-                              mb: 2
-                            }}
-                          >
-                            {task.description || 'Sem descrição'}
-                          </Typography>
-
-                          {/* Dates and Duration */}
-                          <Box className="flex items-center gap-4 mb-3">
-                            <Box className="flex items-center gap-1">
-                              <CalendarIcon size={14} className="text-custom-slate" />
-                              <Typography 
-                                sx={{ 
-                                  color: '#4A6572', 
-                                  fontSize: '0.75rem'
-                                }}
-                              >
-                                {task.startDate}
-                              </Typography>
-                            </Box>
-                            <Box className="flex items-center gap-1">
-                              <ClockIcon size={14} className="text-custom-slate" />
-                              <Typography 
-                                sx={{ 
-                                  color: '#4A6572', 
-                                  fontSize: '0.75rem'
-                                }}
-                              >
-                                {task.duration}
-                              </Typography>
-                            </Box>
-                          </Box>
-
-                          {/* Project and Author */}
-                          <Box className="flex items-center gap-3">
-                            <Box className="flex items-center gap-1">
-                              <Typography 
-                                sx={{ 
-                                  color: '#4A6572', 
-                                  fontSize: '0.75rem'
-                                }}
-                              >
-                                Projeto:
-                              </Typography>
-                              <Box 
-                                className="px-2 py-0.5 rounded"
-                                sx={{ backgroundColor: '#FFE5E5' }}
-                              >
-                                <Typography 
-                                  sx={{ 
-                                    color: '#4A6572', 
+                            {/* Dates and Duration */}
+                            <Box className="flex items-center gap-4 mb-3">
+                              <Box className="flex items-center gap-1">
+                                <CalendarIcon
+                                  size={14}
+                                  className="text-custom-slate"
+                                />
+                                <Typography
+                                  sx={{
+                                    color: '#4A6572',
                                     fontSize: '0.75rem',
-                                    fontWeight: 600
                                   }}
                                 >
-                                  {task.project}
+                                  {task.startDate}
                                 </Typography>
                               </Box>
-                            </Box>
-                            <Box className="flex items-center gap-1">
-                              <Typography 
-                                sx={{ 
-                                  color: '#4A6572', 
-                                  fontSize: '0.75rem'
-                                }}
-                              >
-                                Autor:
-                              </Typography>
-                              <Box 
-                                className="px-2 py-0.5 rounded"
-                                sx={{ backgroundColor: '#E0EADD' }}
-                              >
-                                <Typography 
-                                  sx={{ 
-                                    color: '#4A6572', 
+                              <Box className="flex items-center gap-1">
+                                <ClockIcon
+                                  size={14}
+                                  className="text-custom-slate"
+                                />
+                                <Typography
+                                  sx={{
+                                    color: '#4A6572',
                                     fontSize: '0.75rem',
-                                    fontWeight: 600
                                   }}
                                 >
-                                  {task.author}
+                                  {task.duration}
                                 </Typography>
+                              </Box>
+                              {taskStatus.includes('pendentes') && (
+                                <Box className="flex items-center gap-1">
+                                  <PlayIcon
+                                    size={14}
+                                    className="text-custom-slate cursor-pointer"
+                                    onClick={() =>
+                                      setPomodoroTime(
+                                        parseInt(task.duration) || 25
+                                      )
+                                    }
+                                  />
+                                  <Typography
+                                    sx={{
+                                      color: '#4A6572',
+                                      fontSize: '0.75rem',
+                                    }}
+                                  >
+                                    Iniciar
+                                  </Typography>
+                                </Box>
+                              )}
+                            </Box>
+
+                            {/* Project and Author */}
+                            <Box className="flex items-center gap-3">
+                              <Box className="flex items-center gap-1">
+                                <Typography
+                                  sx={{
+                                    color: '#4A6572',
+                                    fontSize: '0.75rem',
+                                  }}
+                                >
+                                  Projeto:
+                                </Typography>
+                                <Box
+                                  className="px-2 py-0.5 rounded"
+                                  sx={{ backgroundColor: '#FFE5E5' }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      color: '#4A6572',
+                                      fontSize: '0.75rem',
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {task.project}
+                                  </Typography>
+                                </Box>
+                              </Box>
+                              <Box className="flex items-center gap-1">
+                                <Typography
+                                  sx={{
+                                    color: '#4A6572',
+                                    fontSize: '0.75rem',
+                                  }}
+                                >
+                                  Autor:
+                                </Typography>
+                                <Box
+                                  className="px-2 py-0.5 rounded"
+                                  sx={{ backgroundColor: '#E0EADD' }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      color: '#4A6572',
+                                      fontSize: '0.75rem',
+                                      fontWeight: 600,
+                                    }}
+                                  >
+                                    {task.author}
+                                  </Typography>
+                                </Box>
                               </Box>
                             </Box>
                           </Box>
-                        </Box>
-                      ))
-                    )}
-                  </Box>
-                )}
+                        ))
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          </>
+        )}
+
+        {/* Create Task Dialog */}
+        <Dialog
+          open={openCreateDialog}
+          onClose={() => {
+            setOpenCreateDialog(false);
+            resetForm();
+          }}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
+            Nova Tarefa
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Título da Tarefa"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={taskTitle}
+              onChange={(e) => {
+                setTaskTitle(e.target.value);
+                setError('');
+              }}
+              sx={{ mt: 2 }}
+            />
+            <TextField
+              margin="dense"
+              label="Descrição"
+              type="text"
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              sx={{ mt: 2 }}
+            />
+            <Box className="flex gap-2 mt-2">
+              <TextField
+                margin="dense"
+                label="Data de Início"
+                type="text"
+                placeholder="DD/MM/AAAA"
+                variant="outlined"
+                value={taskStartDate}
+                onChange={(e) => setTaskStartDate(e.target.value)}
+                sx={{ flex: 1 }}
+              />
+              <TextField
+                margin="dense"
+                label="Duração"
+                type="text"
+                variant="outlined"
+                value={taskDuration}
+                onChange={(e) => setTaskDuration(e.target.value)}
+                sx={{ flex: 1 }}
+              />
+            </Box>
+            <FormControl fullWidth margin="dense" sx={{ mt: 2 }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={taskStatus}
+                label="Status"
+                onChange={(e) => setTaskStatus(e.target.value as TaskStatus)}
+              >
+                <MenuItem value="pendentes">Pendentes</MenuItem>
+                <MenuItem value="em-andamento">Em andamento</MenuItem>
+                <MenuItem value="concluidas">Concluídas</MenuItem>
+              </Select>
+            </FormControl>
+            {error && (
+              <Typography
+                sx={{ color: 'error.main', mt: 1, fontSize: '0.875rem' }}
+              >
+                {error}
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ p: 2 }}>
+            <Button
+              onClick={() => {
+                setOpenCreateDialog(false);
+                resetForm();
+              }}
+              sx={{ color: '#A3BACF' }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleCreateTask}
+              variant="contained"
+              disabled={actionLoading}
+              sx={{
+                backgroundColor: '#4A6572',
+                '&:hover': { backgroundColor: '#3a5260' },
+                '&:disabled': { backgroundColor: '#A3BACF' },
+              }}
+            >
+              {actionLoading ? (
+                <CircularProgress size={20} sx={{ color: '#FFFFFF' }} />
+              ) : (
+                'Criar'
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Edit Task Dialog */}
+        <Dialog
+          open={openEditDialog}
+          onClose={() => {
+            setOpenEditDialog(false);
+            resetForm();
+            setEditingTaskId(null);
+          }}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
+            Editar Tarefa
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Título da Tarefa"
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={taskTitle}
+              onChange={(e) => {
+                setTaskTitle(e.target.value);
+                setError('');
+              }}
+              sx={{ mt: 2 }}
+            />
+            <TextField
+              margin="dense"
+              label="Descrição"
+              type="text"
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              sx={{ mt: 2 }}
+            />
+            <Box className="flex gap-2 mt-2">
+              <TextField
+                margin="dense"
+                label="Data de Início"
+                type="text"
+                placeholder="DD/MM/AAAA"
+                variant="outlined"
+                value={taskStartDate}
+                onChange={(e) => setTaskStartDate(e.target.value)}
+                sx={{ flex: 1 }}
+              />
+              <TextField
+                margin="dense"
+                label="Duração"
+                type="text"
+                variant="outlined"
+                value={taskDuration}
+                onChange={(e) => setTaskDuration(e.target.value)}
+                sx={{ flex: 1 }}
+              />
+            </Box>
+            <FormControl fullWidth margin="dense" sx={{ mt: 2 }}>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={taskStatus}
+                label="Status"
+                onChange={(e) => setTaskStatus(e.target.value as TaskStatus)}
+              >
+                <MenuItem value="pendentes">Pendentes</MenuItem>
+                <MenuItem value="em-andamento">Em andamento</MenuItem>
+                <MenuItem value="concluidas">Concluídas</MenuItem>
+              </Select>
+            </FormControl>
+            {error && (
+              <Typography
+                sx={{ color: 'error.main', mt: 1, fontSize: '0.875rem' }}
+              >
+                {error}
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ p: 2 }}>
+            <Button
+              onClick={() => {
+                setOpenEditDialog(false);
+                resetForm();
+                setEditingTaskId(null);
+              }}
+              disabled={actionLoading}
+              sx={{ color: '#A3BACF' }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleUpdateTask}
+              variant="contained"
+              disabled={actionLoading}
+              sx={{
+                backgroundColor: '#4A6572',
+                '&:hover': { backgroundColor: '#3a5260' },
+                '&:disabled': { backgroundColor: '#A3BACF' },
+              }}
+            >
+              {actionLoading ? (
+                <CircularProgress size={20} sx={{ color: '#FFFFFF' }} />
+              ) : (
+                'Salvar'
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Legend Dialog */}
+        <Dialog
+          open={openLegendDialog}
+          onClose={() => setOpenLegendDialog(false)}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle
+            sx={{ color: '#4A6572', fontWeight: 600, textAlign: 'center' }}
+          >
+            Legenda
+          </DialogTitle>
+          <DialogContent>
+            <Typography sx={{ color: '#A3BACF', mb: 3 }}>
+              Aqui vamos explicar o que significa cada ícone.
+            </Typography>
+            <Box className="flex flex-col gap-3">
+              <Box className="flex items-center gap-3">
+                <PlusIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Criar uma nova tarefa para o projeto
+                </Typography>
               </Box>
-            ))}
-          </Box>
-        </>
-      )}
-
-      {/* Create Task Dialog */}
-      <Dialog 
-        open={openCreateDialog} 
-        onClose={() => {
-          setOpenCreateDialog(false);
-          resetForm();
-        }}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
-          Nova Tarefa
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Título da Tarefa"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={taskTitle}
-            onChange={(e) => {
-              setTaskTitle(e.target.value);
-              setError('');
-            }}
-            sx={{ mt: 2 }}
-          />
-          <TextField
-            margin="dense"
-            label="Descrição"
-            type="text"
-            fullWidth
-            multiline
-            rows={3}
-            variant="outlined"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
-            sx={{ mt: 2 }}
-          />
-          <Box className="flex gap-2 mt-2">
-            <TextField
-              margin="dense"
-              label="Data de Início"
-              type="text"
-              placeholder="DD/MM/AAAA"
-              variant="outlined"
-              value={taskStartDate}
-              onChange={(e) => setTaskStartDate(e.target.value)}
-              sx={{ flex: 1 }}
-            />
-            <TextField
-              margin="dense"
-              label="Duração"
-              type="text"
-              variant="outlined"
-              value={taskDuration}
-              onChange={(e) => setTaskDuration(e.target.value)}
-              sx={{ flex: 1 }}
-            />
-          </Box>
-          <FormControl fullWidth margin="dense" sx={{ mt: 2 }}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={taskStatus}
-              label="Status"
-              onChange={(e) => setTaskStatus(e.target.value as TaskStatus)}
+              <Box className="flex items-center gap-3">
+                <PencilIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Editar informações da tarefa
+                </Typography>
+              </Box>
+              <Box className="flex items-center gap-3">
+                <TrashIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Excluir a tarefa permanentemente
+                </Typography>
+              </Box>
+              <Box className="flex items-center gap-3">
+                <MoreVerticalIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Visualizar mais opções da tarefa
+                </Typography>
+              </Box>
+              <Box className="flex items-center gap-3">
+                <ChevronUpIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Expandir/Recolher coluna de tarefas
+                </Typography>
+              </Box>
+              <Box className="flex items-center gap-3">
+                <CalendarIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Data de início da tarefa
+                </Typography>
+              </Box>
+              <Box className="flex items-center gap-3">
+                <ClockIcon size={24} className="text-[#4A6572]" />
+                <Typography sx={{ color: '#4A6572' }}>
+                  Duração estimada da tarefa
+                </Typography>
+              </Box>
+            </Box>
+          </DialogContent>
+          <DialogActions sx={{ p: 2, justifyContent: 'center' }}>
+            <Button
+              onClick={() => setOpenLegendDialog(false)}
+              variant="contained"
+              sx={{
+                backgroundColor: '#4A6572',
+                '&:hover': { backgroundColor: '#3a5260' },
+              }}
             >
-              <MenuItem value="pendentes">Pendentes</MenuItem>
-              <MenuItem value="em-andamento">Em andamento</MenuItem>
-              <MenuItem value="concluidas">Concluídas</MenuItem>
-            </Select>
-          </FormControl>
-          {error && (
-            <Typography sx={{ color: 'error.main', mt: 1, fontSize: '0.875rem' }}>
-              {error}
-            </Typography>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button
-            onClick={() => {
-              setOpenCreateDialog(false);
-              resetForm();
-            }}
-            sx={{ color: '#A3BACF' }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleCreateTask}
-            variant="contained"
-            disabled={actionLoading}
-            sx={{
-              backgroundColor: '#4A6572',
-              '&:hover': { backgroundColor: '#3a5260' },
-              '&:disabled': { backgroundColor: '#A3BACF' }
-            }}
-          >
-            {actionLoading ? <CircularProgress size={20} sx={{ color: '#FFFFFF' }} /> : 'Criar'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              Fechar
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-      {/* Edit Task Dialog */}
-      <Dialog 
-        open={openEditDialog} 
-        onClose={() => {
-          setOpenEditDialog(false);
-          resetForm();
-          setEditingTaskId(null);
-        }}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
-          Editar Tarefa
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Título da Tarefa"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={taskTitle}
-            onChange={(e) => {
-              setTaskTitle(e.target.value);
-              setError('');
-            }}
-            sx={{ mt: 2 }}
-          />
-          <TextField
-            margin="dense"
-            label="Descrição"
-            type="text"
-            fullWidth
-            multiline
-            rows={3}
-            variant="outlined"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
-            sx={{ mt: 2 }}
-          />
-          <Box className="flex gap-2 mt-2">
-            <TextField
-              margin="dense"
-              label="Data de Início"
-              type="text"
-              placeholder="DD/MM/AAAA"
-              variant="outlined"
-              value={taskStartDate}
-              onChange={(e) => setTaskStartDate(e.target.value)}
-              sx={{ flex: 1 }}
-            />
-            <TextField
-              margin="dense"
-              label="Duração"
-              type="text"
-              variant="outlined"
-              value={taskDuration}
-              onChange={(e) => setTaskDuration(e.target.value)}
-              sx={{ flex: 1 }}
-            />
-          </Box>
-          <FormControl fullWidth margin="dense" sx={{ mt: 2 }}>
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={taskStatus}
-              label="Status"
-              onChange={(e) => setTaskStatus(e.target.value as TaskStatus)}
-            >
-              <MenuItem value="pendentes">Pendentes</MenuItem>
-              <MenuItem value="em-andamento">Em andamento</MenuItem>
-              <MenuItem value="concluidas">Concluídas</MenuItem>
-            </Select>
-          </FormControl>
-          {error && (
-            <Typography sx={{ color: 'error.main', mt: 1, fontSize: '0.875rem' }}>
-              {error}
-            </Typography>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button
-            onClick={() => {
-              setOpenEditDialog(false);
-              resetForm();
-              setEditingTaskId(null);
-            }}
-            disabled={actionLoading}
-            sx={{ color: '#A3BACF' }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleUpdateTask}
-            variant="contained"
-            disabled={actionLoading}
-            sx={{
-              backgroundColor: '#4A6572',
-              '&:hover': { backgroundColor: '#3a5260' },
-              '&:disabled': { backgroundColor: '#A3BACF' }
-            }}
-          >
-            {actionLoading ? <CircularProgress size={20} sx={{ color: '#FFFFFF' }} /> : 'Salvar'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Legend Dialog */}
-      <Dialog 
-        open={openLegendDialog} 
-        onClose={() => setOpenLegendDialog(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ color: '#4A6572', fontWeight: 600, textAlign: 'center' }}>
-          Legenda
-        </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ color: '#A3BACF', mb: 3 }}>
-            Aqui vamos explicar o que significa cada ícone.
-          </Typography>
-          <Box className="flex flex-col gap-3">
-            <Box className="flex items-center gap-3">
-              <PlusIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Criar uma nova tarefa para o projeto
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <PencilIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Editar informações da tarefa
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <TrashIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Excluir a tarefa permanentemente
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <MoreVerticalIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Visualizar mais opções da tarefa
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <ChevronUpIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Expandir/Recolher coluna de tarefas
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <CalendarIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Data de início da tarefa
-              </Typography>
-            </Box>
-            <Box className="flex items-center gap-3">
-              <ClockIcon size={24} className="text-[#4A6572]" />
-              <Typography sx={{ color: '#4A6572' }}>
-                Duração estimada da tarefa
-              </Typography>
-            </Box>
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ p: 2, justifyContent: 'center' }}>
-          <Button
-            onClick={() => setOpenLegendDialog(false)}
-            variant="contained"
-            sx={{
-              backgroundColor: '#4A6572',
-              '&:hover': { backgroundColor: '#3a5260' }
-            }}
-          >
-            Fechar
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* More Options Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleCloseMenu}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem 
-          onClick={() => selectedTaskId && handleEditTask(selectedTaskId)}
-          sx={{ color: '#4A6572' }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <PencilIcon size={16} />
-            <span>Editar tarefa</span>
-          </Box>
-        </MenuItem>
-        <MenuItem 
-          onClick={() => selectedTaskId && handleMoveTask('em-andamento')}
-          sx={{ color: '#4A6572' }}
-        >
-          ▷ Mover para Em andamento
-        </MenuItem>
-        <MenuItem 
-          onClick={() => selectedTaskId && handleMoveTask('pendentes')}
-          sx={{ color: '#4A6572' }}
-        >
-          ⏸ Mover para Pendentes
-        </MenuItem>
-        <MenuItem 
-          onClick={() => selectedTaskId && handleMoveTask('concluidas')}
-          sx={{ color: '#4A6572' }}
-        >
-          ✓ Mover para Concluídas
-        </MenuItem>
-        <MenuItem 
-          onClick={() => selectedTaskId && handleDeleteClick(selectedTaskId)}
-          sx={{ color: '#d32f2f' }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <TrashIcon size={16} />
-            <span>Excluir tarefa</span>
-          </Box>
-        </MenuItem>
-      </Menu>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog 
-        open={openDeleteDialog} 
-        onClose={() => {
-          setOpenDeleteDialog(false);
-          setTaskToDelete(null);
-        }}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
-          Confirmar Exclusão
-        </DialogTitle>
-        <DialogContent>
-          <Typography sx={{ color: '#4A6572', mb: 2 }}>
-            Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser desfeita.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button
-            onClick={() => {
-              setOpenDeleteDialog(false);
-              setTaskToDelete(null);
-            }}
-            disabled={actionLoading}
-            sx={{ color: '#A3BACF' }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleDeleteTask}
-            variant="contained"
-            disabled={actionLoading}
-            sx={{
-              backgroundColor: '#d32f2f',
-              '&:hover': { backgroundColor: '#b71c1c' },
-              '&:disabled': { backgroundColor: '#A3BACF' }
-            }}
-          >
-            {actionLoading ? <CircularProgress size={20} sx={{ color: '#FFFFFF' }} /> : 'Excluir'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Success Snackbar */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      >
-        <Alert 
-          onClose={() => setSnackbarOpen(false)} 
-          severity="success" 
-          sx={{ 
-            width: '100%',
-            backgroundColor: '#E0EADD',
-            color: '#4A6572',
-            '& .MuiAlert-icon': {
-              color: '#4A6572'
-            }
+        {/* More Options Menu */}
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
           }}
         >
-          {successMessage}
-        </Alert>
-      </Snackbar>
-    </Box>
+          <MenuItem
+            onClick={() => selectedTaskId && handleEditTask(selectedTaskId)}
+            sx={{ color: '#4A6572' }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <PencilIcon size={16} />
+              <span>Editar tarefa</span>
+            </Box>
+          </MenuItem>
+          <MenuItem
+            onClick={() => selectedTaskId && handleMoveTask('em-andamento')}
+            sx={{ color: '#4A6572' }}
+          >
+            ▷ Mover para Em andamento
+          </MenuItem>
+          <MenuItem
+            onClick={() => selectedTaskId && handleMoveTask('pendentes')}
+            sx={{ color: '#4A6572' }}
+          >
+            ⏸ Mover para Pendentes
+          </MenuItem>
+          <MenuItem
+            onClick={() => selectedTaskId && handleMoveTask('concluidas')}
+            sx={{ color: '#4A6572' }}
+          >
+            ✓ Mover para Concluídas
+          </MenuItem>
+          <MenuItem
+            onClick={() => selectedTaskId && handleDeleteClick(selectedTaskId)}
+            sx={{ color: '#d32f2f' }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TrashIcon size={16} />
+              <span>Excluir tarefa</span>
+            </Box>
+          </MenuItem>
+        </Menu>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={openDeleteDialog}
+          onClose={() => {
+            setOpenDeleteDialog(false);
+            setTaskToDelete(null);
+          }}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle sx={{ color: '#4A6572', fontWeight: 600 }}>
+            Confirmar Exclusão
+          </DialogTitle>
+          <DialogContent>
+            <Typography sx={{ color: '#4A6572', mb: 2 }}>
+              Tem certeza que deseja excluir esta tarefa? Esta ação não pode ser
+              desfeita.
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ p: 2 }}>
+            <Button
+              onClick={() => {
+                setOpenDeleteDialog(false);
+                setTaskToDelete(null);
+              }}
+              disabled={actionLoading}
+              sx={{ color: '#A3BACF' }}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleDeleteTask}
+              variant="contained"
+              disabled={actionLoading}
+              sx={{
+                backgroundColor: '#d32f2f',
+                '&:hover': { backgroundColor: '#b71c1c' },
+                '&:disabled': { backgroundColor: '#A3BACF' },
+              }}
+            >
+              {actionLoading ? (
+                <CircularProgress size={20} sx={{ color: '#FFFFFF' }} />
+              ) : (
+                'Excluir'
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Success Snackbar */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity="success"
+            sx={{
+              width: '100%',
+              backgroundColor: '#E0EADD',
+              color: '#4A6572',
+              '& .MuiAlert-icon': {
+                color: '#4A6572',
+              },
+            }}
+          >
+            {successMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
+
+      {pomodoroTime && (
+        <PomodoroWidget
+          defaultTime={pomodoroTime}
+          onClose={() => setPomodoroTime(null)}
+        />
+      )}
+    </>
   );
 };
 

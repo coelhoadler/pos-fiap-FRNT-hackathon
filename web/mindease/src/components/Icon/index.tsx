@@ -9,6 +9,7 @@ import { TrashIcon } from './TrashIcon';
 import { MoreVerticalIcon } from './MoreVerticalIcon';
 import { InfoIcon } from './InfoIcon';
 import { FolderKanbanIcon } from './FolderKanbanIcon';
+import { PlayIcon } from './PlayIcon';
 
 export {
   EyeIcon,
@@ -18,6 +19,7 @@ export {
   CalendarIcon,
   ClockIcon,
   PlusIcon,
+  PlayIcon,
   TrashIcon,
   MoreVerticalIcon,
   InfoIcon,
