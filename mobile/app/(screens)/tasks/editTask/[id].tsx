@@ -19,7 +19,7 @@ import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckSquare, ChevronDown, Calendar, Square } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
-import { Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { editTaskLegendContent } from "../constants";
 import { createStyles } from "./styles";
 
@@ -265,9 +265,15 @@ export default function EditTask() {
       <Text style={styles.subtitle}>
         Preencha os campos abaixo para editar a tarefa.
       </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ width: "100%" }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      >
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.formContainer}
+        keyboardShouldPersistTaps="handled"
       >
         <View style={styles.form}>
           <View>
@@ -471,6 +477,7 @@ export default function EditTask() {
           />
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
       {openModalLegend && (
         <ModalLegendTasks
           legendContentItems={editTaskLegendContent}
