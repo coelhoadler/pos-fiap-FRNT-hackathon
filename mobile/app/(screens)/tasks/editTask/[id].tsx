@@ -270,213 +270,213 @@ export default function EditTask() {
         style={{ width: "100%" }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
       >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.formContainer}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View style={styles.form}>
-          <View>
-            <Input
-              text="Nome da tarefa"
-              value={formData.nome}
-              onChangeText={(t) => {
-                setFormData({ ...formData, nome: t });
-                setErrors({ ...errors, nome: "" });
-              }}
-            />
-            {errors.nome ? <FormErrorMessage message={errors.nome} /> : null}
-          </View>
-          <View>
-            <TextArea
-              id="edit-desc"
-              text="Descrição"
-              value={formData.descricao}
-              onChangeText={(t) => setFormData({ ...formData, descricao: t })}
-            />
-          </View>
-
-          <View style={styles.selectedItems}>
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => {
-                setTempStatus(formData.status);
-                setOpenModalStatus(true);
-              }}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Status
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text style={styles.selectedItemBodyText}>
-                  {formData.status}
-                </Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.selectedItem}
-              onPress={() => {
-                setTempPriority(formData.priority);
-                setOpenModalPriority(true);
-              }}
-            >
-              <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                Prioridade
-              </Text>
-              <View style={styles.selectedItemBody}>
-                <Text style={styles.selectedItemBodyText}>
-                  {formData.priority}
-                </Text>
-                <ChevronDown size={20} color={colors.text} />
-              </View>
-            </TouchableOpacity>
-
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.formContainer}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.form}>
             <View>
+              <Input
+                text="Nome da tarefa"
+                value={formData.nome}
+                onChangeText={(t) => {
+                  setFormData({ ...formData, nome: t });
+                  setErrors({ ...errors, nome: "" });
+                }}
+              />
+              {errors.nome ? <FormErrorMessage message={errors.nome} /> : null}
+            </View>
+            <View>
+              <TextArea
+                id="edit-desc"
+                text="Descrição"
+                value={formData.descricao}
+                onChangeText={(t) => setFormData({ ...formData, descricao: t })}
+              />
+            </View>
+
+            <View style={styles.selectedItems}>
               <TouchableOpacity
                 style={styles.selectedItem}
                 onPress={() => {
-                  setTempColumn({
-                    id: formData.columnId,
-                    name: formData.columnName,
-                  });
-                  setOpenModalColumn(true);
-                  setErrors({ ...errors, columnId: "" });
+                  setTempStatus(formData.status);
+                  setOpenModalStatus(true);
                 }}
               >
-                <View
-                  style={
-                    genericFormStyles(colorScheme).wrapperRequiredIndication
-                  }
-                >
-                  <Text
-                    style={genericFormStyles(colorScheme).requiredIndication}
-                  >
-                    *
-                  </Text>
-                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                    Coluna Destino
-                  </Text>
-                </View>
+                <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                  Status
+                </Text>
                 <View style={styles.selectedItemBody}>
                   <Text style={styles.selectedItemBodyText}>
-                    {formData.columnName || "Selecionar coluna"}
+                    {formData.status}
                   </Text>
                   <ChevronDown size={20} color={colors.text} />
                 </View>
               </TouchableOpacity>
-              {errors.columnId ? (
-                <FormErrorMessage message={errors.columnId} />
-              ) : null}
+
+              <TouchableOpacity
+                style={styles.selectedItem}
+                onPress={() => {
+                  setTempPriority(formData.priority);
+                  setOpenModalPriority(true);
+                }}
+              >
+                <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                  Prioridade
+                </Text>
+                <View style={styles.selectedItemBody}>
+                  <Text style={styles.selectedItemBodyText}>
+                    {formData.priority}
+                  </Text>
+                  <ChevronDown size={20} color={colors.text} />
+                </View>
+              </TouchableOpacity>
+
+              <View>
+                <TouchableOpacity
+                  style={styles.selectedItem}
+                  onPress={() => {
+                    setTempColumn({
+                      id: formData.columnId,
+                      name: formData.columnName,
+                    });
+                    setOpenModalColumn(true);
+                    setErrors({ ...errors, columnId: "" });
+                  }}
+                >
+                  <View
+                    style={
+                      genericFormStyles(colorScheme).wrapperRequiredIndication
+                    }
+                  >
+                    <Text
+                      style={genericFormStyles(colorScheme).requiredIndication}
+                    >
+                      *
+                    </Text>
+                    <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                      Coluna Destino
+                    </Text>
+                  </View>
+                  <View style={styles.selectedItemBody}>
+                    <Text style={styles.selectedItemBodyText}>
+                      {formData.columnName || "Selecionar coluna"}
+                    </Text>
+                    <ChevronDown size={20} color={colors.text} />
+                  </View>
+                </TouchableOpacity>
+                {errors.columnId ? (
+                  <FormErrorMessage message={errors.columnId} />
+                ) : null}
+              </View>
+
+              <View>
+                <TouchableOpacity
+                  style={[
+                    styles.selectedItem,
+                    {
+                      paddingHorizontal: 0,
+                      width: "100%",
+                    },
+                  ]}
+                  onPress={() => setOpenModalTime(true)}
+                >
+                  <View
+                    style={
+                      genericFormStyles(colorScheme).wrapperRequiredIndication
+                    }
+                  >
+                    <Text
+                      style={genericFormStyles(colorScheme).requiredIndication}
+                    >
+                      *
+                    </Text>
+                    <Text style={genericFormStyles(colorScheme).defaultLabel}>
+                      Tempo Estimado
+                    </Text>
+                  </View>
+                  <View style={styles.selectedItemBody}>
+                    <Text
+                      style={styles.selectedItemBodyText}
+                    >{`${formData.hours}h ${formData.minutes}min`}</Text>
+                    <ChevronDown size={20} color={colors.text} />
+                  </View>
+                </TouchableOpacity>
+                {errors.tempoExecucao ? (
+                  <FormErrorMessage
+                    style={{
+                      paddingVertical: 3,
+                      justifyContent: "flex-start",
+                      paddingHorizontal: 3,
+                    }}
+                    message={errors.tempoExecucao}
+                  />
+                ) : null}
+              </View>
             </View>
 
             <View>
-              <TouchableOpacity
-                style={[
-                  styles.selectedItem,
-                  {
-                    paddingHorizontal: 0,
-                    width: "100%",
-                  },
-                ]}
-                onPress={() => setOpenModalTime(true)}
-              >
-                <View
-                  style={
-                    genericFormStyles(colorScheme).wrapperRequiredIndication
-                  }
-                >
-                  <Text
-                    style={genericFormStyles(colorScheme).requiredIndication}
-                  >
-                    *
-                  </Text>
-                  <Text style={genericFormStyles(colorScheme).defaultLabel}>
-                    Tempo Estimado
-                  </Text>
+              <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
+                <View style={{ flex: 1 }}>
+                  <Input
+                    text={
+                      <View
+                        style={[
+                          genericFormStyles(colorScheme).wrapperRequiredIndication,
+                        ]}
+                      >
+                        <Text
+                          style={[genericFormStyles(colorScheme).requiredIndication]}
+                        >
+                          *
+                        </Text>
+                        <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
+                          Data para finalizar
+                        </Text>
+                      </View>
+                    }
+                    value={formData.dataFinalizar}
+                    onChangeText={handleDateChange}
+                    placeholder="DD/MM/AAAA"
+                    keyboardType="numeric"
+                    maxLength={10}
+                  />
                 </View>
-                <View style={styles.selectedItemBody}>
-                  <Text
-                    style={styles.selectedItemBodyText}
-                  >{`${formData.hours}h ${formData.minutes}min`}</Text>
-                  <ChevronDown size={20} color={colors.text} />
-                </View>
-              </TouchableOpacity>
-              {errors.tempoExecucao ? (
-                <FormErrorMessage
+                <TouchableOpacity
+                  onPress={() => setShowDatePicker(true)}
                   style={{
-                    paddingVertical: 3,
-                    justifyContent: "flex-start",
-                    paddingHorizontal: 3,
+                    padding: 12,
+                    borderRadius: 8,
+                    backgroundColor: colors.colorPrimary,
+                    marginBottom: 2,
                   }}
-                  message={errors.tempoExecucao}
+                >
+                  <Calendar size={22} color={colors.colorWhite} />
+                </TouchableOpacity>
+              </View>
+              {showDatePicker && (
+                <DateTimePicker
+                  value={getDatePickerValue()}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "inline" : "calendar"}
+                  minimumDate={new Date()}
+                  onChange={handleDatePickerChange}
                 />
+              )}
+              {errors.dataFinalizar ? (
+                <FormErrorMessage message={errors.dataFinalizar} />
               ) : null}
             </View>
-          </View>
 
-          <View>
-            <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 8 }}>
-              <View style={{ flex: 1 }}>
-                <Input
-                  text={
-                    <View
-                      style={[
-                        genericFormStyles(colorScheme).wrapperRequiredIndication,
-                      ]}
-                    >
-                      <Text
-                        style={[genericFormStyles(colorScheme).requiredIndication]}
-                      >
-                        *
-                      </Text>
-                      <Text style={[genericFormStyles(colorScheme).defaultLabel]}>
-                        Data para finalizar
-                      </Text>
-                    </View>
-                  }
-                  value={formData.dataFinalizar}
-                  onChangeText={handleDateChange}
-                  placeholder="DD/MM/AAAA"
-                  keyboardType="numeric"
-                  maxLength={10}
-                />
-              </View>
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(true)}
-                style={{
-                  padding: 12,
-                  borderRadius: 8,
-                  backgroundColor: colors.colorPrimary,
-                  marginBottom: 2,
-                }}
-              >
-                <Calendar size={22} color={colors.colorWhite} />
-              </TouchableOpacity>
-            </View>
-            {showDatePicker && (
-              <DateTimePicker
-                value={getDatePickerValue()}
-                mode="date"
-                display={Platform.OS === "ios" ? "inline" : "calendar"}
-                minimumDate={new Date()}
-                onChange={handleDatePickerChange}
-              />
-            )}
-            {errors.dataFinalizar ? (
-              <FormErrorMessage message={errors.dataFinalizar} />
-            ) : null}
+            <Button
+              title="Salvar Alterações"
+              onPress={handleUpdate}
+              loading={loading}
+              style={styles.modalButton}
+            />
           </View>
-
-          <Button
-            title="Salvar Alterações"
-            onPress={handleUpdate}
-            loading={loading}
-            style={styles.modalButton}
-          />
-        </View>
-      </ScrollView>
+        </ScrollView>
       </KeyboardAvoidingView>
       {openModalLegend && (
         <ModalLegendTasks
