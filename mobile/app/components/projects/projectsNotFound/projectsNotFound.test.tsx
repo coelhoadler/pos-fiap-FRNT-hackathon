@@ -24,7 +24,7 @@ describe('ProjectsNotFound', () => {
             <ProjectsNotFound
                 message="Nenhum projeto encontrado"
                 text="Criar projeto"
-                onPress={() => {}}
+                onPress={() => { }}
             />
         );
         expect(screen.getByText('Nenhum projeto encontrado')).toBeTruthy();
@@ -35,7 +35,7 @@ describe('ProjectsNotFound', () => {
             <ProjectsNotFound
                 message="Sem projetos"
                 text="Novo projeto"
-                onPress={() => {}}
+                onPress={() => { }}
             />
         );
         expect(screen.getByText('Novo projeto')).toBeTruthy();
@@ -59,7 +59,7 @@ describe('ProjectsNotFound', () => {
             <ProjectsNotFound
                 message="Vazio"
                 text="Adicionar"
-                onPress={() => {}}
+                onPress={() => { }}
             />
         );
         expect(screen.getByText('search-x-icon')).toBeTruthy();

@@ -29,8 +29,8 @@ describe('Modal', () => {
                 contentType="feedbackMessage"
                 text="Operação realizada com sucesso"
                 open={true}
-                onClose={() => {}}
-                onPress={() => {}}
+                onClose={() => { }}
+                onPress={() => { }}
             />
         );
         expect(screen.getByText('Operação realizada com sucesso')).toBeTruthy();
@@ -42,8 +42,8 @@ describe('Modal', () => {
                 contentType="feedbackMessage"
                 text="Mensagem"
                 open={true}
-                onClose={() => {}}
-                onPress={() => {}}
+                onClose={() => { }}
+                onPress={() => { }}
             />
         );
         expect(screen.getByText('OK')).toBeTruthy();
@@ -55,9 +55,9 @@ describe('Modal', () => {
                 contentType="withActions"
                 text="Confirmar ação?"
                 open={true}
-                onClose={() => {}}
-                onPressActionA={() => {}}
-                onPressActionB={() => {}}
+                onClose={() => { }}
+                onPressActionA={() => { }}
+                onPressActionB={() => { }}
             />
         );
         expect(screen.getByText('Não')).toBeTruthy();
@@ -71,9 +71,9 @@ describe('Modal', () => {
                 contentType="withActions"
                 text="Confirmar?"
                 open={true}
-                onClose={() => {}}
+                onClose={() => { }}
                 onPressActionA={onPressA}
-                onPressActionB={() => {}}
+                onPressActionB={() => { }}
             />
         );
         fireEvent.press(screen.getByText('Não'));
@@ -87,8 +87,8 @@ describe('Modal', () => {
                 contentType="withActions"
                 text="Confirmar?"
                 open={true}
-                onClose={() => {}}
-                onPressActionA={() => {}}
+                onClose={() => { }}
+                onPressActionA={() => { }}
                 onPressActionB={onPressB}
             />
         );
@@ -101,7 +101,7 @@ describe('Modal', () => {
             <Modal
                 contentType="loading"
                 open={true}
-                onClose={() => {}}
+                onClose={() => { }}
             />
         );
         expect(screen.getByText('Carregando...')).toBeTruthy();
@@ -113,7 +113,7 @@ describe('Modal', () => {
                 contentType="loading"
                 textLoading="Processando..."
                 open={true}
-                onClose={() => {}}
+                onClose={() => { }}
             />
         );
         expect(screen.getByText('Processando...')).toBeTruthy();
@@ -127,9 +127,9 @@ describe('Modal', () => {
                 open={true}
                 textButtonActionA="Cancelar"
                 textButtonActionB="Confirmar"
-                onClose={() => {}}
-                onPressActionA={() => {}}
-                onPressActionB={() => {}}
+                onClose={() => { }}
+                onPressActionA={() => { }}
+                onPressActionB={() => { }}
             />
         );
         expect(screen.getByText('Cancelar')).toBeTruthy();

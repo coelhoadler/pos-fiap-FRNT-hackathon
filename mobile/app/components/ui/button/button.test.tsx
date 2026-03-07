@@ -24,7 +24,7 @@ describe('Button', () => {
     });
 
     it('deve renderizar o título corretamente', () => {
-        render(<Button title="Salvar" onPress={() => {}} />);
+        render(<Button title="Salvar" onPress={() => { }} />);
         expect(screen.getByText('Salvar')).toBeTruthy();
     });
 
@@ -50,12 +50,12 @@ describe('Button', () => {
     });
 
     it('deve renderizar ícone X quando variant é "close"', () => {
-        render(<Button variant="close" title="Fechar" onPress={() => {}} />);
+        render(<Button variant="close" title="Fechar" onPress={() => { }} />);
         expect(screen.getByText('X-icon')).toBeTruthy();
     });
 
     it('deve renderizar com variant outline', () => {
-        render(<Button variant="outline" title="Outline" onPress={() => {}} />);
+        render(<Button variant="outline" title="Outline" onPress={() => { }} />);
         expect(screen.getByText('Outline')).toBeTruthy();
     });
 });

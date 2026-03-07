@@ -13,7 +13,7 @@ describe('ToggleItem', () => {
     });
 
     it('deve renderizar corretamente', () => {
-        render(<ToggleItem id="toggle1" value={false} onChange={() => {}} />);
+        render(<ToggleItem id="toggle1" value={false} onChange={() => { }} />);
         const switches = screen.getAllByRole('switch');
         expect(switches.length).toBeGreaterThanOrEqual(1);
     });
@@ -36,7 +36,7 @@ describe('ToggleItem', () => {
     });
 
     it('deve renderizar com valor true', () => {
-        render(<ToggleItem id="toggle3" value={true} onChange={() => {}} />);
+        render(<ToggleItem id="toggle3" value={true} onChange={() => { }} />);
         const switches = screen.getAllByRole('switch');
         // O Pressable tem accessibilityState checked
         const checkedSwitch = switches.find(s => s.props.accessibilityState?.checked === true);

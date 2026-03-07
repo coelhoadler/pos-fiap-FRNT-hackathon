@@ -21,7 +21,7 @@ describe('AddContentButton', () => {
     });
 
     it('deve renderizar o texto do botão', () => {
-        render(<AddContentButton text="Adicionar projeto" onPress={() => {}} />);
+        render(<AddContentButton text="Adicionar projeto" onPress={() => { }} />);
         expect(screen.getByText('Adicionar projeto')).toBeTruthy();
     });
 
@@ -33,24 +33,24 @@ describe('AddContentButton', () => {
     });
 
     it('deve renderizar ícone de add por padrão', () => {
-        render(<AddContentButton text="Adicionar" onPress={() => {}} />);
+        render(<AddContentButton text="Adicionar" onPress={() => { }} />);
         expect(screen.getByText('icon-add')).toBeTruthy();
     });
 
     it('deve renderizar ícone de view quando typeIcon é "view"', () => {
-        render(<AddContentButton text="Ver" typeIcon="view" onPress={() => {}} />);
+        render(<AddContentButton text="Ver" typeIcon="view" onPress={() => { }} />);
         expect(screen.getByText('icon-view')).toBeTruthy();
     });
 
     it('não deve renderizar ícone quando noIcon é true', () => {
-        render(<AddContentButton text="Sem ícone" noIcon onPress={() => {}} />);
+        render(<AddContentButton text="Sem ícone" noIcon onPress={() => { }} />);
         expect(screen.queryByText('icon-add')).toBeNull();
         expect(screen.queryByText('icon-view')).toBeNull();
     });
 
     it('deve renderizar children quando text não é fornecido', () => {
         render(
-            <AddContentButton onPress={() => {}}>
+            <AddContentButton onPress={() => { }}>
                 Conteúdo filho
             </AddContentButton>
         );

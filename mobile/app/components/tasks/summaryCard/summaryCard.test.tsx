@@ -85,7 +85,7 @@ describe('SummaryCard', () => {
     });
 
     it('deve renderizar botão play quando onPressPlay é fornecido e isRunning é false', () => {
-        render(<SummaryCard {...defaultProps} onPressPlay={() => {}} />);
+        render(<SummaryCard {...defaultProps} onPressPlay={() => { }} />);
         expect(screen.getByText('play-icon')).toBeTruthy();
     });
 

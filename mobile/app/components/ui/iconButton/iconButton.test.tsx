@@ -14,7 +14,7 @@ describe('IconButton', () => {
     });
 
     it('deve renderizar o ícone fornecido', () => {
-        render(<IconButton icon={<Text>meu-icone</Text>} onPress={() => {}} />);
+        render(<IconButton icon={<Text>meu-icone</Text>} onPress={() => { }} />);
         expect(screen.getByText('meu-icone')).toBeTruthy();
     });
 
@@ -33,7 +33,7 @@ describe('IconButton', () => {
     });
 
     it('deve exibir ActivityIndicator quando loading', () => {
-        const { toJSON } = render(<IconButton icon={<Text>icone</Text>} loading onPress={() => {}} />);
+        const { toJSON } = render(<IconButton icon={<Text>icone</Text>} loading onPress={() => { }} />);
         // Quando loading, o icon não deve ser renderizado
         expect(screen.queryByText('icone')).toBeNull();
     });
