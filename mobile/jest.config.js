@@ -8,11 +8,11 @@ module.exports = {
     collectCoverageFrom: [
         'app/**/*.{ts,tsx}',
         'utils/**/*.{ts,tsx}',
-        '!app/**/*.test.{ts,tsx}',
+        'app/**/*.test.{ts,tsx}',
         '!app/**/*.d.ts',
         '!app/**/styles.ts',
         '!app/interface/**',
         '!app/types/**',
-        '!app/(screens)/**'
-    ],
+        '!app/(screens)/**/*.{ts,tsx}',
+    ]
 };
