@@ -11,5 +11,8 @@ module.exports = {
         '!app/**/*.test.{ts,tsx}',
         '!app/**/*.d.ts',
         '!app/**/styles.ts',
+        '!app/interface/**',
+        '!app/types/**',
+        '!app/(screens)/**'
     ],
 };

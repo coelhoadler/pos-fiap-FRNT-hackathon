@@ -1,5 +1,5 @@
 ---
-mode: agent
+agent: agent
 description: "Gera testes unitários com Jest para arquivos do projeto React Native Expo"
 ---
 

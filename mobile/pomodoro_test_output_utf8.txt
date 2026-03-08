@@ -1,0 +1,765 @@
+﻿  Invalid testPattern \app\\(screens)\\home\\(tabs)\\pomodoro.test.tsx\ supplied. Running all tests instead.
+  Invalid testPattern \app\\(screens)\\home\\(tabs)\\pomodoro.test.tsx\ supplied. Running all tests instead.
+node.exe : PASS app/hooks/use-color-s
+cheme.web.test.ts
+No C:\Program 
+Files\nodejs\npx.ps1:29 caractere:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpe 
+   cified: (PASS app/hooks/...eme.w  
+  eb.test.ts:String) [], RemoteExc   
+ eption
+    + FullyQualifiedErrorId : Native 
+   CommandError
+ 
+PASS app/index.test.tsx
+PASS utils/math.test.ts
+PASS app/(screens)/preferences/prefer
+ences.test.tsx
+PASS app/(screens)/home/home-page/ind
+ex.test.tsx
+PASS 
+app/(screens)/login/login.test.tsx
+PASS app/(screens)/register/register.
+test.tsx
+PASS app/(screens)/home/home.test.tsx
+PASS app/components/preferencesItems/
+preferencesItems.test.tsx
+  ÔùÅ Console
+
+    console.log
+      Prefer├¬ncias salvas com 
+sucesso! { focusMode: false, 
+summaryMode: false }
+
+      at log (app/components/preferen
+cesItems/preferencesItems.tsx:81:15)
+
+    console.log
+      Prefer├¬ncias salvas com 
+sucesso! { focusMode: false, 
+summaryMode: false }
+
+      at log (app/components/preferen
+cesItems/preferencesItems.tsx:81:15)
+
+FAIL app/(screens)/home/(tabs)/pomodo
+ro.test.tsx
+  ÔùÅ Console
+
+    console.error
+      An update to TabTwoScreen 
+inside a test was not wrapped in 
+act(...).
+      
+      When testing, code that causes 
+React state updates should be 
+wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update 
+state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're 
+testing the behavior the user would 
+see in the browser. Learn more at htt
+ps://react.dev/link/wrap-tests-with-a
+ct
+
+    [0m [90m 42 |[39m
+     [90m 43 |[39m                 
+    } [36melse[39m {
+    [31m[1m>[22m[39m[90m 44 
+|[39m                         setIsL
+oading([36mfalse[39m)[33m;[39m
+     [90m    |[39m                 
+        [31m[1m^[22m[39m
+     [90m 45 |[39m                 
+        setPomodoroTimer(settings[33
+m?[39m[33m.[39mpomodoroTime)[33m;
+[39m
+     [90m 46 |[39m                 
+        setTimeLeft(settings[33m?[3
+9m[33m.[39mpomodoroTime 
+[33m*[39m [35m60[39m)[33m;[39m
+     [90m 47 |[39m                 
+        setMusicEnabled(settings[33m
+?[39m[33m.[39mmusicEnabled)[33m;
+[39m[0m
+
+      at node_modules/react-test-rend
+erer/cjs/react-test-renderer.developm
+ent.js:11801:19
+      at runWithFiberInDEV (node_modu
+les/react-test-renderer/cjs/react-tes
+t-renderer.development.js:1574:13)
+      at 
+warnIfUpdatesNotWrappedWithActDEV (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:1180
+0:9)
+      at scheduleUpdateOnFiber (node_
+modules/react-test-renderer/cjs/react
+-test-renderer.development.js:10326:9
+)
+      at dispatchSetStateInternal (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:4148
+:13)
+      at dispatchSetState (node_modul
+es/react-test-renderer/cjs/react-test
+-renderer.development.js:4107:7)
+      at setIsLoading (C:\POSTECH\Tec
+hChallenge\pos-fiap-FRNT-hackathon\mo
+bile\app\(screens)\home\(tabs)../../.
+./../pomodoro.tsx:44:25)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+    console.error
+      An update to TabTwoScreen 
+inside a test was not wrapped in 
+act(...).
+      
+      When testing, code that causes 
+React state updates should be 
+wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update 
+state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're 
+testing the behavior the user would 
+see in the browser. Learn more at htt
+ps://react.dev/link/wrap-tests-with-a
+ct
+
+    [0m [90m 43 |[39m             
+        } [36melse[39m {
+     [90m 44 |[39m                 
+        setIsLoading([36mfalse[39m)
+[33m;[39m
+    [31m[1m>[22m[39m[90m 45 
+|[39m                         setPom
+odoroTimer(settings[33m?[39m[33m.
+[39mpomodoroTime)[33m;[39m
+     [90m    |[39m                 
+        [31m[1m^[22m[39m
+     [90m 46 |[39m                 
+        setTimeLeft(settings[33m?[3
+9m[33m.[39mpomodoroTime 
+[33m*[39m [35m60[39m)[33m;[39m
+     [90m 47 |[39m                 
+        setMusicEnabled(settings[33m
+?[39m[33m.[39mmusicEnabled)[33m;
+[39m
+     [90m 48 |[39m                 
+        setSoundToFinish(settings[33
+m?[39m[33m.[39msoundEnabledWhenFin
+ish)[33m;[39m[0m
+
+      at node_modules/react-test-rend
+erer/cjs/react-test-renderer.developm
+ent.js:11801:19
+      at runWithFiberInDEV (node_modu
+les/react-test-renderer/cjs/react-tes
+t-renderer.development.js:1574:13)
+      at 
+warnIfUpdatesNotWrappedWithActDEV (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:1180
+0:9)
+      at scheduleUpdateOnFiber (node_
+modules/react-test-renderer/cjs/react
+-test-renderer.development.js:10326:9
+)
+      at dispatchSetStateInternal (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:4148
+:13)
+      at dispatchSetState (node_modul
+es/react-test-renderer/cjs/react-test
+-renderer.development.js:4107:7)
+      at setPomodoroTimer (C:\POSTECH
+\TechChallenge\pos-fiap-FRNT-hackatho
+n\mobile\app\(screens)\home\(tabs)../
+../../../pomodoro.tsx:45:25)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+    console.error
+      An update to TabTwoScreen 
+inside a test was not wrapped in 
+act(...).
+      
+      When testing, code that causes 
+React state updates should be 
+wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update 
+state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're 
+testing the behavior the user would 
+see in the browser. Learn more at htt
+ps://react.dev/link/wrap-tests-with-a
+ct
+
+    [0m [90m 44 |[39m             
+            setIsLoading([36mfalse[
+39m)[33m;[39m
+     [90m 45 |[39m                 
+        setPomodoroTimer(settings[33
+m?[39m[33m.[39mpomodoroTime)[33m;
+[39m
+    [31m[1m>[22m[39m[90m 46 
+|[39m                         setTim
+eLeft(settings[33m?[39m[33m.[39mp
+omodoroTime [33m*[39m 
+[35m60[39m)[33m;[39m
+     [90m    |[39m                 
+        [31m[1m^[22m[39m
+     [90m 47 |[39m                 
+        setMusicEnabled(settings[33m
+?[39m[33m.[39mmusicEnabled)[33m;
+[39m
+     [90m 48 |[39m                 
+        setSoundToFinish(settings[33
+m?[39m[33m.[39msoundEnabledWhenFin
+ish)[33m;[39m
+     [90m 49 |[39m                 
+    }[0m
+
+      at node_modules/react-test-rend
+erer/cjs/react-test-renderer.developm
+ent.js:11801:19
+      at runWithFiberInDEV (node_modu
+les/react-test-renderer/cjs/react-tes
+t-renderer.development.js:1574:13)
+      at 
+warnIfUpdatesNotWrappedWithActDEV (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:1180
+0:9)
+      at scheduleUpdateOnFiber (node_
+modules/react-test-renderer/cjs/react
+-test-renderer.development.js:10326:9
+)
+      at dispatchSetStateInternal (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:4148
+:13)
+      at dispatchSetState (node_modul
+es/react-test-renderer/cjs/react-test
+-renderer.development.js:4107:7)
+      at setTimeLeft (C:\POSTECH\Tech
+Challenge\pos-fiap-FRNT-hackathon\mob
+ile\app\(screens)\home\(tabs)../../..
+/../pomodoro.tsx:46:25)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+    console.error
+      An update to TabTwoScreen 
+inside a test was not wrapped in 
+act(...).
+      
+      When testing, code that causes 
+React state updates should be 
+wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update 
+state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're 
+testing the behavior the user would 
+see in the browser. Learn more at htt
+ps://react.dev/link/wrap-tests-with-a
+ct
+
+    [0m [90m 45 |[39m             
+            setPomodoroTimer(settings
+[33m?[39m[33m.[39mpomodoroTime)[
+33m;[39m
+     [90m 46 |[39m                 
+        setTimeLeft(settings[33m?[3
+9m[33m.[39mpomodoroTime 
+[33m*[39m [35m60[39m)[33m;[39m
+    [31m[1m>[22m[39m[90m 47 
+|[39m                         setMus
+icEnabled(settings[33m?[39m[33m.[
+39mmusicEnabled)[33m;[39m
+     [90m    |[39m                 
+        [31m[1m^[22m[39m
+     [90m 48 |[39m                 
+        setSoundToFinish(settings[33
+m?[39m[33m.[39msoundEnabledWhenFin
+ish)[33m;[39m
+     [90m 49 |[39m                 
+    }
+     [90m 50 |[39m                 
+} [36mcatch[39m (error) {[0m
+
+      at node_modules/react-test-rend
+erer/cjs/react-test-renderer.developm
+ent.js:11801:19
+      at runWithFiberInDEV (node_modu
+les/react-test-renderer/cjs/react-tes
+t-renderer.development.js:1574:13)
+      at 
+warnIfUpdatesNotWrappedWithActDEV (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:1180
+0:9)
+      at scheduleUpdateOnFiber (node_
+modules/react-test-renderer/cjs/react
+-test-renderer.development.js:10326:9
+)
+      at dispatchSetStateInternal (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:4148
+:13)
+      at dispatchSetState (node_modul
+es/react-test-renderer/cjs/react-test
+-renderer.development.js:4107:7)
+      at setMusicEnabled (C:\POSTECH\
+TechChallenge\pos-fiap-FRNT-hackathon
+\mobile\app\(screens)\home\(tabs)../.
+./../../pomodoro.tsx:47:25)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+    console.error
+      An update to TabTwoScreen 
+inside a test was not wrapped in 
+act(...).
+      
+      When testing, code that causes 
+React state updates should be 
+wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update 
+state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're 
+testing the behavior the user would 
+see in the browser. Learn more at htt
+ps://react.dev/link/wrap-tests-with-a
+ct
+
+    [0m [90m 46 |[39m             
+            setTimeLeft(settings[33m
+?[39m[33m.[39mpomodoroTime 
+[33m*[39m [35m60[39m)[33m;[39m
+     [90m 47 |[39m                 
+        setMusicEnabled(settings[33m
+?[39m[33m.[39mmusicEnabled)[33m;
+[39m
+    [31m[1m>[22m[39m[90m 48 
+|[39m                         setSou
+ndToFinish(settings[33m?[39m[33m.
+[39msoundEnabledWhenFinish)[33m;[39
+m
+     [90m    |[39m                 
+        [31m[1m^[22m[39m
+     [90m 49 |[39m                 
+    }
+     [90m 50 |[39m                 
+} [36mcatch[39m (error) {
+     [90m 51 |[39m                 
+    
+[33mToast[39m[33m.[39mshow({[0m
+
+      at node_modules/react-test-rend
+erer/cjs/react-test-renderer.developm
+ent.js:11801:19
+      at runWithFiberInDEV (node_modu
+les/react-test-renderer/cjs/react-tes
+t-renderer.development.js:1574:13)
+      at 
+warnIfUpdatesNotWrappedWithActDEV (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:1180
+0:9)
+      at scheduleUpdateOnFiber (node_
+modules/react-test-renderer/cjs/react
+-test-renderer.development.js:10326:9
+)
+      at dispatchSetStateInternal (no
+de_modules/react-test-renderer/cjs/re
+act-test-renderer.development.js:4148
+:13)
+      at dispatchSetState (node_modul
+es/react-test-renderer/cjs/react-test
+-renderer.development.js:4107:7)
+      at setSoundToFinish (C:\POSTECH
+\TechChallenge\pos-fiap-FRNT-hackatho
+n\mobile\app\(screens)\home\(tabs)../
+../../../pomodoro.tsx:48:25)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+  ÔùÅ Pomodoro Screen ÔÇ║ deve 
+redirecionar para settings se nao 
+houver configuracoes
+
+    expect(jest.fn()).toHaveBeenCalle
+dWith(...expected)
+
+    Expected: "/(screens)/home/(tabs)
+/pomodoro-settings"
+
+    Number of calls: 0
+
+    [0m [90m 94 |[39m         rend
+er([33m<[39m[33mPomodoroScreen[39
+m [33m/[39m[33m>[39m)[33m;[39m
+     [90m 95 |[39m
+    [31m[1m>[22m[39m[90m 96 
+|[39m         [36mawait[39m 
+waitFor(() [33m=>[39m {
+     [90m    |[39m                 
+     [31m[1m^[22m[39m
+     [90m 97 |[39m             expe
+ct(router[33m.[39mreplace)[33m.[3
+9mtoHaveBeenCalledWith([32m"/(screen
+s)/home/(tabs)/pomodoro-settings"[39
+m)[33m;[39m
+     [90m 98 |[39m         
+})[33m;[39m
+     [90m 99 |[39m     
+})[33m;[39m[0m
+
+      at Object.<anonymous> (C:\POSTE
+CH\TechChallenge\pos-fiap-FRNT-hackat
+hon\mobile\app\(screens)\home\(tabs).
+./../../../pomodoro.test.tsx:96:22)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+      at node_modules/@babel/runtime/
+helpers/asyncToGenerator.js:22:7
+      at Object.<anonymous> (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:14:12)
+
+  ÔùÅ Pomodoro Screen ÔÇ║ deve 
+navegar para a tela de historico ao 
+clicar em Historico
+
+    expect(jest.fn()).toHaveBeenCalle
+dWith(...expected)
+
+    Expected: "/(screens)/home/(tabs)
+/pomodoro-history"
+
+    Number of calls: 0
+
+    [0m [90m 107 |[39m
+     [90m 108 |[39m         fireEve
+nt[33m.[39mpress(screen[33m.[39mg
+etByText([32m"Hist├│rico"[39m))[33
+m;[39m
+    [31m[1m>[22m[39m[90m 109 
+|[39m         expect(router[33m.[3
+9mpush)[33m.[39mtoHaveBeenCalledWit
+h([32m"/(screens)/home/(tabs)/pomodo
+ro-history"[39m)[33m;[39m
+     [90m     |[39m                
+             [31m[1m^[22m[39m
+     [90m 110 |[39m     
+})[33m;[39m
+     [90m 111 |[39m
+     [90m 112 |[39m     
+it([32m"deve navegar para a tela de 
+configura├º├Áes ao clicar em 
+Configura├º├Áes"[39m[33m,[39m 
+[36masync[39m () [33m=>[39m {[0m
+
+      at Object.toHaveBeenCalledWith 
+(C:\POSTECH\TechChallenge\pos-fiap-FR
+NT-hackathon\mobile\app\(screens)\hom
+e\(tabs)../../../../pomodoro.test.tsx
+:109:29)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+  ÔùÅ Pomodoro Screen ÔÇ║ deve 
+navegar para a tela de 
+configura├º├Áes ao clicar em 
+Configura├º├Áes
+
+    expect(jest.fn()).toHaveBeenCalle
+dWith(...expected)
+
+    Expected: "/(screens)/home/(tabs)
+/pomodoro-settings"
+
+    Number of calls: 0
+
+    [0m [90m 118 |[39m
+     [90m 119 |[39m         fireEve
+nt[33m.[39mpress(screen[33m.[39mg
+etByText([32m"Configura├º├Áes"[39m)
+)[33m;[39m
+    [31m[1m>[22m[39m[90m 120 
+|[39m         expect(router[33m.[3
+9mpush)[33m.[39mtoHaveBeenCalledWit
+h([32m"/(screens)/home/(tabs)/pomodo
+ro-settings"[39m)[33m;[39m
+     [90m     |[39m                
+             [31m[1m^[22m[39m
+     [90m 121 |[39m     
+})[33m;[39m
+     [90m 122 |[39m })[33m;[39m
+     [90m 123 |[39m[0m
+
+      at Object.toHaveBeenCalledWith 
+(C:\POSTECH\TechChallenge\pos-fiap-FR
+NT-hackathon\mobile\app\(screens)\hom
+e\(tabs)../../../../pomodoro.test.tsx
+:120:29)
+      at asyncGeneratorStep (node_mod
+ules/@babel/runtime/helpers/asyncToGe
+nerator.js:3:17)
+      at _next (node_modules/@babel/r
+untime/helpers/asyncToGenerator.js:17
+:9)
+
+PASS 
+app/components/home/index.test.tsx
+PASS app/(screens)/projects/projects.
+test.tsx
+------------------------------------------------|---------|----------|---------|---------|-------------------------------------------------------
+File                                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                     
+------------------------------------------------|---------|----------|---------|---------|-------------------------------------------------------
+All files                                       |   15.59 |       10 |   14.79 |   15.77 |                                                       
+ app                                            |      50 |       50 |      50 |      50 |                                                       
+  _layout.tsx                                   |       0 |        0 |       0 |       0 | 13-22                                                 
+  index.tsx                                     |     100 |      100 |     100 |     100 |                                                       
+ app/(screens)/home                             |   29.88 |     17.5 |   28.12 |   30.58 |                                                       
+  hamburger-menu-button.tsx                     |       0 |        0 |       0 |       0 | 8-27                                                  
+  hamburger-menu-drawer.tsx                     |       0 |        0 |       0 |       0 | 25-215                                                
+  home.tsx                                      |   92.85 |    58.33 |   81.81 |   92.85 | 96,139                                                
+  menu-context.tsx                              |       0 |        0 |       0 |       0 | 8-29                                                  
+ app/(screens)/home/(tabs)                      |   17.85 |    15.55 |   15.49 |   18.21 |                                                       
+  _layout.tsx                                   |       0 |      100 |       0 |       0 | 6                                                     
+  index.tsx                                     |       0 |        0 |       0 |       0 | 8-21                                                  
+  layout-with-menu.tsx                          |       0 |        0 |       0 |       0 | 18-184                                                
+  menu.tsx                                      |       0 |      100 |       0 |       0 | 7-10                                                  
+  pomodoro-history.tsx                          |       0 |        0 |       0 |       0 | 18-249                                                
+  pomodoro-settings.tsx                         |       0 |        0 |       0 |       0 | 13-164                                                
+  pomodoro.tsx                                  |   53.57 |    42.42 |    64.7 |   55.55 | 51-60,81-82,85-110,119-151,156-174                    
+  preferences.tsx                               |       0 |      100 |       0 |       0 | 5                                                     
+  profile.tsx                                   |       0 |        0 |       0 |       0 | 16-137                                                
+  tabsRouters.ts                                |       0 |        0 |       0 |       0 |                                                       
+ app/(screens)/home/(tabs)/projects             |       0 |      100 |       0 |       0 |                                                       
+  addProject.tsx                                |       0 |      100 |       0 |       0 | 5                                                     
+  projects.tsx                                  |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/(tabs)/projects/detail      |       0 |      100 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/(tabs)/projects/editProject |       0 |      100 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |      100 |       0 |       0 | 6                                                     
+ app/(screens)/home/(tabs)/tasks                |       0 |      100 |       0 |       0 |                                                       
+  addTask.tsx                                   |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/(tabs)/tasks/column         |       0 |      100 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/(tabs)/tasks/detail         |       0 |      100 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/(tabs)/tasks/editTask       |       0 |      100 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |      100 |       0 |       0 | 5                                                     
+ app/(screens)/home/home-page                   |     100 |       50 |     100 |     100 |                                                       
+  index.tsx                                     |     100 |       50 |     100 |     100 | 18                                                    
+ app/(screens)/login                            |   51.51 |    36.11 |   57.14 |   51.51 |                                                       
+  login.tsx                                     |   51.51 |    36.11 |   57.14 |   51.51 | 45-57,67-84,114,127-131,136-137,141-142,199           
+ app/(screens)/preferences                      |     100 |       50 |     100 |     100 |                                                       
+  preferences.tsx                               |     100 |       50 |     100 |     100 | 10                                                    
+ app/(screens)/preferences/constants            |     100 |      100 |     100 |     100 |                                                       
+  index.ts                                      |     100 |      100 |     100 |     100 |                                                       
+ app/(screens)/projects                         |   54.54 |       40 |   35.48 |      56 |                                                       
+  projects.tsx                                  |   54.54 |       40 |   35.48 |      56 | 64,83,87-88,91-92,101-102,112,123-134,143-165,186-238 
+ app/(screens)/projects/addProject              |       0 |        0 |       0 |       0 |                                                       
+  addProjects.tsx                               |       0 |        0 |       0 |       0 | 22-206                                                
+ app/(screens)/projects/constants               |     100 |      100 |     100 |     100 |                                                       
+  index.tsx                                     |     100 |      100 |     100 |     100 |                                                       
+ app/(screens)/projects/detail                  |       0 |        0 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |        0 |       0 |       0 | 60-833                                                
+ app/(screens)/projects/detail/constants        |       0 |      100 |     100 |       0 |                                                       
+  index.tsx                                     |       0 |      100 |     100 |       0 | 15-22                                                 
+ app/(screens)/projects/editProject             |       0 |        0 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |        0 |       0 |       0 | 26-222                                                
+ app/(screens)/register                         |   56.89 |    47.05 |   63.63 |   56.89 |                                                       
+  register.tsx                                  |   56.89 |    47.05 |   63.63 |   56.89 | 43-44,48-49,53-54,60-61,66-67,72-73,94-111,198-224    
+ app/(screens)/tasks/addTask                    |       0 |        0 |       0 |       0 |                                                       
+  addTask.tsx                                   |       0 |        0 |       0 |       0 | 28-703                                                
+ app/(screens)/tasks/column                     |       0 |        0 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |        0 |       0 |       0 | 19-171                                                
+ app/(screens)/tasks/constants                  |       0 |      100 |     100 |       0 |                                                       
+  index.tsx                                     |       0 |      100 |     100 |       0 | 9-50                                                  
+ app/(screens)/tasks/detail                     |       0 |        0 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |        0 |       0 |       0 | 43-323                                                
+ app/(screens)/tasks/editTask                   |       0 |        0 |       0 |       0 |                                                       
+  [id].tsx                                      |       0 |        0 |       0 |       0 | 27-703                                                
+ app/components                                 |    3.29 |     8.95 |    6.25 |    3.33 |                                                       
+  haptic-tab.tsx                                |       0 |        0 |       0 |       0 | 6-14                                                  
+  parallax-scroll-view.tsx                      |       0 |        0 |       0 |       0 | 14-71                                                 
+  profile-avatar.tsx                            |       0 |        0 |       0 |       0 | 28-298                                                
+  themed-text.tsx                               |     100 |    54.54 |     100 |     100 | 24-28                                                 
+  themed-view.tsx                               |       0 |      100 |       0 |       0 | 16-21                                                 
+ app/components/home                            |     100 |       90 |     100 |     100 |                                                       
+  index.tsx                                     |     100 |       90 |     100 |     100 | 17                                                    
+ app/components/preferencesItems                |   93.61 |    93.75 |   81.25 |   93.47 |                                                       
+  preferencesItems.tsx                          |   93.61 |    93.75 |   81.25 |   93.47 | 136-138,152                                           
+ app/components/projects/actionsButton          |    12.5 |        0 |       0 |    12.5 |                                                       
+  index.tsx                                     |    12.5 |        0 |       0 |    12.5 | 17-39                                                 
+ app/components/projects/listItemProject        |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 10-25                                                 
+ app/components/projects/modalLegend            |      50 |      100 |       0 |      50 |                                                       
+  index.tsx                                     |      50 |      100 |       0 |      50 | 13                                                    
+ app/components/projects/projectsNotFound       |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 9-20                                                  
+ app/components/tasks/modalLegend               |       0 |      100 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |      100 |       0 |       0 | 7-13                                                  
+ app/components/tasks/summaryCard               |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 18-41                                                 
+ app/components/tasks/taskTimer                 |       0 |        0 |       0 |       0 |                                                       
+  task-timer-context.tsx                        |       0 |        0 |       0 |       0 | 21-132                                                
+  task-timer-widget.tsx                         |       0 |        0 |       0 |       0 | 13-90                                                 
+ app/components/tasks/tasksNotFound             |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 9-18                                                  
+ app/components/ui                              |       0 |        0 |       0 |       0 |                                                       
+  icon-symbol.ios.tsx                           |       0 |        0 |       0 |       0 | 17                                                    
+  icon-symbol.tsx                               |       0 |        0 |       0 |       0 | 19-49                                                 
+ app/components/ui/accordion                    |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 16-40                                                 
+ app/components/ui/actionsButton                |      20 |        0 |       0 |      20 |                                                       
+  index.tsx                                     |      20 |        0 |       0 |      20 | 8-11                                                  
+ app/components/ui/addContentButton             |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 8-24                                                  
+ app/components/ui/button                       |     100 |       55 |     100 |     100 |                                                       
+  index.tsx                                     |     100 |       55 |     100 |     100 | 24-34,40-48                                           
+ app/components/ui/dropdown/dropdownContent     |   14.28 |        0 |       0 |   14.28 |                                                       
+  index.tsx                                     |   14.28 |        0 |       0 |   14.28 | 18-29                                                 
+ app/components/ui/errorMessages/forms          |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 7-17                                                  
+ app/components/ui/iconButton                   |      20 |        0 |       0 |      20 |                                                       
+  index.tsx                                     |      20 |        0 |       0 |      20 | 19-23                                                 
+ app/components/ui/input                        |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 8-21                                                  
+ app/components/ui/legend/legendContent         |   16.66 |        0 |       0 |   16.66 |                                                       
+  index.tsx                                     |   16.66 |        0 |       0 |   16.66 | 13-23                                                 
+ app/components/ui/legend/modalLegend           |      20 |        0 |       0 |      20 |                                                       
+  index.tsx                                     |      20 |        0 |       0 |      20 | 16-20                                                 
+ app/components/ui/modal                        |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 15-40                                                 
+ app/components/ui/textarea                     |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 | 9-21                                                  
+ app/components/ui/toggleItem                   |       0 |        0 |       0 |       0 |                                                       
+  toggleItem.tsx                                |       0 |        0 |       0 |       0 | 7-22                                                  
+ app/constants                                  |     100 |      100 |     100 |     100 |                                                       
+  theme.ts                                      |     100 |      100 |     100 |     100 |                                                       
+ app/hooks                                      |   91.66 |    66.66 |     100 |   91.66 |                                                       
+  use-color-scheme.ts                           |       0 |        0 |       0 |       0 |                                                       
+  use-color-scheme.web.ts                       |     100 |      100 |     100 |     100 |                                                       
+  use-theme-color.ts                            |      80 |       50 |     100 |      80 | 17                                                    
+ app/interface/accordion                        |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/actionsButton                    |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/addContentButton                 |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/buttons                          |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/dropdown                         |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/errorMessages/forms              |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/home                             |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/input                            |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/modal                            |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/pomodoro                         |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/preferences                      |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/project                          |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/projects                         |       0 |        0 |       0 |       0 |                                                       
+  index.tsx                                     |       0 |        0 |       0 |       0 |                                                       
+ app/interface/tasks                            |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/textarea                         |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/interface/toogle                           |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ app/services                                   |    4.24 |     4.25 |    5.45 |    3.43 |                                                       
+  eventBus.ts                                   |   81.81 |      100 |      60 |    87.5 | 14                                                    
+  firebaseAuth.ts                               |       0 |        0 |       0 |       0 | 4-32                                                  
+  firebaseStorage.ts                            |       0 |        0 |       0 |       0 | 10-76                                                 
+  firestorePaths.ts                             |       0 |        0 |       0 |       0 | 5-54                                                  
+  pomodoroHistory.ts                            |       0 |        0 |       0 |       0 | 5-34                                                  
+  pomodoroSettings.ts                           |       0 |        0 |       0 |       0 | 6-52                                                  
+  preferences.ts                                |       0 |        0 |       0 |       0 | 8-41                                                  
+  projects.ts                                   |       0 |        0 |       0 |       0 | 9-101                                                 
+  soundService.ts                               |       0 |        0 |       0 |       0 | 3-96                                                  
+  tasks.ts                                      |       0 |        0 |       0 |       0 | 19-136                                                
+ app/styles                                     |      50 |      100 |      50 |      50 |                                                       
+  genericFormStyles.ts                          |       0 |      100 |       0 |       0 | 4-8                                                   
+  genericStyles.ts                              |     100 |      100 |     100 |     100 |                                                       
+ app/types/preferences                          |       0 |        0 |       0 |       0 |                                                       
+  index.ts                                      |       0 |        0 |       0 |       0 |                                                       
+ utils                                          |     100 |      100 |     100 |     100 |                                                       
+  math.ts                                       |     100 |      100 |     100 |     100 |                                                       
+------------------------------------------------|---------|----------|---------|---------|-------------------------------------------------------
+
+Test Suites: 1 failed, 11 passed, 12 
+total
+Tests:       3 failed, 59 passed, 62 
+total
+Snapshots:   0 total
+Time:        7.465 s
+Ran all test suites.
