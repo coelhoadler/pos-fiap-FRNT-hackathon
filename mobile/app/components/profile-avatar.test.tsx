@@ -52,7 +52,7 @@ describe('ProfileAvatar', () => {
     });
 
     it('deve exibir indicador de carregamento enquanto carrega a imagem inicial', () => {
-        getProfileImageURL.mockReturnValue(new Promise(() => {})); // never resolves
+        getProfileImageURL.mockReturnValue(new Promise(() => { })); // never resolves
         render(<ProfileAvatar />);
         // Enquanto carrega, deve mostrar ActivityIndicator (loading state)
         expect(screen.toJSON()).toBeTruthy();
