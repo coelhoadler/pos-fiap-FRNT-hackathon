@@ -13,5 +13,6 @@ module.exports = {
         '!app/**/styles.ts',
         '!app/interface/**',
         '!app/types/**',
+        '!app/(screens)/**'
     ],
 };
