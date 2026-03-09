@@ -34,7 +34,6 @@ Este é um projeto feito para **mobile** e **web** a fim de atender necessidades
 ## 📂 Estruturação da aplicação
 
 ```
-// mobile
 mobile/
   ├── app/
   │   ├── _layout.tsx              # Layout raiz (providers, toast, task timer global)
@@ -73,7 +72,6 @@ mobile/
   │   └── images/                  # Imagens e ícones
   └── utils/                       # Utilitários
 
-// web
 web/
   └── (em desenvolvimento)
 ```
