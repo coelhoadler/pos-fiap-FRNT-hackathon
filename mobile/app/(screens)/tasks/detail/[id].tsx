@@ -199,7 +199,6 @@ export default function TaskDetail() {
         }}
       >
         <Text style={styles.title}>{task?.nome || "Tarefa"}</Text>
-        <Text style={styles.title}>{task?.tempoExecucao || "0h 0min"}</Text>
         <View style={styles.actionsWrapper}>
           {!isRunning && (
             <Pressable
