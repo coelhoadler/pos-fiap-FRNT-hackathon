@@ -1,11 +1,11 @@
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyCwEzlq5xpyS84AovNlbBKmdv6OoghnRos",
-  authDomain: "mindease-a1223.firebaseapp.com",
-  databaseURL: "https://mindease-a1223-default-rtdb.firebaseio.com",
-  projectId: "mindease-a1223",
-  storageBucket: "mindease-a1223.firebasestorage.app",
-  messagingSenderId: "408782528907",
-  appId: "1:408782528907:web:ab52cefdd1134db5554f8e",
-  measurementId: "G-XHQB4NSTLC"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
