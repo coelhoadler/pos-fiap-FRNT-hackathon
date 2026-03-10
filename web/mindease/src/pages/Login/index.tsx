@@ -28,7 +28,6 @@ export const Login = () => {
         e.preventDefault();
         setError(null);
 
-        // Validações básicas
         if (!formData.email.trim()) {
             setError('Por favor, informe seu e-mail');
             return;
