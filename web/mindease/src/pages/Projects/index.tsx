@@ -53,15 +53,15 @@ const ProjectsPage = () => {
 
     loadInitialProjects();
 
-    // Configurar listener em tempo real
-    let intervalId: ReturnType<typeof setInterval> | null = null;
     
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    //Busca os projetos em tempo real
     const unsubscribe = onProjectsSnapshot(
       (projectsList) => {
         console.log('Projetos atualizados via listener:', projectsList.length);
         setProjects(projectsList);
         setLoading(false);
-        // Limpar intervalo se o listener estiver funcionando
+        
         if (intervalId) {
           clearInterval(intervalId);
           intervalId = null;
@@ -69,11 +69,11 @@ const ProjectsPage = () => {
       },
       (error) => {
         console.error('Erro no listener:', error);
-        // Se o listener falhar, tentar buscar manualmente periodicamente
+        
         if (!intervalId) {
           intervalId = setInterval(() => {
             loadInitialProjects();
-          }, 5000); // Buscar a cada 5 segundos se o listener falhar
+          }, 5000);
         }
       }
     );
@@ -170,17 +170,16 @@ const ProjectsPage = () => {
     const isExpanded = expandedProjects.has(projectId);
     
     if (isExpanded) {
-      // Recolher: remover do Set
+      
       setExpandedProjects(prev => {
         const newSet = new Set(prev);
         newSet.delete(projectId);
         return newSet;
       });
     } else {
-      // Expandir: adicionar ao Set e buscar tarefas
-      setExpandedProjects(prev => new Set(prev).add(projectId));
       
-      // Se ainda não carregou as tarefas, buscar
+      setExpandedProjects(prev => new Set(prev).add(projectId));      
+      
       if (!projectTasks[projectId]) {
         setLoadingTasks(prev => ({ ...prev, [projectId]: true }));
         try {
@@ -197,8 +196,7 @@ const ProjectsPage = () => {
     }
   };
 
-  const handleViewProject = (projectId: string) => {
-    // Navegar para a tela de tarefas com o ID do projeto
+  const handleViewProject = (projectId: string) => {   
     navigate(`/tasks?projectId=${projectId}`);
   };
 
@@ -212,8 +210,7 @@ const ProjectsPage = () => {
   };
 
   return (
-    <Box className="w-full p-8 bg-custom-sand min-h-screen">
-      {/* Header */}
+    <Box className="w-full p-8 bg-custom-sand min-h-screen">     
       <Box className="flex items-center justify-between mb-8">
         <Typography 
           variant="h4" 
@@ -244,15 +241,13 @@ const ProjectsPage = () => {
           </IconButton>
         </Box>
       </Box>
-
-      {/* Error Alert */}
+   
       {error && (
         <Alert severity="error" onClose={() => setError('')} sx={{ mb: 2 }}>
           {error}
         </Alert>
       )}
 
-      {/* Projects List */}
       <Box className="mb-6">
         <Typography 
           variant="h6" 
@@ -329,9 +324,8 @@ const ProjectsPage = () => {
                         )}
                       </IconButton>
                     </Box>
-                  </Box>
-                  
-                  {/* Resumo das Tarefas */}
+                  </Box>   
+               
                   {isExpanded && (
                     <Box 
                       className="mt-2 p-4 rounded-lg"
@@ -399,7 +393,6 @@ const ProjectsPage = () => {
         )}
       </Box>
 
-      {/* Create Project Dialog */}
       <Dialog 
         open={openCreateDialog} 
         onClose={() => {
@@ -473,7 +466,6 @@ const ProjectsPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Edit Project Dialog */}
       <Dialog 
         open={openEditDialog} 
         onClose={() => {
@@ -550,7 +542,6 @@ const ProjectsPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Legend Dialog */}
       <Dialog 
         open={openLegendDialog} 
         onClose={() => setOpenLegendDialog(false)}
@@ -605,7 +596,6 @@ const ProjectsPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog 
         open={openDeleteDialog} 
         onClose={() => {
@@ -649,7 +639,6 @@ const ProjectsPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Success Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
